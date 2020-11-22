@@ -4,77 +4,23 @@ public class Main {
 
     public static void main(String[] args) {
 
+        int matris[][] = {
+                {0, 1, 2, 3, 4},
+                {1, 2, 3, 4, 5},
+                {2, 3, 4, 5, 6 }
+        };
 
-        System.out.println(classifyFood("banana"));
 
+        for (int i = 0; i < 3; i++) {
+            printArray(matris[i]);
+            System.out.println();
+        }
     }
 
-
-    public boolean isEligibleToHaveDrivingLicence(int age) {
-        if(age < 18) {
-            System.out.println("It's too early to drive !!!");
-            return false;
+    private static void printArray(int[] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.print(numbers[i]);
+            if (i != numbers.length -1) System.out.print(" , ");
         }
-
-        return true;
-    }
-
-    public String getDayNameOfWeek(int dayOfTheWeek) {
-
-        String nameOfTheDay;
-
-        switch (dayOfTheWeek) {
-            case 1:
-                nameOfTheDay = "Monday";
-                break;
-            case 2:
-                nameOfTheDay = "Tuesday";
-                break;
-            case 3:
-                nameOfTheDay = "Wednesday";
-                break;
-            case 4:
-                nameOfTheDay = "Thursday";
-                break;
-            case 5:
-                nameOfTheDay = "Friday";
-                break;
-            case 6:
-                nameOfTheDay = "Saturday";
-                break;
-            case 7:
-                nameOfTheDay = "Sunday";
-                break;
-            default:
-                nameOfTheDay = "Unknown";
-                break;
-        }
-
-        return nameOfTheDay;
-    }
-
-    public static String classifyFood(String nameOfTheFood) {
-        String foodType;
-
-        switch (nameOfTheFood) {
-            case "apple":
-                System.out.println("This is an apple");
-            case "banana":
-                System.out.println("This can be an apple or banana");
-                foodType = "fruit";
-                break;
-            case "aubergine":
-                System.out.println("This is aubergine");
-            case "broccoli":
-                System.out.println("This can be an aubergine or broccoli");
-                foodType = "vegetable";
-                break;
-            default:
-                System.out.println("Don't eat that food");
-                foodType = "Unknown";
-                break;
-        }
-
-        return foodType;
     }
 }

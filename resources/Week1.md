@@ -28,36 +28,6 @@ package com.hkarabakla;
 - class   : Nesne yonelimli bir programlama dili olan Java’da hersey bir class ile iliskilendirilmek zorundadır. Class gercek dünyayı yazılımda modellememize yardimci olur
 - method  : Fonksiyon olarak da bilinen methodlar yazilimi oluşturan en kucuk birimlerdir. Yazılıma davranış kazandirirlar.
 
-## Değişkenler
-Değişkenler verileri (data) depolamaya yarar.
-``` java
-// type variable = value*;
-
-int age = 10;
-String organisation = "Kodluyoruz";
-boolean isCool = true;
-
-int x = 2, y = 3, z = 5;
-
-int a, b, c;
-a = 1;
-b = 9;
-c = 11;
-
-// Good
-int minutesPerHour = 60;
-// OK, but hard to understand its purpose
-int m = 60;
-```
-### Değişken isimleri belirlemede genel kurallar:
-- Değişken isimleri anlamlı ve değişkenin gorevini açıklar nitelikte olmalıdır
-- Değişken isimleri harf, rakam, alt çizgi(_) ve dolar işareti($) bulundurabilir
-- Sadece harf ile baslayabilir
-- Kucuk harfle baslamalıdır ve boşluk içeremez
-- $ ve _ ile de baslayabilir fakat yaygın olarak tercih edilmez
-- Değişken isimleri büyük kucuk harfe duyarlıdır
-- Int, boolean… gibi Java icin rezerve edilmiş kelimeler değişken ismi olamaz
-
 ## Veri tipleri
 Java **strongly typed** bir dildir. Yani butun islemler compile zamaninda type checking (veri tipi kontrolu) isleminden 
 gecirilir.
@@ -88,7 +58,36 @@ Car myNewCar = new Car("A4", "Audi");
 - Non-primitive tipler tuttukları deger uzerinde islem yapmaya yarayan metodlar sunabilirler
 - Primitive tipler her zaman bir degere sahip olmak zorundadır bu nedenle default degerleri vardır, non-primitive tipler ise null olabilir
 
-## Degiskenlere daha yakindan bakis
+## Değişkenler
+Değişkenler verileri (data) depolamaya yarar.
+``` java
+// type variable = value*;
+
+int age = 10;
+String organisation = "Kodluyoruz";
+boolean isCool = true;
+
+int x = 2, y = 3, z = 5;
+
+int a, b, c;
+a = 1;
+b = 9;
+c = 11;
+
+// Good
+int minutesPerHour = 60;
+// OK, but hard to understand its purpose
+int m = 60;
+```
+### Değişken isimleri belirlemede genel kurallar:
+- Değişken isimleri anlamlı ve değişkenin gorevini açıklar nitelikte olmalıdır
+- Değişken isimleri harf, rakam, alt çizgi(_) ve dolar işareti($) bulundurabilir
+- Sadece harf ile baslayabilir
+- Kucuk harfle baslamalıdır ve boşluk içeremez
+- $ ve _ ile de baslayabilir fakat yaygın olarak tercih edilmez
+- Değişken isimleri büyük kucuk harfe duyarlıdır
+- Int, boolean… gibi Java icin rezerve edilmiş kelimeler değişken ismi olamaz
+
 #### Tanimlama sirasinda deger atama
 ```java
 int age = 10;
@@ -210,6 +209,31 @@ Operatorler degiskenler ve degerler uzerinde islem yapmaya yarar.
 |!	|Logical not	|Reverse the result, returns false if the result is true	|!(x < 5 && x < 10)|
 
 ## Java'da karar mekanizmalari
+
+### Konsoldan Scanner yardımıyla input alma
+```java
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        System.out.println("Welcome " + getUserName());
+    }
+
+    private static String getUserName() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your name : ");
+        String name = scanner.next();
+        System.out.println();
+        System.out.print("Enter your surname : ");
+        String surname = scanner.next();
+
+        return name + " " + surname;
+    }
+}
+```
+
 ### if-else ifadesi
 if ifadesi belirli bir kosul altinda program akisimizin ne sekilde devam edecegini belirlemeye yarar.
 
@@ -340,3 +364,322 @@ fruit
 
 ## Donguler
 Java'da donguler tekrarli isleri gerceklestirmek icin kullanilir.
+
+### for dongusu
+```java
+    for(initialization; condition; iteration) {
+        statement sequence;
+    }
+```
+Initialization ifadesi dongu kontrol degiskeninin ilk degerini aldigi kisimdir.
+Condition ifadesi ise dongunun hangi sartlar altinda devam edecegini belirledigimiz kisimdir.
+Iteration ifadesi dongu kontrol ifadesinin her bir dongu adiminda nasil degisecegini belirledigimiz kisimdir.
+
+```java
+    for (int i = 0; i < 5; i++) {
+      System.out.println(i);
+    }
+```
+
+Output :
+```
+    0
+    1
+    2
+    3
+    4
+```
+
+```java
+    for(int i = 0, j = 10; i < j; i++, j--) {
+        System.out.println("i and j :" + i + " " + j);
+    }
+```
+
+Output :
+```
+    i and j :0 10
+    i and j :1 9
+    i and j :2 8
+    i and j :3 7
+    i and j :4 6
+```
+
+```java
+    int i = 0;
+    for(; i < 5;) {
+        System.out.println("i :" + i++);
+    }
+```
+
+Output :
+```
+    i :0
+    i :1
+    i :2
+    i :3
+    i :4
+```
+for dongusunun farkli bir versiyonu olan foreach dongusune daha sonra array konusunu isledigimiz zaman deginecegiz
+
+### while dongusu
+```java
+    while(condition) {
+        statement sequence;
+    }
+```
+
+Condition ifadesi ise dongunun hangi sartlar altinda devam edecegini belirledigimiz kisimdir.
+
+```java
+    int i = 0;
+    while (i < 5) {
+      System.out.println(i);
+      i++;
+    }
+```
+
+while dongusu iterasyone condition ifadesinin sonucunu test ederek baslar, condition ifadesi true doner ise dongu icindeki
+kod calistirilir.
+
+```java
+    int i = 5;
+      do {
+         System.out.println("Iteration: "+ ++i);
+      } while(i < 5);
+
+    >Output>
+    Iteration: 6
+```
+do-while dongusunde ise once do ifadesinin icinde bulunan kod calistirilir daha sonra while ifadesinin icinde yeralan 
+condition ifadesinin dondurdugu degere bakilir. do-while dongusunde dongunun en az bir kere calismasi garantidir.
+
+#### break ve continue ifadeleri
+break ifadesi dongulerde, donguyu manuel olarak bitirmeye yarar
+
+```java
+    for (int i = 0; i < 10; i++) {
+      if (i == 4) {
+        break;
+      }
+      System.out.println(i);
+    }
+```
+
+```java
+    while (true) {
+        char ch = (char) System.in.read();
+        if (ch == 'q') {
+            break;
+        }
+    
+        System.out.println(ch);
+    }
+```
+
+continue ifadesi dongulerde, continue'dan sonra gelen dongu icindeki kodun calistirilmadan bir sonraki dongu adimina gecilmesini saglar
+
+```java
+    for (int i = 0; i < 100; i++) {
+        if (i % 10 != 0) {
+            continue;
+        }
+        System.out.println("I : " + i);
+    }
+```
+
+Output :
+```
+    I : 0
+    I : 10
+    I : 20
+    I : 30
+    I : 40
+    I : 50
+    I : 60
+    I : 70
+    I : 80
+    I : 90
+```
+## Array İşlemleri
+Array aynı tipten verileri depolamaya yarayan koleksiyonlara denir. Genellikle birbiri ile alakalı verileri tutmak için kullanılır. 
+Java'da arrayler obje tipindedir. Arraylerin bize sunduğu en büyük avantajlardan biri de sakladıkları veriler üzerinde kolay işlem yapabilme 
+olanağıdır. Örneğin bir arrayde elimizde bulunan programlama kitaplarının isimlerini saklayıp onları kolayca listeleyebiliriz.
+Yada bir gurup insana ait gelir bilgilerini bir arrayde saklayıp kolayca ortalama geliri hesaplayabiliriz, yada bu verileri kolayca sıralayabiliriz.
+
+### Bir boyutlu arrayler
+Bir boyutlu arrayler aynı türden birbiri ile alakalı verileri tutmak için kullanılan diziler olarak düşünebiliriz.
+
+```java
+    type array_name[] = new type[array_capacity];
+```
+
+type : array içinde saklamak istediğimiz veri tipi
+array_name : arrayimizin adı
+new : yeni obje yaratma anahtar kelimesi (daha sonra detaylı göreceğiz)
+array_capacity : arrayimizin saklayabileceği maksimum veri sayısı
+
+```java
+    int sample[] = new int[10];
+
+    int sample2[];
+    sample2 = new int[10];
+```
+
+Arrayler sakladıkları verileri indeksleri ile birlikte saklarlar. Bu nedenle bir arraye veri koyarken ve veriyi arrayden
+alırken indeksleri kullanmamız gerekir.
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] sample = new int[10];
+
+        for (int i = 0; i < 10; i++) {
+            sample[i] = i;
+        }
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Sample [" + i + "] is " + sample[i]);
+        }
+    }
+}
+```
+
+Output :
+```  
+    Sample [0] is 0
+    Sample [1] is 1
+    Sample [2] is 2
+    Sample [3] is 3
+    Sample [4] is 4
+    Sample [5] is 5
+    Sample [6] is 6
+    Sample [7] is 7
+    Sample [8] is 8
+    Sample [9] is 9
+```
+
+Arraylerde indeks değeri herzaman sıfırdan başlar. Yani 10 elemanlı bir array oluşturursak arrayimizin ilk elamnına 
+sıfırncı indeks ile ulaşırız ve en büyük indeksimiz de 9 olur.
+
+![array yapısı](images/array%20structure.png)
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] numbers = {10, 23, -98, 76, 9, -123, -28, 0, 35};
+
+        int max, min;
+        min = max = numbers[0];
+        for (int i = 1; i < numbers.length; i++) {
+            if (numbers[i] < min) min = numbers[i];
+            if (numbers[i] > max) max = numbers[i];
+        }
+
+        System.out.println("Min : " + min + " , Max : " + max);
+    }
+}
+```
+Output :
+```
+    Min : -123 , Max : 76
+```
+
+```
+Peki kapasitesi 10 olan bir arrayimiz var diyelim, -1. veya 10. indexe erişmeye çalışırsak ne olur ?
+```
+
+Şuana kadar öğrendiğimiz bilgilerle arraylerde sıralama yapabiliriz. Bunun için küçük arraylerde iyi performans gösteren
+ama büyük arrayler için önerilmeyen bubble sort algoritmasını kullanacağız.
+
+![bubble sort animasyon](images/Bubble-sort.gif)
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] numbers = {10, 23, -98, 76, 9, -123, -28, 0, 35};
+        sort(numbers);
+        printArray(numbers);
+    }
+
+    private static void printArray(int[] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.print(numbers[i]);
+            if (i != numbers.length -1) System.out.print(" , ");
+        }
+    }
+
+    public static void sort(int[] array) {
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[i] > array[j]) {
+                    int bigger = array[i];
+                    array[i] = array[j];
+                    array[j] = bigger;
+                }
+            }
+        }
+    }
+}
+```
+
+### Çok boyutlu arrayler
+Çok boyutlu arraylerin en basit hali 2 boyutlu arraylerdir. 2 boyutlu array aslında tek boyutlu arraylerin arrayi gibi
+düşünülebir, yani matris gibi.
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        int matris[][] = new int[3][4];
+
+        for (int i = 0; i < matris.length; i++) {
+            for (int j = 0; j < matris[i].length; j++) {
+                matris[i][j] = i + j;
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            printArray(matris[i]);
+            System.out.println();
+        }
+    }
+
+    private static void printArray(int[] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.print(numbers[i]);
+            if (i != numbers.length -1) System.out.print(" , ");
+        }
+    }
+}
+```
+Output :
+```
+    0 , 1 , 2 , 3
+    1 , 2 , 3 , 4
+    2 , 3 , 4 , 5
+```
+
+Tanımlama sırasında değer atama işlemi de aynı tek boyutlu arraylerdeki gibidir.
+
+```java
+int matris[][] = {
+                {0, 1, 2, 3, 4},
+                {1, 2, 3, 4, 5},
+                {2, 3, 4, 5, 6 }
+        };
+```
+
+Çok boyutlu arraylerin genel formülü şu şekildedir.
+
+```java
+    type array_name[][][]...[] = new tyepe[size1][size2][size3]...[sizeN];
+```
+
