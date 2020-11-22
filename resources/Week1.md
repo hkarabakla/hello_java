@@ -683,3 +683,93 @@ int matris[][] = {
     type array_name[][][]...[] = new tyepe[size1][size2][size3]...[sizeN];
 ```
 
+### foreach tarzı for döngüsü
+Arrayler üzerinde döngü kurmayı kolaylaştıran for döngüsünün özel bir formudur.
+Array üzerindeki herbir eleman ile işlem yapmak istediğimizde kodu sadeleştirir ve işimizi kolaylaştırır.
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+    
+        int matris[][] = {
+                {0, 1, 2, 3, 4},
+                {1, 2, 3, 4, 5},
+                {2, 3, 4, 5, 6 }
+        };
+
+        for (int i = 0; i < matris.length; i++) {
+            for (int j = 0; j < matris[i].length; j++) {
+                System.out.println(matris[i][j]);
+            }
+        }
+
+        for (int[] values : matris) {
+            for (int value: values) {
+                System.out.println(value);
+            }
+        }
+    }
+}
+```
+
+Arrayler diğer veri tipleri gibi metodlara parametre olarak gönderilebilir yada bir metoddan çıktı olarak return edilebilir.
+
+## String sınıfı ve başlıca string işlemleri
+String Java gelirtiricilerin günlük hayatta en çok kullandığı veri tiplerinden birisidir. Pek çok programlama dilinde stringler 
+karakter arrayi olarak tutulurken javada string bir objedir. 
+
+Peki stringleri nasıl yaratırız ?
+
+``` java
+    String messageFromJava = "Java strings are powerfull";
+
+    String anotherMessage = new Strıng("Hello Java");
+
+    String lastMessage = new String(anotherMessage);
+```
+
+### string literal vs string obje
+Aşağıdaki resimde de görüldüğü gibi literal string ifadeleri hafıza da string pool denilen özel bir bölmede tutulur.
+Ve siz uygulamanızda bir string literali yaratırsanız string poolda bir değer yaratılır ve sizin değişkeniniz bu değere
+refrans eder. Eğer aynı değerle başka bir string literal daha yaratırsanız bu sefer string poolda yeni bir değer yaratılmaz
+sadece yeni değişkenin daha önce yaratılan değere referans etmesi sağlanır. 
+
+String objeleri ise hafızada Heap adı verilen özel bölmede saklanır, diğer bğtğn objeler gibi. 
+
+![string pool](images/string_pool.png)
+
+### string karşılaştırma
+String veri tipi üzerinde en çok yapılan işlemlerden biri karşılaştırma işlemidir. String karşılaştırma söz konusu olduğu 
+zaman aklımıza iki şey gelmeli; string değişkenlerin değerlerinin eşitliği ya da referansların eşitliği (hafızada aynı objeye referans etme)
+
+```java
+    public static void main(String[] args) {
+
+        String user1 = "userName";
+        String user2 = "userName";
+        String user3 = user2;
+        String user4 = new String("userName");
+
+        System.out.println("user1 == user2 : " + (user1 == user2));
+        System.out.println("user2 == user3 : " + (user2 == user3));
+        System.out.println("user3 == user4 : " + (user3 == user4));
+
+        System.out.println("user1.equals(user2) : " + user1.equals(user2));
+        System.out.println("user2.equals(user3) : " + user2.equals(user3));
+        System.out.println("user3.equals(user4) : " + user3.equals(user4));
+    }
+```
+Output :
+```
+    user1 == user2 : true
+    user2 == user3 : true
+    user3 == user4 : false
+    user1.equals(user2) : true
+    user2.equals(user3) : true
+    user3.equals(user4) : true
+```
+
+### string işlemleri
+
+
