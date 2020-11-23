@@ -918,3 +918,70 @@ System.out.println(sb.toString());
 ```  
 > Henüz thread-safety konusunu görmediğimiz için StringBuffer'dan daha sonra bahsedeceğiz.
 
+## Sayılar
+// TODO bu kisim eksik tamamlanacak
+
+## Tarih işlemleri
+Java dilinde built in olarak tarih ve zaman sınıfları yer almaz. Tarih ve zaman işlemleri yapabilmek için java.time paketinden
+ihtiyacımız olan sınıfı import etmemiz gerekir. Bu pakette yer alan sınıflardan başlıcaları olan LocalDate, LocalTime, LocalDateTime ve
+DateFormatter sınıflarını ve bunların kullanımı yakından inceleyelim.
+
+### LocalDate
+Yıl, gün ve ay bilgisinden oluşan tarih işlemleri için LocalDate sınıfını kullanabiliriz. Default tarih formatı yyyy-mm-dd
+Ayrıca LocalDate objeleri immutable ve thread-safe dir.
+
+```java
+LocalDate firstDayOfTheYear = LocalDate.of(2012, 1, 1);
+System.out.println("firstDayOfTheYear " + firstDayOfTheYear);
+
+LocalDate today = LocalDate.now();
+System.out.println("today " + today);
+
+LocalDate tomorrow = LocalDate.now().plusDays(1);
+System.out.println("tomorrow " + tomorrow);
+
+LocalDate nextMonth = LocalDate.now().withMonth(12);
+System.out.println("nextMonth " + nextMonth);
+
+LocalDate yesterday = LocalDate.parse("2020-11-22");
+System.out.println("yesterday " + yesterday);
+
+System.out.println("is today after tomorrow " + today.isAfter(tomorrow));
+System.out.println("is today equals to yesterday " + today.isEqual(yesterday));
+```
+Output :
+```
+firstDayOfTheYear 2012-01-01
+today 2020-11-23
+tomorrow 2020-11-24
+nextMonth 2020-12-23
+yesterday 2020-11-22
+is today after tomorrow false
+is today equals to yesterday false
+```
+
+### LocalTime
+Saat, dakika, saniye ve nanosaniye cinsinden veriler söz konusu olduğu zaman bakmamız gereken yer LocalTime.
+LocalTime sınıfı da immutable ve thread safe dir. 
+
+```java
+LocalTime now = LocalTime.now();
+System.out.println("Now : " + now);
+
+LocalTime evening = LocalTime.of(20, 0, 0);
+System.out.println("Evening : " + evening);
+
+LocalTime afterThirtyMinutes = LocalTime.now().plusMinutes(30);
+System.out.println("After 30 minutes from now : " + afterThirtyMinutes);
+
+long hoursToNewDay = LocalTime.now().until(LocalTime.of(23, 59, 59, 59), ChronoUnit.MINUTES);
+System.out.println("Remaining minutes to new day : " + hoursToNewDay);
+```
+Output :
+```
+Now : 23:39:39.211
+Evening : 20:00
+After 30 minutes from now : 00:09:39.217
+Remaining minutes to new day : 20
+```
+### LocalDateTime
