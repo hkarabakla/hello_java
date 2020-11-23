@@ -771,5 +771,150 @@ Output :
 ```
 
 ### string işlemleri
+String sınıfı oldukça büyük bir sınıf, iyi bir Java developer olmak için bu sınıfı iyi anlamak ve string objeleri üzerinde 
+hangi işlemleri yapabileceğinizi biliyor olmanız gerekir. Başlıca string işlemleri şunlardır:
 
+#### length() metodu
+String değerinin kaç tane karakter taşıdığını gösterir. Java dilinde boşluk da bir karakterdir ve uzunluk hesabına katılır.
+```java
+public static void main(String[] args) {
+
+    String userEmail = "user@email.com";
+    if (userEmail.length() == 0) {
+        System.out.println("Email is empty !");
+    } else {
+        System.out.println("Email is not empty !");
+    }
+}
+
+```
+
+#### isEmpty() metodu
+Bu method string objesinin hiç karakter bulundurmaması durumunda true, herhangi bir karakter bulundurması durumunda ise false döner.
+```java
+public static void main(String[] args) {
+
+    String userEmail = "user@email.com";
+    if (userEmail.isEmpty()) {
+        System.out.println("Email is empty !");
+    } else {
+        System.out.println("Email is not empty !");
+    }
+}
+``` 
+
+#### charAt() metodu
+Bazen string içerisindeki belli bir posizyondaki karakteri kontrol etmemiz gerekebilir. İşte bu durumda yardımımıza charAt metodu koşuyor.
+
+```java
+private int getPositionOfChar(String value) {
+        
+    int positionOfAt = -1;
+    for (int i = 0; i < value.length(); i++) {
+        if (value.charAt(i) == '@') {
+            positionOfAt = i;
+            break;
+        }
+    }
+    return positionOfAt;
+}
+```
+> Önemli Not : charAt metodunda dikkat edilmesi gereken nokta metoda verdiğimiz int değeridir. Stringlerde karakter indeksleri aynı arraylerde 
+olduğu gibi sıfırdan başlar, bu nedenle charAt metoduna verdiğimiz parametre değeri sıfırdan küçük yada stringin uzunluğuna
+eşit veya daha büyük olmamalıdır, olursa **StringIndexOutOfBoundsException** alırız.
+
+#### indexOf() metodu
+Bazen de bir karakterin string içindeki indexini öğrenmek isteriz. indexOf metodu kendisine parametre olarak verdiğimiz 
+karakteri stringin içinde arar ve ilk bulduğu eşleşmenin indeks değerini bize döner. Eğer hiç eşleşme bulamaz ise bu durumda
+-1 değerini döner.
+
+```java
+String userEmail = "user@email.com";
+int positionOfChar = userEmail.indexOf('@');
+
+System.out.println("Position of @ : " + userEmail.indexOf('@'));
+System.out.println("Position of 'email' : " + userEmail.indexOf("email"));
+System.out.println("Position of 'email' : " + userEmail.indexOf("com", userEmail.indexOf('@')));
+```
+Output :
+```
+Position of @ : 4
+Position of 'email' : 5
+Position of 'email' : 11
+```
+
+#### replace() metodu
+Bazen de bir string değer içindeki bir karakter yada bir karakter dizisini başka bir karakter yada karakter dizisi ile değiştirmek
+isteriz. Bu durumda replace() metodu ve bu metodun diğer türevleri ihtiyacımızı karşılar. Bu meetod orijinal stringi değiştirmek
+yerine yeni bir string değer döner.
+
+```java
+String userEmail = "user@email.com";
+String userEmailWithNet = userEmail.replace("com", "net");
+System.out.println(userEmail);
+System.out.println(userEmailWithNet);
+```
+Output :
+```
+user@email.net
+```
+
+#### split() metodu
+Elimizde özel bir karakter ile birleştirilmiş bir grup bilgi varsa ve bu bilgilere erişmemiz gerekirse bu durumda elimizdeki
+string ifadeyi o özel karaktere göre parçalara ayırmamız gerekir. İşte tam da bu iş için string sınıfı içinde split metodu
+yer alıyor.
+
+```java
+String userInformation = "user@email.com|name of the user|surname of the user|34";
+String[] userDetails = userInformation.split("\\|");
+for (String detail : userDetails) {
+    System.out.println(detail);
+}
+```
+Output :
+```
+user@email.com
+name of the user
+surname of the user
+34
+```
+
+#### concat() metodu
+Elimizde birden fazla string değeri varsa ve bunları birleştirerek yeni bir string değer yaratmamız gerekirse bu durumda
+string sınıfı içinde yer alan concat() metodunu kullanabiliriz.
+
+```java
+String name = "Huseyin";
+String middleName = "Cihangir";
+String surname = "Karabakla";
+
+String fullName = name.concat(" ").concat(middleName).concat(" ").concat(surname);
+System.out.println("Full name of the user : " + fullName);
+```
+Output :
+```
+Full name of the user : Huseyin Cihangir Karabakla
+```
+
+Bazen üzerinde birleştirme işlemi yapmamız gereken string sayısı çok fazla olabilir bu durumda concat işlemini kullanmamız 
+doğru olmaz. Çünkü yukardaki örnekte de görüldüğü gibi her string için concat metodunu çağırmamız gerekir. concat metoduna 
+yaptığımız her çağrı yeni bir string objesi oluşturur hafıza da, bu da bir süre sonra uygulamamızın performansında düşüşlere 
+yol açar. Bu tarz durumlar için Javada daha özel iki tane sınıf var, **StringBuilder**, **StringBuffer**:
+
+```java
+String first = "First sentence";
+String second = "Second sentence";
+String third = "Third sentence";
+String fourth = "Fourth sentence";
+String fifth = "Fifth sentence";
+StringBuilder sb = new StringBuilder();
+sb.append(first)
+        .append(second)
+        .append(third)
+        .append(fourth)
+        .append(fifth);
+
+System.out.println(sb.toString());
+```  
+> Henüz thread-safety konusunu görmediğimiz için StringBuffer'dan daha sonra bahsedeceğiz.
 
