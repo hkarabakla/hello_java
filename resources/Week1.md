@@ -923,8 +923,8 @@ System.out.println(sb.toString());
 
 ## Tarih işlemleri
 Java dilinde built in olarak tarih ve zaman sınıfları yer almaz. Tarih ve zaman işlemleri yapabilmek için java.time paketinden
-ihtiyacımız olan sınıfı import etmemiz gerekir. Bu pakette yer alan sınıflardan başlıcaları olan LocalDate, LocalTime, LocalDateTime ve
-DateFormatter sınıflarını ve bunların kullanımı yakından inceleyelim.
+ihtiyacımız olan sınıfı import etmemiz gerekir. Bu pakette yer alan sınıflardan başlıcaları olan LocalDate, LocalTime, LocalDateTime,
+DateTimeFormatter ve Duration sınıflarını ve bunların kullanımı yakından inceleyelim.
 
 ### LocalDate
 Yıl, gün ve ay bilgisinden oluşan tarih işlemleri için LocalDate sınıfını kullanabiliriz. Default tarih formatı yyyy-mm-dd
@@ -985,3 +985,133 @@ After 30 minutes from now : 00:09:39.217
 Remaining minutes to new day : 20
 ```
 ### LocalDateTime
+Hem tarih hemde zaman bilgisini birlikte tutmaya ve işlemeye yarayan sınıftır. LocalDate ve LocalTime gibi LocalDateTime da
+immutable ve thread safe dir. 
+```java
+LocalDateTime now = LocalDateTime.now();
+System.out.println("Now : " + now);
+
+LocalDateTime evening = LocalDateTime.of(2020, 11, 24, 20, 45, 0);
+System.out.println("Evening : " + evening);
+```
+Output :
+```
+Now : 2020-11-24T22:53:16.636
+Evening : 2020-11-24T20:45
+```
+### DateTimeFormatter
+Bazı durumlarda LocalDateTime objemizi belirli bir formatta string objesine çevirmemiz yada tam tersi belli bir formatta 
+oluşturulmuş string objemizden LocalDateTime objesi oluşturmamız gerekebilir. Bu durumlarda LocalDateTimeFormatter dönüşüm 
+konusunda işimizi kolaylaştırır. 
+```java
+LocalDateTime now = LocalDateTime.now();
+System.out.println("Default format : " + now);
+
+String formattedDateTime = now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+System.out.println("Custom format : " + formattedDateTime);
+
+String date = "11-24-2020 10:12:00";
+LocalDateTime parsedDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss"));
+System.out.println("Custom format parsed : " + parsedDate);
+```
+Output :
+```
+Default format : 2020-11-24T23:06:41.127
+Custom format : 24-11-2020 23:06:41
+Custom format parsed : 2020-11-24T10:12
+```
+### Duration
+İki farklı zaman dilimi arasındaki farkı farklı zaman birimlerinde hesaplamaya yarayan sınıftır. 
+
+```java
+LocalDateTime now = LocalDateTime.now();
+LocalDateTime myBirthDate = LocalDateTime.of(1987, 3, 7, 0, 0, 0);
+
+Duration duration = Duration.between(myBirthDate, now);
+System.out.println("My birthdate : " + myBirthDate);
+System.out.println("Now : " + now);
+System.out.println("Days between min date and now : " + duration.toDays());
+```
+Output :
+```
+My birthdate : 1987-03-07T00:00
+Now : 2020-11-24T23:13:11.127
+Days between min date and now : 12316
+```
+
+## Nesneye Yönelik Programlama (OOP)
+Nesne (object) Java dilinin özüdür temelde. Nesneler classlardan üretilir ve class kavramı Javanın temel yapı taşıdır.
+Bu nedenle Javayı anlamak için class ve object kavramını çok iyi anlamak gerekir.
+
+Etrafımızda gördüğümüz herşey bir obje olarak modellenebilir. Nesneye dayalı programlamanın gücü de burdan gelir. Gerçek hayatı
+modellemek için iyi bir araçtır.
+
+### Class ve Object kavramları
+Javada hersey classların içinde döner, aslında eğitimin başından beri classları çokca kullandık fakat oldukça basiy classlardı bunlar.
+Bir class çeşitli türden veriler ve bu veriler üzerinde işlem yapmaya yarayan metodlar içerir. Bu haliyle class objeler için
+bir şablon görevi görür, yani tek başına class bir işe yaramaz. Onun hafızada bir yer kaplaması ve programın döngüsüne katılabilmesi için
+kendisinden objeler yaratılmalıdır.
+
+Sınıfın içinde bulunan verilere ve metodlara sınıfın üyeleri adı verilir. Sınıfın içinde bulunan verilere tek başına 
+instance variable da denir.
+
+Bir sınıf hem veri hem metod barındırabileceği gibi bunlardan sadece birini de barındırabilir.
+
+```java
+class classname {
+    // declare instance variables
+    type var1;
+    type var2;
+    // ...
+    type varN;
+
+    // declare methods
+    type method1(parameters) {
+     // body of method
+    }
+    type method2(parameters) {
+     // body of method
+    }
+    // ...
+    type methodN(parameters) {
+     // body of method
+    }
+}
+```
+
+Bir class tanımlarken burada önemli olan sınıfın birbiri ile alakalı bilgiler içeriyor olmasıdır. Örneğin bir kullanıcı sınıfı
+tanımlıyorsak içine kullanıcı adı, email adresi gibi bilgiler koyarken stok bilgisi ile ilakalı veriler koymaktan kaçınmalıyız.
+
+Bir java uygulamasında main() metodu uygulamanın başlangıç noktasını işaret eder. O nedenle eğer yazdığımız sınıf uygulamanın 
+başlangıç noktası değilse o sınıf main() metodunu içermemelidir.
+
+Şimdi bir Vehicle sınıfı yaratalım ve bundan instancelar üretelim :
+```java
+public class Vehicle {
+
+    int passengers;
+    double fuelCapacity;
+    int fuelConsumptionPerKm;
+}
+```
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        Vehicle minivan = new Vehicle();
+        minivan.passengers = 7;
+        minivan.fuelCapacity = 70;
+        minivan.fuelConsumptionPerKm = 6;
+
+        double range = minivan.fuelCapacity / minivan.fuelConsumptionPerKm;
+        System.out.println("Minivan can carry " + minivan.passengers + " people for " + range + " km");
+    }
+}
+```
+Output :
+```
+Minivan can carry 7 people for 11.666666666666666 km
+```
+
