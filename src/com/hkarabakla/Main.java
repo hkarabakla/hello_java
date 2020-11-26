@@ -4,12 +4,20 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Vehicle minivan = new Vehicle();
-        minivan.passengers = 7;
-        minivan.fuelCapacity = 70;
-        minivan.fuelConsumptionPerKm = 6;
+        int value = 5;
+        Vehicle vehicle = new Vehicle(4, 60, 6, false, "BMW");
 
-        double range = minivan.fuelCapacity / minivan.fuelConsumptionPerKm;
-        System.out.println("Minivan can carry " + minivan.passengers + " people for " + range + " km");
+        System.out.println("Value : " + value);
+        System.out.println("Brand of vehicle : " + vehicle.brand);
+
+        doSomeOperation(value, vehicle);
+        System.out.println("After operation -------");
+        System.out.println("Value : " + value);
+        System.out.println("Brand of vehicle : " + vehicle.brand);
+    }
+
+    public static void doSomeOperation(int value, Vehicle vehicle) {
+        value = 10;
+        vehicle.brand = "Mercedes";
     }
 }

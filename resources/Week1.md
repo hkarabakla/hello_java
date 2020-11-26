@@ -1047,7 +1047,7 @@ Etrafımızda gördüğümüz herşey bir obje olarak modellenebilir. Nesneye da
 modellemek için iyi bir araçtır.
 
 ### Class ve Object kavramları
-Javada hersey classların içinde döner, aslında eğitimin başından beri classları çokca kullandık fakat oldukça basiy classlardı bunlar.
+Javada hersey classların içinde döner, aslında eğitimin başından beri classları çokca kullandık fakat oldukça basit classlardı bunlar.
 Bir class çeşitli türden veriler ve bu veriler üzerinde işlem yapmaya yarayan metodlar içerir. Bu haliyle class objeler için
 bir şablon görevi görür, yani tek başına class bir işe yaramaz. Onun hafızada bir yer kaplaması ve programın döngüsüne katılabilmesi için
 kendisinden objeler yaratılmalıdır.
@@ -1115,3 +1115,317 @@ Output :
 Minivan can carry 7 people for 11.666666666666666 km
 ```
 
+#### Instance variables
+Daha önce class degişkenlerine instance variables denildiğini öğrenmiştik. Şimdi bu değikenlere biraz daha yakından bakalım.
+Bu değişkenlerin default değerleri vardır, yani bir classdan bir instance yarattığımızda eğer değişkenlerine biz değer atamazsak
+Java arka planda bu değişkenlere bir değer ataması yapar.
+
+```java
+public class Vehicle {
+    int passengers;
+    double fuelCapacity;
+    int fuelConsumptionPerKm;
+    boolean isSport;
+    String brand;
+}
+```
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        Vehicle minivan = new Vehicle();
+        System.out.println(
+                "Brand " + minivan.brand +
+                " passengers : " + minivan.passengers +
+                " fuel capacity : " + minivan.fuelCapacity +
+                " consumption per km : " + minivan.fuelConsumptionPerKm +
+                " is sport car : " + minivan.isSport
+        );
+    }
+}
+```
+Output :
+```
+Brand null passengers : 0 fuel capacity : 0.0 consumption per km : 0 is sport car : false
+```
+Burada gördüğümüz gibi instance değişkenleri biz onlara değer atamazsak default değerleri java tarafından atanır.
+
+#### Metodlar
+Daha önce instance değişkenlerini görmüştük şimdi ise bu değişkenler üzerinde işleem yapmak için metod tanımına bakacağız.
+```java
+return-type methodName( parameter-list ) {
+    // body of method
+}
+```
+Burada methodName metodumuzun ismini temsil etmektedir ve daha sonra bu metoda erişmek istediğimizde kullanacağız.
+parameter-list ise metodumuzun kabul ettiği argüman listesini temsil etmektedir. Son olarak return-type metod işletildiği
+zaman metodun çağırıldığı yere hangi tipte bir veri döneceğini belirtir. Return tipi bir primitive tip olabileceği gibi
+ bir class da olabilir(yani metod bir obje dönebilir). Bazı durumlarda bir metod hiçbir değer de dönmeyebilir,
+yine de bu durumda metodun dönüş tipini özel bir kelime ile belirtmemiz gerekir; **void**
+
+Şimdi daha önce yarattığımız Vehicle sınıfına bir metod ekleyelim.
+```java
+public class Vehicle {
+    int passengers;
+    double fuelCapacity;
+    int fuelConsumptionPerKm;
+    boolean isSport;
+    String brand;
+
+    double range () {
+        return fuelCapacity / fuelConsumptionPerKm;
+    }
+}
+```
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        Vehicle minivan = new Vehicle();
+        minivan.passengers = 7;
+        minivan.fuelCapacity = 70;
+        minivan.fuelConsumptionPerKm = 6;
+
+        double range = minivan.range();
+        System.out.println("Minivan can carry " + minivan.passengers + " people for " + range + " km");
+    }
+}
+```
+Output :
+```
+Minivan can carry 7 people for 11.666666666666666 km
+```
+Burada range() metodunun fuelCapacity ve fuelConsumptionPerKm değerlerine obje ismi kullanmadan eriştiğine dikkat ediniz.
+Ayrıca metoddan çıkmak ve değer dönmek için **return** ifadesinin kullanıldığına da dikkat ediniz.
+
+```java
+public class SimpleMath {
+
+    int add (int a, int b) {
+        return a + b;
+    }
+
+    int subtract(int a, int b) {
+        return a - b;
+    }
+
+    double divide(int a, int b) {
+        return (double) a / b;
+    }
+
+    int multiply(int a, int b) {
+        return a * b;
+    }
+
+    boolean isOddNumber(int a) {
+        if (a % 2 == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    boolean isFactor(int a, int b) {
+        return a % b == 0;
+    }
+
+    public int addAll(int[] args) {
+        int sum = 0;
+        for (int value : args) {
+            sum += value;
+        }
+        return sum;
+    }
+}
+``` 
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        SimpleMath simpleMath = new SimpleMath();
+        int addThreeAndFive = simpleMath.add(3, 5);
+        boolean factorElevenAndThree = simpleMath.isFactor(11, 3);
+        int sum = simpleMath.addAll(new int[]{1, 2, 3});
+    }
+}
+```
+#### Constuctor
+```java
+Vehicle minivan = new Vehicle();
+minivan.passengers = 7;
+minivan.fuelCapacity = 70;
+minivan.fuelConsumptionPerKm = 6;
+```
+Daha önceki örneklerimizde yukarıdakine benzer objenin değişkenlerine değer atama işlemleri görmüştük.
+Profesyonel bir uygulamada buna benzer değer atama işlemlerini göremeyiz, bunun yerine değişkenlerin ilk değerlerini atamak
+için constructor dediğimiz metodlara benzeyen yapıları kullanırız.
+
+Constructorlar ait oldukları class ile aynı ismi taşırlar ve bir dönüş değerleri yoktur. Bir constructorun içinde instance variablelara
+ilk değer atama işlemi yapılırken ayrıca objenin tam olarak işlevini yerine getirmesini sağlayacak diğer konfigürasyon işlemleri de yer 
+alabilir.
+```java
+public class Vehicle {
+    int passengers;
+    double fuelCapacity;
+    int fuelConsumptionPerKm;
+    boolean isSport;
+    String brand;
+
+    public Vehicle() {
+        passengers = 4;
+        fuelCapacity = 60;
+        fuelConsumptionPerKm = 6;
+        isSport = false;
+        brand = "BMW";
+    }
+}
+```
+
+Burada görülen constructor hiç bir parametre almazken içinde bütün instance değişkenlerine default değerler atanmıştır.
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        Vehicle bmw = new Vehicle();
+        System.out.println(
+                "Brand " + bmw.brand +
+                        " passengers : " + bmw.passengers +
+                        " fuel capacity : " + bmw.fuelCapacity +
+                        " consumption per km : " + bmw.fuelConsumptionPerKm +
+                        " is sport car : " + bmw.isSport
+        );
+    }
+}
+```
+Output :
+```
+Brand BMW passengers : 4 fuel capacity : 60.0 consumption per km : 6 is sport car : false
+```
+
+Constructorlar aynı zamanda bütün bu değerleri dışarıdan argüman olarak da alabilir, bu durumda ilk değerleri set etme görevi
+objeyi yaratan kod parçasına düşer.
+
+```java
+public Vehicle(int passengers, double fuelCapacity, int fuelConsumptionPerKm, boolean isSport, String brand) {
+    this.passengers = passengers;
+    this.fuelCapacity = fuelCapacity;
+    this.fuelConsumptionPerKm = fuelConsumptionPerKm;
+    this.isSport = isSport;
+    this.brand = brand;
+}
+```
+```java
+Vehicle bmw = new Vehicle(4, 75, 7, false, "Volkswagen");
+```
+
+Eğer hiç bir constructor eklemezsek sınıfa bu durumda Java otomatik olarak default constructoru ekler (hiçbir parametre almayan constructor)
+ve değişkenler default değerlerini alır.
+
+ #### Bir obje yaratıldığında arka planda neler olur ? 
+ 
+![memory model](images/java-memory-model.png)
+
+Jvm (Java virtual machine)'de memory yönetimi şu şekilde yapılır :
+Memory ikiye ayrılmıştır, Stack ve Heap. Yaratılan her bir obje memoryde Heap adı verilen bu özel alanda saklanır. 
+Bunun yanında uygulama sırasında yaratılan her bir thread için bir Stack alanı açılır ve bu alan threadin çaşıltırdığı metodları
+sırası ile tutar. Çalıştırılan metodların yanında local değişkenler de stackde saklanır. 
+
+Burada önemli bir kaç nokta vardır. Memorydeki stack alanları threadlere özeldir, yani bir threadin stack alanına sadece o thread erişebilir.
+Fakat heap memorydeki paylaşılan alandır, yani bir thread bir obje yaratırsa heap alanında bu obje diğer threadler için de erişilebilirdir.
+Bu multithread uygulamalarda herzaman istenmeyen bir olaydır, concurrency ve multithreading konuları gelince bu konuya tekrar detaylıca değineceğiz.
+Bunun yanında bir method içinde bir lokal değişken bir objeye referans ediyor diyelim, referans stack kısmında saklanırken objenin kendisi
+heap alanında saklanır. 
+
+Peki heap ve stack alanlarında ne kadar veri saklayabiliriz ? Memory dediğmiz kısım fiziksel bir cihazdan ibaret olduğu için
+tabiki maksimum kullanabileceğimiz bir limit var. Fakat basit bir uygulamada bu limiti doldurmak okadar kolay değil merak etmeyin
+sadece döngüler içinde obje yaratırken dikkatli olun yeter =) Yinede jvm parametreleri ile stack ve heap için nekadar 
+yerayırmak istediğimizi kontrol edebiliyoruz. Olurda yinede ayırdığımız stack alanı yeterli gelmezse java.lang.StackOverFlowError 
+exceptionı fırlatılır. Eğer heap alanı yeterli gelmez ise java.lang.OutOfMemoryError hatası fırlatılır.
+
+#### new ve this anahtar kelimeleri
+new operatorünün yeni nesne yaratmak için kullanıldığını daha önce görmüştük. new operatoru ile yarattığımız nesneyi bir
+referans değişkenine atayarak bu referans değişkenin ismiyle objenin fieldlarına ve metodlarına erişebildiğimizi de görmüştük.
+
+Şimdi this anahtar kelimesine bakalım biraz da ;
+```java
+public class Power {
+    int base;
+    int power;
+    int value;
+
+    public Power(int base, int power) {
+        this.base = base;
+        this.power = power;
+
+        if (power == 0) return;
+        
+        this.value = 1;
+        for (int value = 0; value < power; value++) {
+            this.value = this.value * base;
+        }
+    }
+}
+```
+Burada value ifadesine dikkat edelim. Hem instance variable olarak tanımlanmış, hem de for döngüsü içinde local değişken olarak 
+tanımlanmış. Javada bu tarz durumlarda eğer this anahtar kelimesini kullanmazsak jvm instance değişkenini görünmez kılar ve
+for döngüsü içinde local değişken olan value değeri kullanılır. bu şekilde this anahtar kelimesi bize instance değişkenine 
+objenin kendi içinde erişme imkanı verir. Yani sadece bir objenin içinde objenin alanlarına/metodlarına erişmek için kullanılır.
+
+#### Pass by value / pass by reference
+Mülakatlarda en çok karşımıza çıkan konseptlerden birisi budur. Daha önce metodlara argüman verilebildiğini görmüştük.
+Peki bir metoda bir değişkeni gönderdiğimizi düşünelim, ve bu metodun da gönderdiğimiz değişkenin değerinde değişiklik yaptığını 
+varsayalım. Bu durumda metodu çağırdığımız yerde tekrar parametre olarak gönderdiğimiz değişkenlere erişmek istersek hangi
+değere erişiriz ?
+
+```java
+public static void main(String[] args) {
+
+    int value = 5;
+    Vehicle vehicle = new Vehicle(4, 60, 6, false, "BMW");
+
+    System.out.println("Value : " + value);
+    System.out.println("Brand of vehicle : " + vehicle.brand);
+
+    doSomeOperation(value, vehicle);
+    System.out.println("After the operation -------");
+    System.out.println("Value : " + value);
+    System.out.println("Brand of vehicle : " + vehicle.brand);
+}
+
+public static void doSomeOperation(int value, Vehicle vehicle) {
+    value = 10;
+    vehicle.brand = "Mercedes";
+}
+```
+Output :
+```
+Value : 5
+Brand of vehicle : BMW
+After the operation -------
+Value : 5
+Brand of vehicle : Mercedes
+```
+
+Burada görüldüğü gibi metoda bir primitive tipte değişken gönderirsek o değişkenin değerinin bir kopyası metoda ulaşmış olur
+ve orijinal değer üzerinde yapacağımız değişiklikleerden etkilenmez. Buna pass by value denir.
+
+Fakat bir metoda bir objeyi parametre olarak gönderirsek aslında metoda o objenin referansı yani memorydeki adresi ulaşmış olur
+bizde metodun içinde o referansı kullanark objeye erişir ve değerleri değiştirirsek orijinal objede değişiklik yapmış olur.
+Buna pass by reference denir.
+
+Yani Javada metodlar hem pass by value hemde pass by refernce dir. Metoda ne gönderdiğinize bağlı olarak. 
+
+#### Garbage Collector
+Daha önce objelerin memorynin heap adı verilen özel alanlarında tutulduğunu ve bu alanın bir limitinin olduğundan bahsetmiştik.
+BU nedenle uygulamada yarattığımız objelerin kendilerine ihtiyaç kalmadığından memoryden temizlenmesi gerekir. C gibi bazı
+dillerde bu işlem manuel olarak uygulamanın içinden yapıldığı gibi Javada bu işlem tamemn JVM tarafından Garbage Collector
+dediğimiz bileşen tarafından otomatik olarak yürütülür. Yani developer olarak bizim birşey yapmamıza gerek yok. 
+
+Garbage collector bir nesneye ait referans kalmadığında memeoryde bu nesnenin memoryde tuttuğu alanı temizleer ve tekrar kullanıma 
+açar. Bu işlemi kod içinde tetiklemenin bir yolu yok. Masraflı bir işlem olduğu için işlemin zamanına Garbage Collector kendisi
+karar verir. 
