@@ -1429,3 +1429,424 @@ dediğimiz bileşen tarafından otomatik olarak yürütülür. Yani developer ol
 Garbage collector bir nesneye ait referans kalmadığında memeoryde bu nesnenin memoryde tuttuğu alanı temizleer ve tekrar kullanıma 
 açar. Bu işlemi kod içinde tetiklemenin bir yolu yok. Masraflı bir işlem olduğu için işlemin zamanına Garbage Collector kendisi
 karar verir. 
+
+## Inheritance, Polymorphism, Encapsulation
+
+### Inheritance
+Inheritance (kalıtım) nesne yönelimli programlamanın üç ana bileşeninden birisidir. Inheritance yardımıyla sınıflar arası 
+hierarşi oluşturmak ve ortak özellikleri başka sınıflara aktarmak mümkündür.
+
+Kalıtımda iki ana unsur vardır, ortak özellikleri taşıyan ve diğer sınıflara aktaran superclass ve superclass dan kalıtımla 
+ortak özellikleri alıp üzerine kendine has özellikleri ekleyen subclass.
+
+Kalıtımı sağlamak için Javada **extends** ifadesini kullanırız. Genel syntax şu şekildedir.
+
+```java
+class SuperClass {
+}
+
+class SubClass extends SuperClass {
+}
+
+class SubToSubClass extends SubClass {
+}
+```
+
+> Java dilinde bir subclass sadece bir superclass ı extend edebilir. Mülakatlarda bu konu çok sıklıkla sorulmaktadır.
+> Javada bu şekilde multiple inheritance mümkün değildir. Bunun sebebini ilerleyen konularda göreceğiz.
+
+![class_hierarchy](images/inheritance_1.png)
+
+Şimdi bu yukarda gördüğümüz örnek dizaynı nasıl implemente edebiliriz bakalım, 
+
+```java
+public class Vehicle {
+    String brand;
+    String model;
+    String fuel;
+    int tankCapacity;
+    double remainingFuel;
+
+    void fillTheTank(double amount) {
+        if (amount + remainingFuel < tankCapacity) {
+            tankCapacity += amount;
+        }
+    }
+}
+
+public class Car extends Vehicle {
+    int numberOfSits;
+}
+
+public class Train extends Vehicle {
+    boolean isPassengerTrain;
+    int numberOfWaggons;
+
+    void addWaggon(int waggons) {
+        numberOfWaggons += waggons;
+    }
+}
+
+public class Truck extends Vehicle {
+    int loadCapacityInTons;
+    int currentLoad;
+
+    void loadTruck(int load) {
+        if (load + currentLoad <= loadCapacityInTons) {
+            currentLoad += load;
+        }
+    }
+}
+```
+
+#### super anahtar ifadeleri
+Yukarıdaki örnekte de görüldüğü gibi Car, Train ve Truck sınıfları Vehicle sınıfını extend ediyor ve kalıtım yolu ile 
+Vehicle sınıfının değişkenlerine ve metoduna sahip oluyorlar. Subclass lar superclass tarafından sunulan değişken ve metodlara 
+super ifadesi aracılığıyla erişebilirler. Bu erişim tek yönlüdür, yani superclass subclass ın bileşenlerine erişemez.
+
+```java
+public class Car extends Vehicle {
+    int numberOfSits;
+
+    void printCarNameAndBrand() {
+        System.out.println("Brand : " + super.brand + " Model : " + super.model);
+    }   
+}
+``` 
+
+#### Inheritance ve constructor işlemleri
+Üst sınıflar alt sınıflardan bağımsızdır fakat alt sınıflar üst sınıflara bağımlıdır. Örneğin üst sınıfların objeleri
+bağımsız olarak yaratılabilir.
+
+```java
+public class Vehicle {
+    String brand;
+    String model;
+    String fuel;
+    int tankCapacity;
+    double remainingFuel;
+
+    public Vehicle(String brand, String model, String fuel, int tankCapacity, double remainingFuel) {
+        this.brand = brand;
+        this.model = model;
+        this.fuel = fuel;
+        this.tankCapacity = tankCapacity;
+        this.remainingFuel = remainingFuel;
+    }
+
+    void fillTheTank(double amount) {
+        if (amount + remainingFuel < tankCapacity) {
+            tankCapacity += amount;
+        }
+    }
+}
+
+public class Truck extends Vehicle {
+    int loadCapacityInTons;
+    int currentLoad;
+
+    public Truck(String brand, String model, String fuel, int tankCapacity, double remainingFuel, int loadCapacityInTons, int currentLoad) {
+        super(brand, model, fuel, tankCapacity, remainingFuel);
+        this.loadCapacityInTons = loadCapacityInTons;
+        this.currentLoad = currentLoad;
+    }
+    
+    void loadTruck(int load) {
+        if (load + currentLoad <= loadCapacityInTons) {
+            currentLoad += load;
+        }
+    }
+}
+```
+
+Üst sınıfa bir constructor eklersek bu constructor ı alt sınıflara da constructor ekleyerek üst sınıfın constructorunu 
+uygun şekilde çağırmamız gerekir. Aksi durumda compiler hata verir. Onun dışında alt sınıfın ihtiyacı olan bilgileri de 
+constructora ekleyip alt sınıfın değişkenlerine atayabiliriz. Burada this ifadesini kullanarak içinde bulunduğumuz objeye
+değerleri atarız.
+
+Burada önemli olan herzaman üst sınıfın constructorunun alt sınıf constructorunda ilk olarak çağrılması gerektiğidir.
+Çünkü herzaman sınıf hieraşisinde ilk olarak üst sınıfın constructoru çalıştırılır ve biter.
+
+```java
+public class A {
+    public A() {
+        System.out.println("Constructing class A");
+    }
+}
+
+public class B extends A {
+    public B() {
+        System.out.println("Constructing class B");
+    }
+}
+
+public class C extends B {
+    public C() {
+        System.out.println("Constructing class C");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        C c = new C();
+    }
+}
+```
+
+Output :
+```
+Constructing class A
+Constructing class B
+Constructing class C
+```
+
+#### Süper sınıf referans ve alt sınıf obje
+Java dilinin tip ve değer uyumunu kontrol ederken çok katıdır. Yani diyelimki X sınıfı ve Y sınıfı diye iki tane sınıfınız var.
+Bu sınıflar arasında üst sınıf alt sınıf ilişkisi yok. Bu durumda X tipinde bir değişkene Y tipinde bir objeyi değer olarak
+atayamayız. Java buna compile sırasında hata vererek engel olur. 
+
+```java
+public class X {
+    
+}
+
+public class Y {
+   
+}
+
+public class Main {
+    public static void main(String[] args) {
+        X x = new Y(); // Hata
+    }
+}
+```
+
+Fakat X ve Y siniflari arasinda üst alt sınıf ilişkisi varsa bu drumda X tipinde bir değişkene Y tipinde bir objeye referans edebilir.
+Fakat bu durumda referans üzerinden sadece Y objesi tarafından sunulan ortak bileşenlere erişilebilir. Bunun tam tersi mümkün değildir,
+yani alt sınıf tipinde bir değişken üst sınıf tipinde bir objeye referans gösteremez.
+
+```java
+public class X {
+    int valueByX;
+}
+
+public class Y extends X {
+   int valueByY;
+}
+
+public class Main {
+    public static void main(String[] args) {
+        X x = new Y();
+        x.valueByX = 10;
+        x.valueByY = 10; // Hata
+        
+        Y y = new X(); // Hata
+ 
+    }
+}
+```
+#### Method overriding ve method overloading
+En çok karıştırılan ve bu nedenle de mülakatlarda en çok soru sorulan konulardan biri method overriding/overloading konusudur.  
+Her nekadar fonotik olarak birbirine benzeselerde birbirinden tamamen farklıdır bu iki kavram. Öncelikle doğrudan kalıtım
+konusuyla da ilgili olan overriding kavramına bakalım.
+
+Üst sınıf tarafından alt sınıfa miraz bırakılan metodların alt sınıftan bir obje yaratılarak erişilebildiğini daha önce öğrenmiştik.
+Bazı durumlarda üst sınıf tarafında kalıtımla alt sınıflara miras bırakılan metodlar alt sınıfın ihitiyacını tam olarak karşılayamazlar.
+Bu durumda bu metodun alt sınıfta onun kendi ihtiyacına uygun olarak tekrardan yazılması gerekir. Burada önemli olan metod 
+imazsının aynen korunmasıdır. Bu noktada alt sınıftan yaratılan obje artık üst sınıfın metodunu değil kendi metodunu kullanabilecektir.
+ İşte bu olaya üst sınıfın metodunu ezme yani method overriding denir.
+ 
+```java
+public class Animal {
+
+    void speak() {
+        System.out.println("All animals speak.");
+    }
+}
+
+public class Dog extends Animal {
+
+    void speak() {
+        System.out.println("Dogs bark");
+    }
+}
+
+public class Ant extends Animal {
+
+    void speak() {
+        System.out.println("Ants don't speak much");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        Animal animal = new Animal();
+        animal.speak();
+
+        Dog dog = new Dog();
+        dog.speak();
+
+        Ant ant = new Ant();
+        ant.speak();
+    }
+}
+```
+
+Output :
+```
+All animals speak.
+Dogs bark
+Ants don't speak much
+```
+
+Method overloading ise aynı sınıf yada üst sınıfta yer alan bir metodun ismini korumak şartıyla imzasının değiştirilerek
+farklı şekilde implemente edilmesidir.
+
+```java
+public class Animal {
+
+    void speak() {
+        System.out.println("All animals speak.");
+    }
+}
+
+public class Ant extends Animal {
+
+    void speak() {
+        System.out.println("Ants don't speak much");
+    }
+
+    void speak(String word) {
+        System.out.println(word);
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Ant ant = new Ant();
+        ant.speak();
+        ant.speak("Overloaded method");
+    }
+}
+```
+
+Output :
+```
+Ants don't speak much
+Overloaded method
+```
+
+> Method overriding olabilmesi için kalıtımın olması ve override edilen metodun imzası değiştirilmeden sadece implementasyon 
+ kısmının değişmesi şarttır.Fakat overloading olması için kalıtım olması şart değildir, metodun imzasının değişmesi 
+ yeterlidir (metod ismi aynı kalmalı).
+
+### Encapsulation
+Şuana kadar örneklerimizde sadece 1-2 sınıftan oluşan basit kod parçaları gördük fakat gerçek hayatta yazılımlar çok daha
+karmaşık olabilmekte. Bir yazılım içinde onlarca, yüzlerce, binlerce hatta milyonlarca sınıf bulunabiliyor. Bunun üzerine 
+yazılımınız tarafından kullanılan kütüphaneleri de eklediğimiz zaman ortaya çok karmaşık bir yapı çıkmakta. Ve uygulamada 
+bazı bilgilerin diğer sınıf/objelerin erişiminden saklanması ihtiyacı ortaya çıkmakta. Java dili bize bu gizlenmeyi ve 
+beraberinde güvenliği sağlama noktasında bir kaç adımdan oluşan güçlü bir mekanizma sunuyor. Şimdi bu adımlarda kullanmamız gereken
+bileşenlere göz atalım:
+
+#### Package kavramı
+Package dediğimiz kavram aslında dosya sisteminde dizin (folder) den ibarettir. Mantıksal olarak birlikte bulunması gereken
+sınıfları birlikte gruplamaya yarar. Ayrıca aynı isme sahip sınıflar için isim karmaşasını önler. Son olarak da erişim 
+kontrol mekanizmasında önemli bir rol oynar. Şimdi paketlerin nasıl tanımlandığına ve kullanıldığına göz atalım.
+
+Javada paketler **src** dizininin altında yer alır ve src dizininin altından yaratılan dizinler daha sonra o dizinler
+içinde yaratılacak sınıfların paket ismini oluşturur, yani java paket isimlerinde dosya sistemini kullanır. 
+
+Eğer uygulamada hiçbir paket yaratmazsak ve sınıflarımızı doğrudan src dizinine koyarsak java bizim için default paketi 
+kullanır.
+
+Bir paket yaratılırken isimlendirmeye dikkat etmek gerekir. Javada paket isimleri case sensitive dir, yani büyük küçük harfe duyarlıdır.
+Pratikte paket isimlendirmede vereceğimiz ismin her bir harfi için bir dizin oluşturulur ve tamamen küçük harfler tercih edilir.
+```java
+src
+ |
+ |--pckg1
+    |
+    |--pckg2
+        |
+        |--pckg3
+            |
+            |--pckg4
+```
+
+Bir sınıfın hangi pakete ait olduğunu öğrenmek için o sınıfın ilk satırına bakarız, paket bilgisi aşağıdaki gibi tanımlanır.
+
+```java
+package pckg1.pckg2.pckg3.pckg4;
+```
+
+Başka bir pakette tanımlanmış bir sınıfa başka bir pakette tanımlanmış bir sınıftan erişmek istersek o sınıfı paket bilgisi 
+ile birlikte import etmemiz gerekir.
+
+```java
+package com.hkarabakla.example;
+
+import java.util.UUID;
+
+public class UserDetails {
+    String username;
+    UUID userId;
+    String name;
+    String surname;
+
+    public UserDetails(String username, UUID userId, String name, String surname) {
+        this.username = username;
+        this.userId = userId;
+        this.name = name;
+        this.surname = surname;
+    }
+}
+```
+
+```java
+package com.hkarabakla;
+
+import UserDetails;
+
+import java.util.UUID;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        UserDetails userDetails = new UserDetails("nesUser", UUID.randomUUID(), "name", "surname");
+        userDetails.username = "anotherName";
+    }
+}
+```
+
+Yukarıdaki örnekte görüldüğü gibi UserDetails objesini yaratabiliyor ve constructor unu kullanarak instance değişkenlerine
+değer atayabiliyoruz. Fakat yarattığımız objenin bir değişkenin değiştirmek istersek ne olur ? 
+
+#### Access Modifiers (Erişim belirleyiciler)
+Önceki bölümde gördüğümüz gibi paketler birtakım kodları ve bilgileri saklamakta bize yardımcı oluyor fakat tek başına yeterli değil.
+Kod erişimini farklı seviyelerde engelleyen bir de erişim belirleyiciler vardır. Java dilinde 4 adet erişim belirleyici vardır :
+public, protected, private ve default. İlk üç erişim belirleyiciyi kullanmazsak otomatikman default erişim belirleyici atanır.
+
+Şuana kadar hep default erişim belirleyiciyi ve public ifadesini kullandık. Şimdi bunların detaylarına bakalım :
+
+![access modifiers](images/access_modifiers.jpg)
+
+Bu tablodaki kurallar sadece class members için geçerlidir.
+
+Default erişim belirleyiciye sahip değişken ve metodlar sadece aynı paket içinde bulunan diğer sınıf ve metodları tarafından erişilebilir.
+Bu nendenle bu erişim belirleyciye package access modifier da denir.
+
+Public erişim belirleyici en geniş erişim hakkı sununa ifadedir. Aynı pakette olsun olmasın tüm sınıf ve metodlar tarafından erişilebilir.
+
+Private erişim belirleyici sadece sınıf içi erişim hakkı verir, paket ve subclass ilişkilerine bakmaksızın.
+
+Protected ifadesi ise kendisi ile aynı pakette bulunan diğer kodlara ve diğer paketlerde bulunan sadece subclass larına erişim hakkı verir.
+
+Söz konusu class olduğunda ise kullanabileceğimiz sadece 2 tane erişim belirleyici var; default ve public.
+Bir class public olarak tanımlanırsa bu durumda tüm uygulama tarafından erişilebilir aynı sınıf bileşenlerinde olduğu gibi.
+Default olarak tanımlanır ise bu durumda sadece tanımlandığı paketteki sınıflar tarafından erişilebilir.
+
+ 
