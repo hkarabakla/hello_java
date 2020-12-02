@@ -1843,7 +1843,7 @@ abstract class AbstractClassName {
 }
 ``` 
 Burada önemli olan abstract metodların subclasslar tarafından implemente edilmesi gerektiğidir. Aksi durumda onlar da abstract 
-metod tanımını class içinde bulundurmak ve kendi subclasslarını durumdan haberdar etmek zorundalardır. Ayrıca abstract 
+class olmak zorunda ve implementasyonu kendi subclasslarina birakmak zorundalardır. Ayrıca abstract 
 metodların yalnızca abstract class içinde yer alabileceğini unutmayalım. Abstract classlar abstract metodların yanında
 metod implementasyonları da içerebilir.
 
@@ -1854,6 +1854,8 @@ public abstract class Animal {
         System.out.println("I'm doing something else");
     }
 
+    abstract void doSomethingElse();
+
     abstract void speak();
 }
 
@@ -1862,12 +1864,29 @@ public class Dog extends Animal {
     void speak() {
         System.out.println("Dogs bark");
     }
+    
+    void doSomethingElse() {
+        System.out.println("Something something else");
+    }
+
+
+}
+
+public abstract class Ant extends Animal {
+    void doSomethingElse() {
+        System.out.println("Something something else from Ant");
+    }
 }
 ```  
+Yukardaki örnekte Dog sınıfının Animal sınıfı tarafından tanımlanan tüm abstract metodları implemente etmek zorunda kaldığına
+Ant sınıfının ise abstract olduğu için Animal tarafından tanımlanan tüm abstract mettodları impleemente etmek zorunda olmadığına
+dikkat edelim.
 
 > Abstract classların new operatörü yardımıyla objelerinin yaratılamayacağını unutmayalım.
 
 ## Interface
+Abstract sınıflar tarafından sunulan abstraction ın bir adım daha ileri taşınmış halidir interface.
+
 
 
 ### Encapsulation
