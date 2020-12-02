@@ -1650,7 +1650,7 @@ En çok karıştırılan ve bu nedenle de mülakatlarda en çok soru sorulan kon
 Her nekadar fonotik olarak birbirine benzeselerde birbirinden tamamen farklıdır bu iki kavram. Öncelikle doğrudan kalıtım
 konusuyla da ilgili olan overriding kavramına bakalım.
 
-Üst sınıf tarafından alt sınıfa miraz bırakılan metodların alt sınıftan bir obje yaratılarak erişilebildiğini daha önce öğrenmiştik.
+Üst sınıf tarafından alt sınıfa miras bırakılan metodların alt sınıftan bir obje yaratılarak erişilebildiğini daha önce öğrenmiştik.
 Bazı durumlarda üst sınıf tarafında kalıtımla alt sınıflara miras bırakılan metodlar alt sınıfın ihitiyacını tam olarak karşılayamazlar.
 Bu durumda bu metodun alt sınıfta onun kendi ihtiyacına uygun olarak tekrardan yazılması gerekir. Burada önemli olan metod 
 imazsının aynen korunmasıdır. Bu noktada alt sınıftan yaratılan obje artık üst sınıfın metodunu değil kendi metodunu kullanabilecektir.
@@ -1742,6 +1742,133 @@ Overloaded method
 > Method overriding olabilmesi için kalıtımın olması ve override edilen metodun imzası değiştirilmeden sadece implementasyon 
  kısmının değişmesi şarttır.Fakat overloading olması için kalıtım olması şart değildir, metodun imzasının değişmesi 
  yeterlidir (metod ismi aynı kalmalı).
+
+### Polymorphism (Çok biçimlilik)
+Java dilinde iki tip polymorphism vardır; ilki compile time polymorphism, ikincisi ise runtime polymorphism.
+
+### Compile time polymorphism
+Java dilinde method overloadingin ne demek olduğunu ve nasıl yapıldığını daha önceki konularımızda öğrenmiştik. Şimdi bunun
+compiler açısından ne demek olduğuna bakalım. Diyelimki bir Math sınıfımız var ve bu sınıfın içine basit toplama işlemi 
+için metodlar eklemek istiyoruz. Bu metodlar iki tane sayısal parametre alsın ve bunları toplayıp sonucunu dönsün.
+
+Burada Math sınıfını kullanacak diğer sınıfları toplama işleminin karmaşasından uzaklaştırmak ve toplama işlemini parametrelerin
+tipinden bağımsız hale getirmek için meethod overloading yöntemini kullanırız. Yani aynı isimli toplama metodları farklı türle 
+parametreler alır ve aldığı parametre tipinde sonuç döner.
+
+```java
+public class Math {
+
+    int add (int a, int b) {
+        return a + b;
+    }
+
+    double add (double a, double b) {
+        return a + b;
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Math math = new Math();
+        int addInt = math.add(5, 4);
+        double addDouble = math.add(1.2, 5.7);
+    }
+}
+```   
+
+Örnekte görüldüğü gibi Main sınıfının main metodu Math sınıfından bir obje yaratıyor sonra int ve double değerleri topluyor.
+Bu iki işlem için aynı metod ismini kullanıyor. Bu uygulamayı compile ettiğimiz zaman arka planda compiler hangi metodun 
+çağrılacağına compile time da karar veriyor. Buna compile time polymorphism denir.
+
+### Runtime polymorphism
+Daha önce super class, sub class ve mothod overriding kavramlarından bahsetmiştik. Hatta super class tipinde bir değişkenin 
+sub class tipinde bir objeye referans gösterebileceğini de söylemiştik.
+
+Böyle bir durumda sub classın bir metodu override ettiğini ve referans değişken ile override edilen metodun çağırıldığını düşünelim
+Bu durumda JVM hangi metodu kullanacak ? JVM in hangi metodu çağıracağını compile time da bilme şansı yoktur. Çünkü referans 
+değişkenine obje atama işlemi run time da gerçekleşir. JVM de runtime da referans edilen objenin ilgili metodunu çağırır.
+Burda yazılımcı olarak önemli olan metodun nasıl çağrılacağını bilmektir. Geri kalan iş JVM tarafından runtime da halledilir.
+
+```java
+public class Animal {
+
+    void speak() {
+        System.out.println("All animals speak.");
+    }
+}
+
+public class Dog extends Animal {
+
+    void speak() {
+        System.out.println("Dogs bark");
+    }
+}
+
+public class Ant extends Animal {
+
+    void speak() {
+        System.out.println("Ants don't speak much");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        letTheAnimalSpeak(new Dog());
+        letTheAnimalSpeak(new Ant());
+        letTheAnimalSpeak(new Animal());
+    }
+    
+    static void letTheAnimalSpeak(Animal animal) {
+        animal.speak();
+    }
+}
+```    
+Burada letTheAnimalSpeak metodu bir Animal objesi kabul ediyor ve objenin speak metodunu çağırıyor. Burada hangi metodun 
+çalıştırılacağına runtime da JVM gelen parametreye göre karar veriyor. İşte buna runtime polymorphism denir. 
+
+## Abstract method ve abstract class
+Daha önce inheritance yardımıyla bir sınıfın başka sınıfların yerine metodları nasıl implemente ettiğini görmüştük.
+
+Bazı durumlarda super class bu metod implementasyonunu kendisi yapmak yerine bunu sub classlara bırakmak ister. Kendisi
+sadece metod imzasını verir ve metodun içini doldurma işlemini subclass dan bekler.
+
+Bu durumda aşağıdaki yapıda abstract metod tanımlaması yapılır.
+```java
+abstract class AbstractClassName {
+    abstract returnType methodName();
+}
+``` 
+Burada önemli olan abstract metodların subclasslar tarafından implemente edilmesi gerektiğidir. Aksi durumda onlar da abstract 
+metod tanımını class içinde bulundurmak ve kendi subclasslarını durumdan haberdar etmek zorundalardır. Ayrıca abstract 
+metodların yalnızca abstract class içinde yer alabileceğini unutmayalım. Abstract classlar abstract metodların yanında
+metod implementasyonları da içerebilir.
+
+```java
+public abstract class Animal {
+
+    void doSomething() {
+        System.out.println("I'm doing something else");
+    }
+
+    abstract void speak();
+}
+
+public class Dog extends Animal {
+
+    void speak() {
+        System.out.println("Dogs bark");
+    }
+}
+```  
+
+> Abstract classların new operatörü yardımıyla objelerinin yaratılamayacağını unutmayalım.
+
+## Interface
+
 
 ### Encapsulation
 Şuana kadar örneklerimizde sadece 1-2 sınıftan oluşan basit kod parçaları gördük fakat gerçek hayatta yazılımlar çok daha

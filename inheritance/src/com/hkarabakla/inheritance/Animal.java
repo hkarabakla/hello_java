@@ -1,8 +1,10 @@
 package com.hkarabakla.inheritance;
 
-public class Animal {
+public abstract class Animal {
 
-    void speak() {
-        System.out.println("All animals speak.");
+    void doSomething() {
+        System.out.println("I'm doing something else");
     }
+
+    abstract void speak();
 }
