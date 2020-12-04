@@ -1499,7 +1499,7 @@ public class Truck extends Vehicle {
 }
 ```
 
-#### super anahtar ifadeleri
+#### super anahtar ifadesi
 Yukarıdaki örnekte de görüldüğü gibi Car, Train ve Truck sınıfları Vehicle sınıfını extend ediyor ve kalıtım yolu ile 
 Vehicle sınıfının değişkenlerine ve metoduna sahip oluyorlar. Subclass lar superclass tarafından sunulan değişken ve metodlara 
 super ifadesi aracılığıyla erişebilirler. Bu erişim tek yönlüdür, yani superclass subclass ın bileşenlerine erişemez.
@@ -1746,7 +1746,7 @@ Overloaded method
 ### Polymorphism (Çok biçimlilik)
 Java dilinde iki tip polymorphism vardır; ilki compile time polymorphism, ikincisi ise runtime polymorphism.
 
-### Compile time polymorphism
+#### Compile time polymorphism
 Java dilinde method overloadingin ne demek olduğunu ve nasıl yapıldığını daha önceki konularımızda öğrenmiştik. Şimdi bunun
 compiler açısından ne demek olduğuna bakalım. Diyelimki bir Math sınıfımız var ve bu sınıfın içine basit toplama işlemi 
 için metodlar eklemek istiyoruz. Bu metodlar iki tane sayısal parametre alsın ve bunları toplayıp sonucunu dönsün.
@@ -1782,7 +1782,7 @@ public class Main {
 Bu iki işlem için aynı metod ismini kullanıyor. Bu uygulamayı compile ettiğimiz zaman arka planda compiler hangi metodun 
 çağrılacağına compile time da karar veriyor. Buna compile time polymorphism denir.
 
-### Runtime polymorphism
+#### Runtime polymorphism
 Daha önce super class, sub class ve mothod overriding kavramlarından bahsetmiştik. Hatta super class tipinde bir değişkenin 
 sub class tipinde bir objeye referans gösterebileceğini de söylemiştik.
 
@@ -1830,7 +1830,7 @@ public class Main {
 Burada letTheAnimalSpeak metodu bir Animal objesi kabul ediyor ve objenin speak metodunu çağırıyor. Burada hangi metodun 
 çalıştırılacağına runtime da JVM gelen parametreye göre karar veriyor. İşte buna runtime polymorphism denir. 
 
-## Abstract method ve abstract class
+### Abstract method ve abstract class
 Daha önce inheritance yardımıyla bir sınıfın başka sınıfların yerine metodları nasıl implemente ettiğini görmüştük.
 
 Bazı durumlarda super class bu metod implementasyonunu kendisi yapmak yerine bunu sub classlara bırakmak ister. Kendisi
@@ -1884,10 +1884,188 @@ dikkat edelim.
 
 > Abstract classların new operatörü yardımıyla objelerinin yaratılamayacağını unutmayalım.
 
-## Interface
+### Interface
 Abstract sınıflar tarafından sunulan abstraction ın bir adım daha ileri taşınmış halidir interface.
+Abstract class da yer alan abstract metodlar metod imzasını verir metodun implementasyonunu subclass a bırakır. Yani ne yapılması
+gerektiğini tarif eder fakat nasıl yapılması gerektiğini söylemez. Bunun yanında abstract class ful implemente edilmiş 
+metodlar, private metodlar yada instance değişkenleri de barındırabilir. İşte interface tam da bu noktada farklılık gösteriyor.
+Java 8 öncesi versiyonlarda interfaceler sadece metod imzalarını içinde barındırabiliyor implementasyon kısmını interface i
+implemente eden sınıfa bırakıyordu. Java 8 ile birlikte interfaceler içinde sabit değişkenler ve default metodlar (ful implemente
+edilmiş) da ekleyebiliyoruz. Java 9 ve 10 ile birlikte daha yeni özellikler de eklendi ama biz onlara değinmeyeceğiz.
+
+```java
+access interface name {
+    returnType methodName1(parameter list);
+    returnType methodName2(parameter list);
+    
+    default returnType defaultMethod1(parameter list) {
+        ...
+    }
+
+    type var1 = value;
+    type var2 = value;
+}
+```
+
+Burada dikkat edilmesi gereken noktaların başında class yerine kullandığımız interface anahtar kelimesi gelir. 
+Bunun yanında bir interface sadece 2 farklı erişim belirleyici alabilir. Public yada default (Erişim belirleyicilere 
+daha sonra detaylı olarak değineceğiz)
+Bir interface hangi erişim belirleyiciyi alırsa içindeki metodlar o erişim belirleyiciye otomatik olarak sahip olur 
+yani tekrar erişim belirleyici almalarına gerek olmaz ve bu değiştirilemez.
+Interface içinde tanımlanan bütün değişkenler otomatik olarak class düzeyinde (public, static, final) değişken olurlar ve bir ilk değer 
+almak zorundalar. Buna constant yani sabit değer diyeceğiz.
+Default metodlar, default anahtar kelimesini almaları dışında normal metodlar gibi davranır ve interface i implemente eden 
+sınıfa davranışları aktarırlar.
+
+Interfacelerin nasıl implemente edildiğine bakalım :
+```java
+class ClassName extends SuperClass implements Interface1, Interface2, Interface3 {
+}
+```
+
+Bir class hem bir super class ı extend edip hemde bir yada birden fazla interface i implemente edebilir. Bir interface i
+implemente etmek için yukarda görüldüğü gibi implements anahtar kelimesini kullanmak yeterlidir. Eğer birden fazla interface i
+implemente etmek gerekirse bunları virgül ile ayırmak yeterli olur.
+
+Eğer bir sınıf bir yada birkaç interface i implemente ediyor ise bu interfacelerde yer alan tüm metodları implemente etmek zorundadır.
+Eğer tüm metodları implemente etmek istemezsek bu durumda bu sınıfı abstract sınıf yapmak zorundayız böylece implemente etmediğimiz
+metodlar otomatikman abstract metod gibi davranacak ve implemente etmek zorunda kalmayacağız. Bu abstract sınıfı extend ettiğimiz
+sınıf içinde bu metodları implemente etmemiz gerekecek. Böyle bir durumda eğer interface içinde bir default metod var ise 
+bu metodu abstract class içinde override etmek de mümkündür. 
+
+```java
+abstract class Animal {
+    String name;
+    String mainLand;
+    int averageLife;
+    double averageHeight;
+    double averageWeight;
+
+    public Animal(String name, String mainLand, int averageLife, double averageHeight, double averageWeight) {
+        this.name = name;
+        this.mainLand = mainLand;
+        this.averageLife = averageLife;
+        this.averageHeight = averageHeight;
+        this.averageWeight = averageWeight;
+    }
+}
+
+public interface Flyer {
+    void fly();
+}
+
+public interface Runner {
+    void run();
+}
+
+public interface Swimmer {
+    void swim();
+}
+
+public class Dog extends Animal implements Runner, Swimmer {
+
+    public Dog(String name, String mainLand, int averageLife, double averageHeight, double averageWeight) {
+        super(name, mainLand, averageLife, averageHeight, averageWeight);
+    }
+
+    public void run() {
+        System.out.println("A dog can run.");
+    }
+
+    public void swim() {
+        System.out.println("A dog can swim.");
+    }
+}
+
+public class Eagle extends Animal implements Flyer {
 
 
+    public Eagle(String name, String mainLand, int averageLife, double averageHeight, double averageWeight) {
+        super(name, mainLand, averageLife, averageHeight, averageWeight);
+    }
+
+    public void fly() {
+        System.out.println("An eagle can fly");
+    }
+}
+
+public class Puffin extends Animal implements Swimmer, Flyer {
+
+    public Puffin(String name, String mainLand, int averageLife, double averageHeight, double averageWeight) {
+        super(name, mainLand, averageLife, averageHeight, averageWeight);
+    }
+
+    public void fly() {
+        System.out.println("A puffin can fly");
+    }
+    
+    public void swim() {
+        System.out.println("A puffin can swim");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Animal dog = new Dog("Lessi", "Anywhere on the earth", 15, 60, 35);
+        Animal eagle = new Eagle("Rocky", "Rocks", 25, 60, 30);
+        Animal puffin = new Puffin("Puffin", "North", 8, 40, 25);
+
+        printSkills(dog);
+        printSkills(eagle);
+        printSkills(puffin);
+    }
+
+    static void printSkills(Animal animal) {
+        if (animal instanceof Flyer) {
+            ((Flyer) animal).fly();
+        }
+
+        if (animal instanceof Swimmer) {
+            ((Swimmer) animal).swim();
+        }
+
+        if (animal instanceof Runner) {
+            ((Runner) animal).run();
+        }
+    }
+}
+
+``` 
+
+Output :
+```
+A dog can swim.
+A dog can run.
+An eagle can fly
+A puffin can fly
+A puffin can swim
+```
+
+Bir interface başka bir interface i extend edebilir, uygulanış şekli normal sıfınıfların birbirini extend etmesi gibidir.
+Eğer bir sınıf başka bir interface i extend eden bir intterface i implemente derse bu durumda heer iki interface de de bulunan 
+tüm metodları implemente etmesi gerekir.
+
+```java
+interface A {
+    void method1();
+} 
+
+interface B extends A {
+    int method2();
+}
+
+class C implements B {
+    void method1() {
+    }
+    
+    int method2() {
+    }   
+}
+``` 
+
+### Multiple Inheritance
 
 ### Encapsulation
 Şuana kadar örneklerimizde sadece 1-2 sınıftan oluşan basit kod parçaları gördük fakat gerçek hayatta yazılımlar çok daha

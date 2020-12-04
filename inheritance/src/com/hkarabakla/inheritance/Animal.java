@@ -1,8 +1,17 @@
 package com.hkarabakla.inheritance;
 
-public abstract class Animal {
+abstract class Animal {
+    String name;
+    String mainLand;
+    int averageLife;
+    double averageHeight;
+    double averageWeight;
 
-    abstract void doSomething();
-
-    abstract void speak();
+    public Animal(String name, String mainLand, int averageLife, double averageHeight, double averageWeight) {
+        this.name = name;
+        this.mainLand = mainLand;
+        this.averageLife = averageLife;
+        this.averageHeight = averageHeight;
+        this.averageWeight = averageWeight;
+    }
 }
