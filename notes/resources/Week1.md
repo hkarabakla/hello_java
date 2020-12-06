@@ -501,543 +501,6 @@ Output :
     I : 80
     I : 90
 ```
-## Array İşlemleri
-Array aynı tipten verileri depolamaya yarayan koleksiyonlara denir. Genellikle birbiri ile alakalı verileri tutmak için kullanılır. 
-Java'da arrayler obje tipindedir. Arraylerin bize sunduğu en büyük avantajlardan biri de sakladıkları veriler üzerinde kolay işlem yapabilme 
-olanağıdır. Örneğin bir arrayde elimizde bulunan programlama kitaplarının isimlerini saklayıp onları kolayca listeleyebiliriz.
-Yada bir gurup insana ait gelir bilgilerini bir arrayde saklayıp kolayca ortalama geliri hesaplayabiliriz, yada bu verileri kolayca sıralayabiliriz.
-
-### Bir boyutlu arrayler
-Bir boyutlu arrayler aynı türden birbiri ile alakalı verileri tutmak için kullanılan diziler olarak düşünebiliriz.
-
-```java
-    type array_name[] = new type[array_capacity];
-```
-
-type : array içinde saklamak istediğimiz veri tipi
-array_name : arrayimizin adı
-new : yeni obje yaratma anahtar kelimesi (daha sonra detaylı göreceğiz)
-array_capacity : arrayimizin saklayabileceği maksimum veri sayısı
-
-```java
-    int sample[] = new int[10];
-
-    int sample2[];
-    sample2 = new int[10];
-```
-
-Arrayler sakladıkları verileri indeksleri ile birlikte saklarlar. Bu nedenle bir arraye veri koyarken ve veriyi arrayden
-alırken indeksleri kullanmamız gerekir.
-
-```java
-public class Main {
-
-    public static void main(String[] args) {
-
-        int[] sample = new int[10];
-
-        for (int i = 0; i < 10; i++) {
-            sample[i] = i;
-        }
-
-        for (int i = 0; i < 10; i++) {
-            System.out.println("Sample [" + i + "] is " + sample[i]);
-        }
-    }
-}
-```
-
-Output :
-```  
-    Sample [0] is 0
-    Sample [1] is 1
-    Sample [2] is 2
-    Sample [3] is 3
-    Sample [4] is 4
-    Sample [5] is 5
-    Sample [6] is 6
-    Sample [7] is 7
-    Sample [8] is 8
-    Sample [9] is 9
-```
-
-Arraylerde indeks değeri herzaman sıfırdan başlar. Yani 10 elemanlı bir array oluşturursak arrayimizin ilk elamnına 
-sıfırncı indeks ile ulaşırız ve en büyük indeksimiz de 9 olur.
-
-![array yapısı](images/array%20structure.png)
-
-```java
-public class Main {
-
-    public static void main(String[] args) {
-
-        int[] numbers = {10, 23, -98, 76, 9, -123, -28, 0, 35};
-
-        int max, min;
-        min = max = numbers[0];
-        for (int i = 1; i < numbers.length; i++) {
-            if (numbers[i] < min) min = numbers[i];
-            if (numbers[i] > max) max = numbers[i];
-        }
-
-        System.out.println("Min : " + min + " , Max : " + max);
-    }
-}
-```
-Output :
-```
-    Min : -123 , Max : 76
-```
-
-```
-Peki kapasitesi 10 olan bir arrayimiz var diyelim, -1. veya 10. indexe erişmeye çalışırsak ne olur ?
-```
-
-Şuana kadar öğrendiğimiz bilgilerle arraylerde sıralama yapabiliriz. Bunun için küçük arraylerde iyi performans gösteren
-ama büyük arrayler için önerilmeyen bubble sort algoritmasını kullanacağız.
-
-![bubble sort animasyon](images/Bubble-sort.gif)
-
-```java
-public class Main {
-
-    public static void main(String[] args) {
-
-        int[] numbers = {10, 23, -98, 76, 9, -123, -28, 0, 35};
-        sort(numbers);
-        printArray(numbers);
-    }
-
-    private static void printArray(int[] numbers) {
-        for (int i = 0; i < numbers.length; i++) {
-            System.out.print(numbers[i]);
-            if (i != numbers.length -1) System.out.print(" , ");
-        }
-    }
-
-    public static void sort(int[] array) {
-        for (int i = 0; i < array.length - 1; i++) {
-            for (int j = i + 1; j < array.length; j++) {
-                if (array[i] > array[j]) {
-                    int bigger = array[i];
-                    array[i] = array[j];
-                    array[j] = bigger;
-                }
-            }
-        }
-    }
-}
-```
-
-### Çok boyutlu arrayler
-Çok boyutlu arraylerin en basit hali 2 boyutlu arraylerdir. 2 boyutlu array aslında tek boyutlu arraylerin arrayi gibi
-düşünülebir, yani matris gibi.
-
-```java
-public class Main {
-
-    public static void main(String[] args) {
-
-        int matris[][] = new int[3][4];
-
-        for (int i = 0; i < matris.length; i++) {
-            for (int j = 0; j < matris[i].length; j++) {
-                matris[i][j] = i + j;
-            }
-        }
-
-        for (int i = 0; i < 3; i++) {
-            printArray(matris[i]);
-            System.out.println();
-        }
-    }
-
-    private static void printArray(int[] numbers) {
-        for (int i = 0; i < numbers.length; i++) {
-            System.out.print(numbers[i]);
-            if (i != numbers.length -1) System.out.print(" , ");
-        }
-    }
-}
-```
-Output :
-```
-    0 , 1 , 2 , 3
-    1 , 2 , 3 , 4
-    2 , 3 , 4 , 5
-```
-
-Tanımlama sırasında değer atama işlemi de aynı tek boyutlu arraylerdeki gibidir.
-
-```java
-int matris[][] = {
-                {0, 1, 2, 3, 4},
-                {1, 2, 3, 4, 5},
-                {2, 3, 4, 5, 6 }
-        };
-```
-
-Çok boyutlu arraylerin genel formülü şu şekildedir.
-
-```java
-    type array_name[][][]...[] = new tyepe[size1][size2][size3]...[sizeN];
-```
-
-### foreach tarzı for döngüsü
-Arrayler üzerinde döngü kurmayı kolaylaştıran for döngüsünün özel bir formudur.
-Array üzerindeki herbir eleman ile işlem yapmak istediğimizde kodu sadeleştirir ve işimizi kolaylaştırır.
-
-```java
-public class Main {
-
-    public static void main(String[] args) {
-    
-        int matris[][] = {
-                {0, 1, 2, 3, 4},
-                {1, 2, 3, 4, 5},
-                {2, 3, 4, 5, 6 }
-        };
-
-        for (int i = 0; i < matris.length; i++) {
-            for (int j = 0; j < matris[i].length; j++) {
-                System.out.println(matris[i][j]);
-            }
-        }
-
-        for (int[] values : matris) {
-            for (int value: values) {
-                System.out.println(value);
-            }
-        }
-    }
-}
-```
-
-Arrayler diğer veri tipleri gibi metodlara parametre olarak gönderilebilir yada bir metoddan çıktı olarak return edilebilir.
-
-## String sınıfı ve başlıca string işlemleri
-String Java gelirtiricilerin günlük hayatta en çok kullandığı veri tiplerinden birisidir. Pek çok programlama dilinde stringler 
-karakter arrayi olarak tutulurken javada string bir objedir. 
-
-Peki stringleri nasıl yaratırız ?
-
-``` java
-    String messageFromJava = "Java strings are powerfull";
-
-    String anotherMessage = new Strıng("Hello Java");
-
-    String lastMessage = new String(anotherMessage);
-```
-
-### string literal vs string obje
-Aşağıdaki resimde de görüldüğü gibi literal string ifadeleri hafıza da string pool denilen özel bir bölmede tutulur.
-Ve siz uygulamanızda bir string literali yaratırsanız string poolda bir değer yaratılır ve sizin değişkeniniz bu değere
-refrans eder. Eğer aynı değerle başka bir string literal daha yaratırsanız bu sefer string poolda yeni bir değer yaratılmaz
-sadece yeni değişkenin daha önce yaratılan değere referans etmesi sağlanır. 
-
-String objeleri ise hafızada Heap adı verilen özel bölmede saklanır, diğer bğtğn objeler gibi. 
-
-![string pool](images/string_pool.png)
-
-### string karşılaştırma
-String veri tipi üzerinde en çok yapılan işlemlerden biri karşılaştırma işlemidir. String karşılaştırma söz konusu olduğu 
-zaman aklımıza iki şey gelmeli; string değişkenlerin değerlerinin eşitliği ya da referansların eşitliği (hafızada aynı objeye referans etme)
-
-```java
-    public static void main(String[] args) {
-
-        String user1 = "userName";
-        String user2 = "userName";
-        String user3 = user2;
-        String user4 = new String("userName");
-
-        System.out.println("user1 == user2 : " + (user1 == user2));
-        System.out.println("user2 == user3 : " + (user2 == user3));
-        System.out.println("user3 == user4 : " + (user3 == user4));
-
-        System.out.println("user1.equals(user2) : " + user1.equals(user2));
-        System.out.println("user2.equals(user3) : " + user2.equals(user3));
-        System.out.println("user3.equals(user4) : " + user3.equals(user4));
-    }
-```
-Output :
-```
-    user1 == user2 : true
-    user2 == user3 : true
-    user3 == user4 : false
-    user1.equals(user2) : true
-    user2.equals(user3) : true
-    user3.equals(user4) : true
-```
-
-### string işlemleri
-String sınıfı oldukça büyük bir sınıf, iyi bir Java developer olmak için bu sınıfı iyi anlamak ve string objeleri üzerinde 
-hangi işlemleri yapabileceğinizi biliyor olmanız gerekir. Başlıca string işlemleri şunlardır:
-
-#### length() metodu
-String değerinin kaç tane karakter taşıdığını gösterir. Java dilinde boşluk da bir karakterdir ve uzunluk hesabına katılır.
-```java
-public static void main(String[] args) {
-
-    String userEmail = "user@email.com";
-    if (userEmail.length() == 0) {
-        System.out.println("Email is empty !");
-    } else {
-        System.out.println("Email is not empty !");
-    }
-}
-
-```
-
-#### isEmpty() metodu
-Bu method string objesinin hiç karakter bulundurmaması durumunda true, herhangi bir karakter bulundurması durumunda ise false döner.
-```java
-public static void main(String[] args) {
-
-    String userEmail = "user@email.com";
-    if (userEmail.isEmpty()) {
-        System.out.println("Email is empty !");
-    } else {
-        System.out.println("Email is not empty !");
-    }
-}
-``` 
-
-#### charAt() metodu
-Bazen string içerisindeki belli bir posizyondaki karakteri kontrol etmemiz gerekebilir. İşte bu durumda yardımımıza charAt metodu koşuyor.
-
-```java
-private int getPositionOfChar(String value) {
-        
-    int positionOfAt = -1;
-    for (int i = 0; i < value.length(); i++) {
-        if (value.charAt(i) == '@') {
-            positionOfAt = i;
-            break;
-        }
-    }
-    return positionOfAt;
-}
-```
-> Önemli Not : charAt metodunda dikkat edilmesi gereken nokta metoda verdiğimiz int değeridir. Stringlerde karakter indeksleri aynı arraylerde 
-olduğu gibi sıfırdan başlar, bu nedenle charAt metoduna verdiğimiz parametre değeri sıfırdan küçük yada stringin uzunluğuna
-eşit veya daha büyük olmamalıdır, olursa **StringIndexOutOfBoundsException** alırız.
-
-#### indexOf() metodu
-Bazen de bir karakterin string içindeki indexini öğrenmek isteriz. indexOf metodu kendisine parametre olarak verdiğimiz 
-karakteri stringin içinde arar ve ilk bulduğu eşleşmenin indeks değerini bize döner. Eğer hiç eşleşme bulamaz ise bu durumda
--1 değerini döner.
-
-```java
-String userEmail = "user@email.com";
-int positionOfChar = userEmail.indexOf('@');
-
-System.out.println("Position of @ : " + userEmail.indexOf('@'));
-System.out.println("Position of 'email' : " + userEmail.indexOf("email"));
-System.out.println("Position of 'email' : " + userEmail.indexOf("com", userEmail.indexOf('@')));
-```
-Output :
-```
-Position of @ : 4
-Position of 'email' : 5
-Position of 'email' : 11
-```
-
-#### replace() metodu
-Bazen de bir string değer içindeki bir karakter yada bir karakter dizisini başka bir karakter yada karakter dizisi ile değiştirmek
-isteriz. Bu durumda replace() metodu ve bu metodun diğer türevleri ihtiyacımızı karşılar. Bu meetod orijinal stringi değiştirmek
-yerine yeni bir string değer döner.
-
-```java
-String userEmail = "user@email.com";
-String userEmailWithNet = userEmail.replace("com", "net");
-System.out.println(userEmail);
-System.out.println(userEmailWithNet);
-```
-Output :
-```
-user@email.net
-```
-
-#### split() metodu
-Elimizde özel bir karakter ile birleştirilmiş bir grup bilgi varsa ve bu bilgilere erişmemiz gerekirse bu durumda elimizdeki
-string ifadeyi o özel karaktere göre parçalara ayırmamız gerekir. İşte tam da bu iş için string sınıfı içinde split metodu
-yer alıyor.
-
-```java
-String userInformation = "user@email.com|name of the user|surname of the user|34";
-String[] userDetails = userInformation.split("\\|");
-for (String detail : userDetails) {
-    System.out.println(detail);
-}
-```
-Output :
-```
-user@email.com
-name of the user
-surname of the user
-34
-```
-
-#### concat() metodu
-Elimizde birden fazla string değeri varsa ve bunları birleştirerek yeni bir string değer yaratmamız gerekirse bu durumda
-string sınıfı içinde yer alan concat() metodunu kullanabiliriz.
-
-```java
-String name = "Huseyin";
-String middleName = "Cihangir";
-String surname = "Karabakla";
-
-String fullName = name.concat(" ").concat(middleName).concat(" ").concat(surname);
-System.out.println("Full name of the user : " + fullName);
-```
-Output :
-```
-Full name of the user : Huseyin Cihangir Karabakla
-```
-
-Bazen üzerinde birleştirme işlemi yapmamız gereken string sayısı çok fazla olabilir bu durumda concat işlemini kullanmamız 
-doğru olmaz. Çünkü yukardaki örnekte de görüldüğü gibi her string için concat metodunu çağırmamız gerekir. concat metoduna 
-yaptığımız her çağrı yeni bir string objesi oluşturur hafıza da, bu da bir süre sonra uygulamamızın performansında düşüşlere 
-yol açar. Bu tarz durumlar için Javada daha özel iki tane sınıf var, **StringBuilder**, **StringBuffer**:
-
-```java
-String first = "First sentence";
-String second = "Second sentence";
-String third = "Third sentence";
-String fourth = "Fourth sentence";
-String fifth = "Fifth sentence";
-StringBuilder sb = new StringBuilder();
-sb.append(first)
-        .append(second)
-        .append(third)
-        .append(fourth)
-        .append(fifth);
-
-System.out.println(sb.toString());
-```  
-> Henüz thread-safety konusunu görmediğimiz için StringBuffer'dan daha sonra bahsedeceğiz.
-
-## Sayılar
-// TODO bu kisim eksik tamamlanacak
-
-## Tarih işlemleri
-Java dilinde built in olarak tarih ve zaman sınıfları yer almaz. Tarih ve zaman işlemleri yapabilmek için java.time paketinden
-ihtiyacımız olan sınıfı import etmemiz gerekir. Bu pakette yer alan sınıflardan başlıcaları olan LocalDate, LocalTime, LocalDateTime,
-DateTimeFormatter ve Duration sınıflarını ve bunların kullanımı yakından inceleyelim.
-
-### LocalDate
-Yıl, gün ve ay bilgisinden oluşan tarih işlemleri için LocalDate sınıfını kullanabiliriz. Default tarih formatı yyyy-mm-dd
-Ayrıca LocalDate objeleri immutable ve thread-safe dir.
-
-```java
-LocalDate firstDayOfTheYear = LocalDate.of(2012, 1, 1);
-System.out.println("firstDayOfTheYear " + firstDayOfTheYear);
-
-LocalDate today = LocalDate.now();
-System.out.println("today " + today);
-
-LocalDate tomorrow = LocalDate.now().plusDays(1);
-System.out.println("tomorrow " + tomorrow);
-
-LocalDate nextMonth = LocalDate.now().withMonth(12);
-System.out.println("nextMonth " + nextMonth);
-
-LocalDate yesterday = LocalDate.parse("2020-11-22");
-System.out.println("yesterday " + yesterday);
-
-System.out.println("is today after tomorrow " + today.isAfter(tomorrow));
-System.out.println("is today equals to yesterday " + today.isEqual(yesterday));
-```
-Output :
-```
-firstDayOfTheYear 2012-01-01
-today 2020-11-23
-tomorrow 2020-11-24
-nextMonth 2020-12-23
-yesterday 2020-11-22
-is today after tomorrow false
-is today equals to yesterday false
-```
-
-### LocalTime
-Saat, dakika, saniye ve nanosaniye cinsinden veriler söz konusu olduğu zaman bakmamız gereken yer LocalTime.
-LocalTime sınıfı da immutable ve thread safe dir. 
-
-```java
-LocalTime now = LocalTime.now();
-System.out.println("Now : " + now);
-
-LocalTime evening = LocalTime.of(20, 0, 0);
-System.out.println("Evening : " + evening);
-
-LocalTime afterThirtyMinutes = LocalTime.now().plusMinutes(30);
-System.out.println("After 30 minutes from now : " + afterThirtyMinutes);
-
-long hoursToNewDay = LocalTime.now().until(LocalTime.of(23, 59, 59, 59), ChronoUnit.MINUTES);
-System.out.println("Remaining minutes to new day : " + hoursToNewDay);
-```
-Output :
-```
-Now : 23:39:39.211
-Evening : 20:00
-After 30 minutes from now : 00:09:39.217
-Remaining minutes to new day : 20
-```
-### LocalDateTime
-Hem tarih hemde zaman bilgisini birlikte tutmaya ve işlemeye yarayan sınıftır. LocalDate ve LocalTime gibi LocalDateTime da
-immutable ve thread safe dir. 
-```java
-LocalDateTime now = LocalDateTime.now();
-System.out.println("Now : " + now);
-
-LocalDateTime evening = LocalDateTime.of(2020, 11, 24, 20, 45, 0);
-System.out.println("Evening : " + evening);
-```
-Output :
-```
-Now : 2020-11-24T22:53:16.636
-Evening : 2020-11-24T20:45
-```
-### DateTimeFormatter
-Bazı durumlarda LocalDateTime objemizi belirli bir formatta string objesine çevirmemiz yada tam tersi belli bir formatta 
-oluşturulmuş string objemizden LocalDateTime objesi oluşturmamız gerekebilir. Bu durumlarda LocalDateTimeFormatter dönüşüm 
-konusunda işimizi kolaylaştırır. 
-```java
-LocalDateTime now = LocalDateTime.now();
-System.out.println("Default format : " + now);
-
-String formattedDateTime = now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-System.out.println("Custom format : " + formattedDateTime);
-
-String date = "11-24-2020 10:12:00";
-LocalDateTime parsedDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss"));
-System.out.println("Custom format parsed : " + parsedDate);
-```
-Output :
-```
-Default format : 2020-11-24T23:06:41.127
-Custom format : 24-11-2020 23:06:41
-Custom format parsed : 2020-11-24T10:12
-```
-### Duration
-İki farklı zaman dilimi arasındaki farkı farklı zaman birimlerinde hesaplamaya yarayan sınıftır. 
-
-```java
-LocalDateTime now = LocalDateTime.now();
-LocalDateTime myBirthDate = LocalDateTime.of(1987, 3, 7, 0, 0, 0);
-
-Duration duration = Duration.between(myBirthDate, now);
-System.out.println("My birthdate : " + myBirthDate);
-System.out.println("Now : " + now);
-System.out.println("Days between min date and now : " + duration.toDays());
-```
-Output :
-```
-My birthdate : 1987-03-07T00:00
-Now : 2020-11-24T23:13:11.127
-Days between min date and now : 12316
-```
 
 ## Nesneye Yönelik Programlama (OOP)
 Nesne (object) Java dilinin özüdür temelde. Nesneler classlardan üretilir ve class kavramı Javanın temel yapı taşıdır.
@@ -1376,7 +839,7 @@ tanımlanmış. Javada bu tarz durumlarda eğer this anahtar kelimesini kullanma
 for döngüsü içinde local değişken olan value değeri kullanılır. bu şekilde this anahtar kelimesi bize instance değişkenine 
 objenin kendi içinde erişme imkanı verir. Yani sadece bir objenin içinde objenin alanlarına/metodlarına erişmek için kullanılır.
 
-#### Pass by value / pass by reference
+### Pass by value / pass by reference
 Mülakatlarda en çok karşımıza çıkan konseptlerden birisi budur. Daha önce metodlara argüman verilebildiğini görmüştük.
 Peki bir metoda bir değişkeni gönderdiğimizi düşünelim, ve bu metodun da gönderdiğimiz değişkenin değerinde değişiklik yaptığını 
 varsayalım. Bu durumda metodu çağırdığımız yerde tekrar parametre olarak gönderdiğimiz değişkenlere erişmek istersek hangi
@@ -1420,7 +883,7 @@ Buna pass by reference denir.
 
 Yani Javada metodlar hem pass by value hemde pass by refernce dir. Metoda ne gönderdiğinize bağlı olarak. 
 
-#### Garbage Collector
+### Garbage Collector
 Daha önce objelerin memorynin heap adı verilen özel alanlarında tutulduğunu ve bu alanın bir limitinin olduğundan bahsetmiştik.
 BU nedenle uygulamada yarattığımız objelerin kendilerine ihtiyaç kalmadığından memoryden temizlenmesi gerekir. C gibi bazı
 dillerde bu işlem manuel olarak uygulamanın içinden yapıldığı gibi Javada bu işlem tamemn JVM tarafından Garbage Collector
@@ -2065,7 +1528,145 @@ class C implements B {
 }
 ``` 
 
-### Multiple Inheritance
+#### Multiple Inheritance
+Daha önce bir sınıfın birden fazla sınıfı extend edemeyeceğini söylemiştik. Şimdi bunun nedenine bakalım.
+
+Diyelim ki A sınıfının operation() adında bir metodu var ve B sınıfının da aynı operation() metoduna sahip olduğunu düşünelim.
+Bu durumda C sınıfı hem A sınıfını hem de B sınıfını extend ederse bu durumda JVM hangi operation() metodunun inherit edilip 
+kullanılacağını anlayamıyor. Başka programlama dillerinde bunu yapmak mümkün fakat JAVA dilinde en başından beri buna izin verilmiyor.
+
+Fakat bir sınıfın birden fazla interface i implemente edebildiğini ve Java 8 ile birlikte interfacelerin default metodlar yardımı
+aracılığıyla metod implementasyonları içerebildiğini görmüştük. Bu durumda iki interface aynı default metodlara sahipse 
+ve bir sınıf bu iki interface i implemente ederse ne olur ?
+
+Bu durumda compiler yine hata verir. Çünkü yine hangi metod implementasyonun kullanılacağını bilemez. Böyle bir durumla 
+karşılaşırsak bu durumdan kurtulmanın tek yolu o sınıf içinde bu metodu override etmektir. Override ederek istersek kendi 
+implementasyonumuzu yazabilir istersek de implemente ettiğimiz interfacelerden birinin metodunu çağırabiliriz. Şimdi bir
+örnekle bunu nasıl yaparız bakalım :
+
+```java
+public interface A {
+
+    default void operation() {
+        System.out.println("This operation from interface A");
+    }
+}
+
+public interface B {
+    default void operation() {
+        System.out.println("This operation from interface B");
+    }
+}
+
+public class C implements A, B {
+
+    // Option 1
+//    public void operation() {
+//        A.super.operation();
+//    }
+
+    // Option 2
+    public void operation() {
+        System.out.println("This operation from interface C");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        C c = new C();
+        c.operation();
+    }
+}
+```
+Output :
+```
+Option 1
+This operation from interface A
+
+Option 2
+This operation from interface C
+```
+
+Burada interfacelerden birinin metodunu çağırmak için **interfaceName.super.methodName()** kalıbının kullanıldığına dikkat edelim.
+
+> Multiple inheritance konusu mülakatlarda sıklıkla sorulmaktadır, o nedenle mantığını anlamak önemli. Multiple inheritance 
+> Java dilinde 8 versiyonundan sonra interfaceler ve default metodlar yardımıyla mümkündür. Fakat yukarıda bahsettiğimiz kurala
+> uyma zorunluluğu vardır.
+
+#### final anahtar kelimesi
+Daha önce Java dilinde sınıfların nasıl extend edildiğini ve metodların nasıl override edildiğini gördük. Fakat bazı durumlarda
+bir sınıfı oluştururken bu sınıfın hiçbir şekilde extend edilememesini isteriz. Yada bu sınıfta yer alan bir metodun 
+sub class lar tarafından override edilememsini. Yada bir değişkenin ilk değerinin değiştirilememesini isteriz. Bu durumlar 
+gerçek hayatta yazılımcılar sıklıkla karşılaştıkları durumlardır. 
+
+Bütün bu senaryolarda kullanmamız için Java dilinde **final** anahtar kelimesi bizlere sunulmuştur. Bu senaryolarda görüldüğü
+gibi final anahtar kelimesi hem sınıflara, hem metodlara hem de değişkenlere uygulanabilir. Şimdi bu senaryolara birer örnek 
+ile bakalım.
+
+1. Senaryo, final class
+```java
+public final class FinalClass {
+
+    void operation() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println("");            
+        }
+    }
+}
+
+public class AnotherClass extends FinalClass {
+}
+```  
+Bu senaryoda AnotherClass sınıfı final olarak tanımlanmış FinalClass sınıfını extend etmek istiyor. Bu durumda compiler
+hata vererek final bir sınıfı extend edemeyeceğimizi bize hatırlatır.
+
+> final kelimesi abstract class ve interface ler ile birlikte kullanılamaz.
+
+2. Senaryo, final method
+```java
+public class A {
+
+    final void nonOverrideableMethod() {
+        System.out.println("This method cannot be overrideable");
+    }
+}
+
+public class B extends A {
+
+    void nonOverrideableMethod() {
+        System.out.println("Nice try but this method cannoy be overrideable");
+    }
+}
+``` 
+Bu senaryoda B sınıfı A sınıfını extend ederek A sınıfında yeralan final bir metodu override etmeye çalışıyor. Fakat compiler
+hata vererek bizi uyarıyor.
+
+> final ifadesi abstract metodlar ve default metodlar ile birlikte kullanılamaz.
+
+3. Senaryo, final değişken
+```java
+public class Main {
+
+    static final int value1 = 7;
+    
+    public static void main(String[] args) {
+        final boolean value2 = true;
+        
+        value2 = false; // Hata
+        value1 = 12; // Hata
+    }
+    
+    static void aMethod(final String value3) {
+        
+        value3 = "new value"; // Hata
+    }
+}
+```
+Bu senaryoda final kelimesini üç farklı şekilde değişkenler ile kullandık. Üç durumda da final tanımlanan değişkenlere
+tekrar değer atamaya çalışınca compiler ın hata verdiğini görüyoruz.
+
 
 ### Encapsulation
 Şuana kadar örneklerimizde sadece 1-2 sınıftan oluşan basit kod parçaları gördük fakat gerçek hayatta yazılımlar çok daha
@@ -2087,7 +1688,7 @@ Eğer uygulamada hiçbir paket yaratmazsak ve sınıflarımızı doğrudan src d
 kullanır.
 
 Bir paket yaratılırken isimlendirmeye dikkat etmek gerekir. Javada paket isimleri case sensitive dir, yani büyük küçük harfe duyarlıdır.
-Pratikte paket isimlendirmede vereceğimiz ismin her bir harfi için bir dizin oluşturulur ve tamamen küçük harfler tercih edilir.
+Pratikte paket isimlendirmede vereceğimiz ismin her bir kelimesi için bir dizin oluşturulur ve tamamen küçük harfler tercih edilir.
 ```java
 src
  |
@@ -2158,7 +1759,7 @@ public, protected, private ve default. İlk üç erişim belirleyiciyi kullanmaz
 
 ![access modifiers](images/access_modifiers.jpg)
 
-Bu tablodaki kurallar sadece class members için geçerlidir.
+Bu tablodaki kurallar sadece sinif içindeki değişken ve metodlar için geçerlidir.
 
 Default erişim belirleyiciye sahip değişken ve metodlar sadece aynı paket içinde bulunan diğer sınıf ve metodları tarafından erişilebilir.
 Bu nendenle bu erişim belirleyciye package access modifier da denir.
@@ -2173,4 +1774,646 @@ Söz konusu class olduğunda ise kullanabileceğimiz sadece 2 tane erişim belir
 Bir class public olarak tanımlanırsa bu durumda tüm uygulama tarafından erişilebilir aynı sınıf bileşenlerinde olduğu gibi.
 Default olarak tanımlanır ise bu durumda sadece tanımlandığı paketteki sınıflar tarafından erişilebilir.
 
- 
+#### getter ve setter metodlar
+Her nekadar encapsulation yardımı ile bazı sınıfları ve sınıf bileşenlerini saklasak da bazı pek çok durumda yarattığımız sınıfa 
+ve o sınıfın bileşenlerine bir noktada erişim yetkisi vermek zorundayız. Fakat bu demek değil ki tüm kontrolü dışarıya verelim.
+
+Bazı durumlarda bir sınıfın değişkenin atanacak değerin belli şartlara uyması gerekir, örneğin int bir değişken için değerin 0 ile
+10 arasında olması zorunluluğu gibi. Yadan bir değişkenin değerini deeğiştirirken başka bir işlem de yapılması gerekmesi gibi.
+
+Yada bir değişkenin sadece obje yaratıldığı anda değer almasını daha sonra değiştirilmesini istemeyebiliriz.
+
+Yada bir deeğişkenin değerini dönerken değişken değerini direk dönmek yerine o değerin kopyasını dönmek isteyebiliriz.
+
+Bütün bu senaryoları düşündüğümüzde yardımımıza getter ve setter metodlar yetişiyor. Genellikle bir best practice olarak
+sınıf değişkenlerinin private tanımlanması ve o değişkene değer atamak ve değeri okumak için özel metodların kullanılması önerilir.
+
+```java
+public class Vehicle {
+    
+    private String brand;
+    private String model;
+    private int yearOfConstruction;
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public int getYearOfConstruction() {
+        return yearOfConstruction;
+    }
+
+    public void setYearOfConstruction(int yearOfConstruction) {
+        this.yearOfConstruction = yearOfConstruction;
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Vehicle vehicle1 = new Vehicle();
+        Vehicle vehicle2 = new Vehicle();
+        Vehicle vehicle3 = new Vehicle();
+
+        Vehicle[] myCars = new Vehicle[] {vehicle1, vehicle2, vehicle3};
+
+        vehicle1.setBrand("Audi");
+        vehicle1.setModel("A4");
+        vehicle1.setYearOfConstruction(2019);
+
+        vehicle2.setBrand("BMW");
+        vehicle2.setModel("M4");
+        vehicle2.setYearOfConstruction(2020);
+
+        vehicle3.setBrand("Ford");
+        vehicle3.setModel("Focus");
+        vehicle3.setYearOfConstruction(2018);
+
+        for (Vehicle v: myCars) {
+            System.out.println(v.getBrand() + " " + v.getModel() + " " + v.getYearOfConstruction());
+        }
+    }
+}
+```
+Output :
+```
+Audi A4 2019
+BMW M4 2020
+Ford Focus 2018
+```  
+
+## Array İşlemleri
+Array aynı tipten verileri depolamaya yarayan koleksiyonlara denir. Genellikle birbiri ile alakalı verileri tutmak için kullanılır. 
+Java'da arrayler obje tipindedir. Arraylerin bize sunduğu en büyük avantajlardan biri de sakladıkları veriler üzerinde kolay işlem yapabilme 
+olanağıdır. Örneğin bir arrayde elimizde bulunan programlama kitaplarının isimlerini saklayıp onları kolayca listeleyebiliriz.
+Yada bir gurup insana ait gelir bilgilerini bir arrayde saklayıp kolayca ortalama geliri hesaplayabiliriz, yada bu verileri kolayca sıralayabiliriz.
+
+### Bir boyutlu arrayler
+Bir boyutlu arrayler aynı türden birbiri ile alakalı verileri tutmak için kullanılan diziler olarak düşünebiliriz.
+
+```java
+    type array_name[] = new type[array_capacity];
+```
+
+type : array içinde saklamak istediğimiz veri tipi
+array_name : arrayimizin adı
+new : yeni obje yaratma anahtar kelimesi (daha sonra detaylı göreceğiz)
+array_capacity : arrayimizin saklayabileceği maksimum veri sayısı
+
+```java
+    int sample[] = new int[10];
+
+    int sample2[];
+    sample2 = new int[10];
+```
+
+Arrayler sakladıkları verileri indeksleri ile birlikte saklarlar. Bu nedenle bir arraye veri koyarken ve veriyi arrayden
+alırken indeksleri kullanmamız gerekir.
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] sample = new int[10];
+
+        for (int i = 0; i < 10; i++) {
+            sample[i] = i;
+        }
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Sample [" + i + "] is " + sample[i]);
+        }
+    }
+}
+```
+
+Output :
+```  
+    Sample [0] is 0
+    Sample [1] is 1
+    Sample [2] is 2
+    Sample [3] is 3
+    Sample [4] is 4
+    Sample [5] is 5
+    Sample [6] is 6
+    Sample [7] is 7
+    Sample [8] is 8
+    Sample [9] is 9
+```
+
+Arraylerde indeks değeri herzaman sıfırdan başlar. Yani 10 elemanlı bir array oluşturursak arrayimizin ilk elamnına 
+sıfırncı indeks ile ulaşırız ve en büyük indeksimiz de 9 olur.
+
+![array yapısı](images/array%20structure.png)
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] numbers = {10, 23, -98, 76, 9, -123, -28, 0, 35};
+
+        int max, min;
+        min = max = numbers[0];
+        for (int i = 1; i < numbers.length; i++) {
+            if (numbers[i] < min) min = numbers[i];
+            if (numbers[i] > max) max = numbers[i];
+        }
+
+        System.out.println("Min : " + min + " , Max : " + max);
+    }
+}
+```
+Output :
+```
+    Min : -123 , Max : 76
+```
+
+```
+Peki kapasitesi 10 olan bir arrayimiz var diyelim, -1. veya 10. indexe erişmeye çalışırsak ne olur ?
+```
+
+Şuana kadar öğrendiğimiz bilgilerle arraylerde sıralama yapabiliriz. Bunun için küçük arraylerde iyi performans gösteren
+ama büyük arrayler için önerilmeyen bubble sort algoritmasını kullanacağız.
+
+![bubble sort animasyon](images/Bubble-sort.gif)
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] numbers = {10, 23, -98, 76, 9, -123, -28, 0, 35};
+        sort(numbers);
+        printArray(numbers);
+    }
+
+    private static void printArray(int[] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.print(numbers[i]);
+            if (i != numbers.length -1) System.out.print(" , ");
+        }
+    }
+
+    public static void sort(int[] array) {
+        for (int i = 0; i < array.length - 1; i++) {
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[i] > array[j]) {
+                    int bigger = array[i];
+                    array[i] = array[j];
+                    array[j] = bigger;
+                }
+            }
+        }
+    }
+}
+```
+
+### Çok boyutlu arrayler
+Çok boyutlu arraylerin en basit hali 2 boyutlu arraylerdir. 2 boyutlu array aslında tek boyutlu arraylerin arrayi gibi
+düşünülebir, yani matris gibi.
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        int matris[][] = new int[3][4];
+
+        for (int i = 0; i < matris.length; i++) {
+            for (int j = 0; j < matris[i].length; j++) {
+                matris[i][j] = i + j;
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            printArray(matris[i]);
+            System.out.println();
+        }
+    }
+
+    private static void printArray(int[] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.print(numbers[i]);
+            if (i != numbers.length -1) System.out.print(" , ");
+        }
+    }
+}
+```
+Output :
+```
+    0 , 1 , 2 , 3
+    1 , 2 , 3 , 4
+    2 , 3 , 4 , 5
+```
+
+Tanımlama sırasında değer atama işlemi de aynı tek boyutlu arraylerdeki gibidir.
+
+```java
+int matris[][] = {
+                {0, 1, 2, 3, 4},
+                {1, 2, 3, 4, 5},
+                {2, 3, 4, 5, 6 }
+        };
+```
+
+Çok boyutlu arraylerin genel formülü şu şekildedir.
+
+```java
+    type array_name[][][]...[] = new tyepe[size1][size2][size3]...[sizeN];
+```
+
+### foreach tarzı for döngüsü
+Arrayler üzerinde döngü kurmayı kolaylaştıran for döngüsünün özel bir formudur.
+Array üzerindeki herbir eleman ile işlem yapmak istediğimizde kodu sadeleştirir ve işimizi kolaylaştırır.
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+    
+        int matris[][] = {
+                {0, 1, 2, 3, 4},
+                {1, 2, 3, 4, 5},
+                {2, 3, 4, 5, 6 }
+        };
+
+        for (int i = 0; i < matris.length; i++) {
+            for (int j = 0; j < matris[i].length; j++) {
+                System.out.println(matris[i][j]);
+            }
+        }
+
+        for (int[] values : matris) {
+            for (int value: values) {
+                System.out.println(value);
+            }
+        }
+    }
+}
+```
+
+Arrayler diğer veri tipleri gibi metodlara parametre olarak gönderilebilir yada bir metoddan çıktı olarak return edilebilir.
+
+## String sınıfı ve başlıca string işlemleri
+String Java gelirtiricilerin günlük hayatta en çok kullandığı veri tiplerinden birisidir. Pek çok programlama dilinde stringler 
+karakter arrayi olarak tutulurken javada string bir objedir. 
+
+Peki stringleri nasıl yaratırız ?
+
+``` java
+    String messageFromJava = "Java strings are powerfull";
+
+    String anotherMessage = new Strıng("Hello Java");
+
+    String lastMessage = new String(anotherMessage);
+```
+
+### string literal vs string obje
+Aşağıdaki resimde de görüldüğü gibi literal string ifadeleri hafıza da string pool denilen özel bir bölmede tutulur.
+Ve siz uygulamanızda bir string literali yaratırsanız string poolda bir değer yaratılır ve sizin değişkeniniz bu değere
+refrans eder. Eğer aynı değerle başka bir string literal daha yaratırsanız bu sefer string poolda yeni bir değer yaratılmaz
+sadece yeni değişkenin daha önce yaratılan değere referans etmesi sağlanır. 
+
+String objeleri ise hafızada Heap adı verilen özel bölmede saklanır, diğer bğtğn objeler gibi. 
+
+![string pool](images/string_pool.png)
+
+### string karşılaştırma
+String veri tipi üzerinde en çok yapılan işlemlerden biri karşılaştırma işlemidir. String karşılaştırma söz konusu olduğu 
+zaman aklımıza iki şey gelmeli; string değişkenlerin değerlerinin eşitliği ya da referansların eşitliği (hafızada aynı objeye referans etme)
+
+```java
+    public static void main(String[] args) {
+
+        String user1 = "userName";
+        String user2 = "userName";
+        String user3 = user2;
+        String user4 = new String("userName");
+
+        System.out.println("user1 == user2 : " + (user1 == user2));
+        System.out.println("user2 == user3 : " + (user2 == user3));
+        System.out.println("user3 == user4 : " + (user3 == user4));
+
+        System.out.println("user1.equals(user2) : " + user1.equals(user2));
+        System.out.println("user2.equals(user3) : " + user2.equals(user3));
+        System.out.println("user3.equals(user4) : " + user3.equals(user4));
+    }
+```
+Output :
+```
+    user1 == user2 : true
+    user2 == user3 : true
+    user3 == user4 : false
+    user1.equals(user2) : true
+    user2.equals(user3) : true
+    user3.equals(user4) : true
+```
+
+### string işlemleri
+String sınıfı oldukça büyük bir sınıf, iyi bir Java developer olmak için bu sınıfı iyi anlamak ve string objeleri üzerinde 
+hangi işlemleri yapabileceğinizi biliyor olmanız gerekir. Başlıca string işlemleri şunlardır:
+
+#### length() metodu
+String değerinin kaç tane karakter taşıdığını gösterir. Java dilinde boşluk da bir karakterdir ve uzunluk hesabına katılır.
+```java
+public static void main(String[] args) {
+
+    String userEmail = "user@email.com";
+    if (userEmail.length() == 0) {
+        System.out.println("Email is empty !");
+    } else {
+        System.out.println("Email is not empty !");
+    }
+}
+
+```
+
+#### isEmpty() metodu
+Bu method string objesinin hiç karakter bulundurmaması durumunda true, herhangi bir karakter bulundurması durumunda ise false döner.
+```java
+public static void main(String[] args) {
+
+    String userEmail = "user@email.com";
+    if (userEmail.isEmpty()) {
+        System.out.println("Email is empty !");
+    } else {
+        System.out.println("Email is not empty !");
+    }
+}
+``` 
+
+#### charAt() metodu
+Bazen string içerisindeki belli bir posizyondaki karakteri kontrol etmemiz gerekebilir. İşte bu durumda yardımımıza charAt metodu koşuyor.
+
+```java
+private int getPositionOfChar(String value) {
+        
+    int positionOfAt = -1;
+    for (int i = 0; i < value.length(); i++) {
+        if (value.charAt(i) == '@') {
+            positionOfAt = i;
+            break;
+        }
+    }
+    return positionOfAt;
+}
+```
+> Önemli Not : charAt metodunda dikkat edilmesi gereken nokta metoda verdiğimiz int değeridir. Stringlerde karakter indeksleri aynı arraylerde 
+olduğu gibi sıfırdan başlar, bu nedenle charAt metoduna verdiğimiz parametre değeri sıfırdan küçük yada stringin uzunluğuna
+eşit veya daha büyük olmamalıdır, olursa **StringIndexOutOfBoundsException** alırız.
+
+#### indexOf() metodu
+Bazen de bir karakterin string içindeki indexini öğrenmek isteriz. indexOf metodu kendisine parametre olarak verdiğimiz 
+karakteri stringin içinde arar ve ilk bulduğu eşleşmenin indeks değerini bize döner. Eğer hiç eşleşme bulamaz ise bu durumda
+-1 değerini döner.
+
+```java
+String userEmail = "user@email.com";
+int positionOfChar = userEmail.indexOf('@');
+
+System.out.println("Position of @ : " + userEmail.indexOf('@'));
+System.out.println("Position of 'email' : " + userEmail.indexOf("email"));
+System.out.println("Position of 'email' : " + userEmail.indexOf("com", userEmail.indexOf('@')));
+```
+Output :
+```
+Position of @ : 4
+Position of 'email' : 5
+Position of 'email' : 11
+```
+
+#### replace() metodu
+Bazen de bir string değer içindeki bir karakter yada bir karakter dizisini başka bir karakter yada karakter dizisi ile değiştirmek
+isteriz. Bu durumda replace() metodu ve bu metodun diğer türevleri ihtiyacımızı karşılar. Bu meetod orijinal stringi değiştirmek
+yerine yeni bir string değer döner.
+
+```java
+String userEmail = "user@email.com";
+String userEmailWithNet = userEmail.replace("com", "net");
+System.out.println(userEmail);
+System.out.println(userEmailWithNet);
+```
+Output :
+```
+user@email.net
+```
+
+#### split() metodu
+Elimizde özel bir karakter ile birleştirilmiş bir grup bilgi varsa ve bu bilgilere erişmemiz gerekirse bu durumda elimizdeki
+string ifadeyi o özel karaktere göre parçalara ayırmamız gerekir. İşte tam da bu iş için string sınıfı içinde split metodu
+yer alıyor.
+
+```java
+String userInformation = "user@email.com|name of the user|surname of the user|34";
+String[] userDetails = userInformation.split("\\|");
+for (String detail : userDetails) {
+    System.out.println(detail);
+}
+```
+Output :
+```
+user@email.com
+name of the user
+surname of the user
+34
+```
+
+#### concat() metodu
+Elimizde birden fazla string değeri varsa ve bunları birleştirerek yeni bir string değer yaratmamız gerekirse bu durumda
+string sınıfı içinde yer alan concat() metodunu kullanabiliriz.
+
+```java
+String name = "Huseyin";
+String middleName = "Cihangir";
+String surname = "Karabakla";
+
+String fullName = name.concat(" ").concat(middleName).concat(" ").concat(surname);
+System.out.println("Full name of the user : " + fullName);
+```
+Output :
+```
+Full name of the user : Huseyin Cihangir Karabakla
+```
+
+Bazen üzerinde birleştirme işlemi yapmamız gereken string sayısı çok fazla olabilir bu durumda concat işlemini kullanmamız 
+doğru olmaz. Çünkü yukardaki örnekte de görüldüğü gibi her string için concat metodunu çağırmamız gerekir. concat metoduna 
+yaptığımız her çağrı yeni bir string objesi oluşturur hafıza da, bu da bir süre sonra uygulamamızın performansında düşüşlere 
+yol açar. Bu tarz durumlar için Javada daha özel iki tane sınıf var, **StringBuilder**, **StringBuffer**:
+
+```java
+String first = "First sentence";
+String second = "Second sentence";
+String third = "Third sentence";
+String fourth = "Fourth sentence";
+String fifth = "Fifth sentence";
+StringBuilder sb = new StringBuilder();
+sb.append(first)
+        .append(second)
+        .append(third)
+        .append(fourth)
+        .append(fifth);
+
+System.out.println(sb.toString());
+```  
+> Henüz thread-safety konusunu görmediğimiz için StringBuffer'dan daha sonra bahsedeceğiz.
+
+## Sayılar
+// TODO bu kisim eksik tamamlanacak
+
+## Tarih işlemleri
+Java dilinde built in olarak tarih ve zaman sınıfları yer almaz. Tarih ve zaman işlemleri yapabilmek için java.time paketinden
+ihtiyacımız olan sınıfı import etmemiz gerekir. Bu pakette yer alan sınıflardan başlıcaları olan LocalDate, LocalTime, LocalDateTime,
+DateTimeFormatter ve Duration sınıflarını ve bunların kullanımı yakından inceleyelim.
+
+### LocalDate
+Yıl, gün ve ay bilgisinden oluşan tarih işlemleri için LocalDate sınıfını kullanabiliriz. Default tarih formatı yyyy-mm-dd
+Ayrıca LocalDate objeleri immutable ve thread-safe dir.
+
+```java
+LocalDate firstDayOfTheYear = LocalDate.of(2012, 1, 1);
+System.out.println("firstDayOfTheYear " + firstDayOfTheYear);
+
+LocalDate today = LocalDate.now();
+System.out.println("today " + today);
+
+LocalDate tomorrow = LocalDate.now().plusDays(1);
+System.out.println("tomorrow " + tomorrow);
+
+LocalDate nextMonth = LocalDate.now().withMonth(12);
+System.out.println("nextMonth " + nextMonth);
+
+LocalDate yesterday = LocalDate.parse("2020-11-22");
+System.out.println("yesterday " + yesterday);
+
+System.out.println("is today after tomorrow " + today.isAfter(tomorrow));
+System.out.println("is today equals to yesterday " + today.isEqual(yesterday));
+```
+Output :
+```
+firstDayOfTheYear 2012-01-01
+today 2020-11-23
+tomorrow 2020-11-24
+nextMonth 2020-12-23
+yesterday 2020-11-22
+is today after tomorrow false
+is today equals to yesterday false
+```
+
+### LocalTime
+Saat, dakika, saniye ve nanosaniye cinsinden veriler söz konusu olduğu zaman bakmamız gereken yer LocalTime.
+LocalTime sınıfı da immutable ve thread safe dir. 
+
+```java
+LocalTime now = LocalTime.now();
+System.out.println("Now : " + now);
+
+LocalTime evening = LocalTime.of(20, 0, 0);
+System.out.println("Evening : " + evening);
+
+LocalTime afterThirtyMinutes = LocalTime.now().plusMinutes(30);
+System.out.println("After 30 minutes from now : " + afterThirtyMinutes);
+
+long hoursToNewDay = LocalTime.now().until(LocalTime.of(23, 59, 59, 59), ChronoUnit.MINUTES);
+System.out.println("Remaining minutes to new day : " + hoursToNewDay);
+```
+Output :
+```
+Now : 23:39:39.211
+Evening : 20:00
+After 30 minutes from now : 00:09:39.217
+Remaining minutes to new day : 20
+```
+### LocalDateTime
+Hem tarih hemde zaman bilgisini birlikte tutmaya ve işlemeye yarayan sınıftır. LocalDate ve LocalTime gibi LocalDateTime da
+immutable ve thread safe dir. 
+```java
+LocalDateTime now = LocalDateTime.now();
+System.out.println("Now : " + now);
+
+LocalDateTime evening = LocalDateTime.of(2020, 11, 24, 20, 45, 0);
+System.out.println("Evening : " + evening);
+```
+Output :
+```
+Now : 2020-11-24T22:53:16.636
+Evening : 2020-11-24T20:45
+```
+### DateTimeFormatter
+Bazı durumlarda LocalDateTime objemizi belirli bir formatta string objesine çevirmemiz yada tam tersi belli bir formatta 
+oluşturulmuş string objemizden LocalDateTime objesi oluşturmamız gerekebilir. Bu durumlarda LocalDateTimeFormatter dönüşüm 
+konusunda işimizi kolaylaştırır. 
+```java
+LocalDateTime now = LocalDateTime.now();
+System.out.println("Default format : " + now);
+
+String formattedDateTime = now.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+System.out.println("Custom format : " + formattedDateTime);
+
+String date = "11-24-2020 10:12:00";
+LocalDateTime parsedDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss"));
+System.out.println("Custom format parsed : " + parsedDate);
+```
+Output :
+```
+Default format : 2020-11-24T23:06:41.127
+Custom format : 24-11-2020 23:06:41
+Custom format parsed : 2020-11-24T10:12
+```
+### Duration
+İki farklı zaman dilimi arasındaki farkı farklı zaman birimlerinde hesaplamaya yarayan sınıftır. 
+
+```java
+LocalDateTime now = LocalDateTime.now();
+LocalDateTime myBirthDate = LocalDateTime.of(1987, 3, 7, 0, 0, 0);
+
+Duration duration = Duration.between(myBirthDate, now);
+System.out.println("My birthdate : " + myBirthDate);
+System.out.println("Now : " + now);
+System.out.println("Days between min date and now : " + duration.toDays());
+```
+Output :
+```
+My birthdate : 1987-03-07T00:00
+Now : 2020-11-24T23:13:11.127
+Days between min date and now : 12316
+```
+
+# Ödev SOS Oyunu
+
+|   | 1 | 2 | 3 |
+|---|---|---|---|
+| 1 | s | s | s |
+| 2 | s | o | s |
+| 3 | o | o | s |
+
+Kare şeklinde nxn kutulardan oluşan bir panelde iki kişi tarafından oynanan bir oyundur. Oyun sırasında
+her bir kutuya **s** yada **o** harflerinden biri yerleştirilir. Oyunun başında hangi oyuncunun hangi harfi
+yerleştireceği ve kimin başlayacağına karar verilir. Amaç bir harf koyduğumuzda yatayda, dikeeyde yada çarprazda **SOS**
+kelimesini oluşturmaktır. SOS kelimesini oluşturan oyuncu 1 puan alır ve tekrar harf ekleme hakkı kazanır.
+Panel üzerinde hiç boş kutu kalmayana kadar oyun oynanır, sonunda en çok puanı alan oyunu kazanır.
+
+## Kurallar
+1. Panel büyüklüğü oyunun en başında konsoldan girdi olarak alınır. Minimum 3x3 maksimum 7x7 büyüklüğünde olmalıdır.
+2. Oyun bir kullanıcı tarafından bilgisayara karşı oynanır.
+3. Hangi oyuncunun hangi harfi alacağına ve kimin başlayacağına random karar verilir.
+4. Oyuncu hangi hangi kutuya harfini girmek istediğini satır ve sütun numarasını konsoldan girerek belli eder.
+5. Bilgisayar hangi kutuya harf yazacağına panel üzerindeki boş kutulardan birini random seçerek karar verir.
+6. Panele her karakter girişinde panelin güncel hali satır ve sütun numaraları ile birlikte ve oyuncuların puan durumu 
+ekranda gösterilir.
+7. Dolu kutulara harf yazılmasına izin verilmez.
+   
