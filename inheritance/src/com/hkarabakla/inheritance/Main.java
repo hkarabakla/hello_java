@@ -5,26 +5,15 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Vehicle vehicle1 = new Vehicle();
-        Vehicle vehicle2 = new Vehicle();
-        Vehicle vehicle3 = new Vehicle();
+        NumericOperation<Integer> intValue = new NumericOperation<>(23);
+        System.out.println("Is " + intValue.getObj() + " dividable by ten : " + intValue.isDividableByTen());
 
-        Vehicle[] myCars = new Vehicle[] {vehicle1, vehicle2, vehicle3};
+        NumericOperation<Double> doubleValue = new NumericOperation<>(23.12);
+        System.out.println("Is " + doubleValue.getObj() + " dividable by ten : " + doubleValue.isDividableByTen());
 
-        vehicle1.setBrand("Audi");
-        vehicle1.setModel("A4");
-        vehicle1.setYearOfConstruction(2019);
+        NumericOperation<Double> doubleValue2 = new NumericOperation<>(30.0);
+        System.out.println("Is " + doubleValue2.getObj() + " dividable by ten : " + doubleValue2.isDividableByTen());
 
-        vehicle2.setBrand("BMW");
-        vehicle2.setModel("M4");
-        vehicle2.setYearOfConstruction(2020);
-
-        vehicle3.setBrand("Ford");
-        vehicle3.setModel("Focus");
-        vehicle3.setYearOfConstruction(2018);
-
-        for (Vehicle v: myCars) {
-            System.out.println(v.getBrand() + " " + v.getModel() + " " + v.getYearOfConstruction());
-        }
+        NumericOperation<String> stringNumericOperation = new NumericOperation<String>("invalid parameter type");
     }
 }
