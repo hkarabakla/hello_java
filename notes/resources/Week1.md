@@ -615,7 +615,7 @@ Brand null passengers : 0 fuel capacity : 0.0 consumption per km : 0 is sport ca
 Burada gördüğümüz gibi instance değişkenleri biz onlara değer atamazsak default değerleri java tarafından atanır.
 
 #### Metodlar
-Daha önce instance değişkenlerini görmüştük şimdi ise bu değişkenler üzerinde işleem yapmak için metod tanımına bakacağız.
+Daha önce instance değişkenlerini görmüştük şimdi ise bu değişkenler üzerinde işlem yapmak için metod tanımına bakacağız.
 ```java
 return-type methodName( parameter-list ) {
     // body of method

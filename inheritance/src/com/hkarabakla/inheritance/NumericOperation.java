@@ -14,4 +14,8 @@ public class NumericOperation<T extends Number> {
     boolean isDividableByTen() {
         return obj.doubleValue() - obj.intValue() == 0 && obj.intValue() % 10 == 0;
     }
+
+    boolean absEqual(NumericOperation<?> another) {
+        return Math.abs(this.obj.doubleValue()) == Math.abs(another.obj.doubleValue());
+    }
 }

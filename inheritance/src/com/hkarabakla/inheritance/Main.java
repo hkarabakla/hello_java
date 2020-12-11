@@ -1,19 +1,30 @@
 package com.hkarabakla.inheritance;
 
-public class Main {
+import java.io.InputStreamReader;
 
+public class Main {
 
     public static void main(String[] args) {
 
-        NumericOperation<Integer> intValue = new NumericOperation<>(23);
-        System.out.println("Is " + intValue.getObj() + " dividable by ten : " + intValue.isDividableByTen());
+        StringFunc strReader = () -> {
+            String result = "";
+            InputStreamReader reader = new InputStreamReader(System.in);
+            result = String.valueOf(reader.read());
 
-        NumericOperation<Double> doubleValue = new NumericOperation<>(23.12);
-        System.out.println("Is " + doubleValue.getObj() + " dividable by ten : " + doubleValue.isDividableByTen());
+            return result;
+        };
 
-        NumericOperation<Double> doubleValue2 = new NumericOperation<>(30.0);
-        System.out.println("Is " + doubleValue2.getObj() + " dividable by ten : " + doubleValue2.isDividableByTen());
 
-        NumericOperation<String> stringNumericOperation = new NumericOperation<String>("invalid parameter type");
+        NumericTest<Integer> isFactor = (a, b) -> {
+            if (b == 0) {
+                throw new IllegalArgumentException("Divider cannot be zero");
+            }
+            return a % b == 0;
+        };
+
+        isFactor.test(20, 5);
+
+        isFactor.test(20, 0);
+
     }
 }
