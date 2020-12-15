@@ -400,11 +400,46 @@ Görüldüğü gibi aynı işi yapan kod çok daha kısa ve sade.
 
 Eğer birden fazla kaynağa erişmemiz gerekirse try bloğu içinde bu drumda aşağıdaki örnekte gösterildiği gibi eerişilebilir.
 
+```java
+try (Scanner scanner = new Scanner(new File("testRead.txt"));
+        PrintWriter writer = new PrintWriter(new File("testWrite.txt"))) {
+        while (scanner.hasNext()) {
+            writer.print(scanner.nextLine());
+        }
+}
+```
+### Checked / unchecked exception
+Daha önce tüm exceptionların Throwable sınıfından türediğini onun altında Error ve Exception sınıflarının bulunduğundan bahsetmiştik.
+Şimdi bütün exception hiyerarşisine tekrar gözatalım ve bu yapının arkasında yatan mantığı anlamaya çalışalım.
+
+![exception hierarchy](images/exception_hierarchy.png)
+
+Grafikte görüldüğü gibi tüm exceptionların atası Throwable sınıfı, onun altın Error sınıfı ve Exception sınıfı yer alıyor.
+Exception sınıfının altında ise RuntimeException sınıfı ve diğer pekçok exception sınıfı bulunuyor. Bu kısımda daha çok 
+RuntimeException ve diğer kardeşlerinden bahsedeceğiz.
+
+Java dilinde uygulama ile ilgili ve runtime da karşımıza çıkabilecek tüm hatalar RuntimeException sınıfından türer. Bu hatalar
+çalışma sırasında karşımıza çıkar ve uygulamanın compile edilmesi sırasında görülmesi mümkün değildir. Bu nedenle de compiler 
+bizi bu hataları yakalamak için zorlamaz, bu nedenle bunlara unchecked exception denir. ArithmeticException, ArrayIndexOutOfBoundException
+unchecked exceptionlara örnektir.
+
+Exception sınıfından türeyen RuntimeException dışındaki tüm exceptionlar compile time hatalarıdır ve catch edilmesi yada 
+throw edilmesi zorunludur. Compiler tarafından kontrol edilen bu hatalara checked exception denilir. IOException,
+SQLException checked exceptionlara örnektir.
+
+Peki nezaman checked ne zaman unchecked exception kullanmalıyız ? Oracle'ın resmi dökümanında yeralan tavsiye şu şekilde:
+> If a client can reasonably be expected to recover from an exception, make it a checked exception. If a client cannot 
+> do anything to recover from the exception, make it an unchecked exception.
+
+Yani hata fırlattığımız metodu çağıran metodun bu hatayı düzeltme ve tekrar metodumuzu çağırma fırsatı varsa checked exception
+yok ise unchecked exception kullanmak faydalı.
+
+
 ## Multithreaded programlama
 
 TODO
 
-## Generics (Jenaerikler)
+## Generics (Jenerikler)
 Java dilinde pek çok özellik çoğunlukla 1.0 versiyonunda eklenmiştir. Eklenen diğer tüm özellikler dilin kapsamını genişletmiştir 
 ki bunlardan biri olan Jenerikler dili en çok şekillendirenlerdendir.
 
