@@ -875,7 +875,7 @@ Brand of vehicle : Mercedes
 ```
 
 Burada görüldüğü gibi metoda bir primitive tipte değişken gönderirsek o değişkenin değerinin bir kopyası metoda ulaşmış olur
-ve orijinal değer üzerinde yapacağımız değişiklikleerden etkilenmez. Buna pass by value denir.
+ve orijinal değer üzerinde yapacağımız değişikliklerden etkilenmez. Buna pass by value denir.
 
 Fakat bir metoda bir objeyi parametre olarak gönderirsek aslında metoda o objenin referansı yani memorydeki adresi ulaşmış olur
 bizde metodun içinde o referansı kullanark objeye erişir ve değerleri değiştirirsek orijinal objede değişiklik yapmış olur.
@@ -889,7 +889,7 @@ BU nedenle uygulamada yarattığımız objelerin kendilerine ihtiyaç kalmadığ
 dillerde bu işlem manuel olarak uygulamanın içinden yapıldığı gibi Javada bu işlem tamemn JVM tarafından Garbage Collector
 dediğimiz bileşen tarafından otomatik olarak yürütülür. Yani developer olarak bizim birşey yapmamıza gerek yok. 
 
-Garbage collector bir nesneye ait referans kalmadığında memeoryde bu nesnenin memoryde tuttuğu alanı temizleer ve tekrar kullanıma 
+Garbage collector bir nesneye ait referans kalmadığında memeoryde bu nesnenin memoryde tuttuğu alanı temizler ve tekrar kullanıma 
 açar. Bu işlemi kod içinde tetiklemenin bir yolu yok. Masraflı bir işlem olduğu için işlemin zamanına Garbage Collector kendisi
 karar verir. 
 
@@ -1215,7 +1215,7 @@ compiler açısından ne demek olduğuna bakalım. Diyelimki bir Math sınıfım
 için metodlar eklemek istiyoruz. Bu metodlar iki tane sayısal parametre alsın ve bunları toplayıp sonucunu dönsün.
 
 Burada Math sınıfını kullanacak diğer sınıfları toplama işleminin karmaşasından uzaklaştırmak ve toplama işlemini parametrelerin
-tipinden bağımsız hale getirmek için meethod overloading yöntemini kullanırız. Yani aynı isimli toplama metodları farklı türle 
+tipinden bağımsız hale getirmek için method overloading yöntemini kullanırız. Yani aynı isimli toplama metodları farklı türle 
 parametreler alır ve aldığı parametre tipinde sonuç döner.
 
 ```java
@@ -1342,7 +1342,7 @@ public abstract class Ant extends Animal {
 }
 ```  
 Yukardaki örnekte Dog sınıfının Animal sınıfı tarafından tanımlanan tüm abstract metodları implemente etmek zorunda kaldığına
-Ant sınıfının ise abstract olduğu için Animal tarafından tanımlanan tüm abstract mettodları impleemente etmek zorunda olmadığına
+Ant sınıfının ise abstract olduğu için Animal tarafından tanımlanan tüm abstract mettodları implemente etmek zorunda olmadığına
 dikkat edelim.
 
 > Abstract classların new operatörü yardımıyla objelerinin yaratılamayacağını unutmayalım.
@@ -1507,7 +1507,7 @@ A puffin can swim
 ```
 
 Bir interface başka bir interface i extend edebilir, uygulanış şekli normal sıfınıfların birbirini extend etmesi gibidir.
-Eğer bir sınıf başka bir interface i extend eden bir intterface i implemente derse bu durumda heer iki interface de de bulunan 
+Eğer bir sınıf başka bir interface i extend eden bir intterface i implemente derse bu durumda her iki interface de de bulunan 
 tüm metodları implemente etmesi gerekir.
 
 ```java
@@ -1779,11 +1779,11 @@ Her nekadar encapsulation yardımı ile bazı sınıfları ve sınıf bileşenle
 ve o sınıfın bileşenlerine bir noktada erişim yetkisi vermek zorundayız. Fakat bu demek değil ki tüm kontrolü dışarıya verelim.
 
 Bazı durumlarda bir sınıfın değişkenin atanacak değerin belli şartlara uyması gerekir, örneğin int bir değişken için değerin 0 ile
-10 arasında olması zorunluluğu gibi. Yadan bir değişkenin değerini deeğiştirirken başka bir işlem de yapılması gerekmesi gibi.
+10 arasında olması zorunluluğu gibi. Yadan bir değişkenin değerini değiştirirken başka bir işlem de yapılması gerekmesi gibi.
 
 Yada bir değişkenin sadece obje yaratıldığı anda değer almasını daha sonra değiştirilmesini istemeyebiliriz.
 
-Yada bir deeğişkenin değerini dönerken değişken değerini direk dönmek yerine o değerin kopyasını dönmek isteyebiliriz.
+Yada bir değişkenin değerini dönerken değişken değerini direk dönmek yerine o değerin kopyasını dönmek isteyebiliriz.
 
 Bütün bu senaryoları düşündüğümüzde yardımımıza getter ve setter metodlar yetişiyor. Genellikle bir best practice olarak
 sınıf değişkenlerinin private tanımlanması ve o değişkene değer atamak ve değeri okumak için özel metodların kullanılması önerilir.
@@ -2199,7 +2199,7 @@ Position of 'email' : 11
 
 #### replace() metodu
 Bazen de bir string değer içindeki bir karakter yada bir karakter dizisini başka bir karakter yada karakter dizisi ile değiştirmek
-isteriz. Bu durumda replace() metodu ve bu metodun diğer türevleri ihtiyacımızı karşılar. Bu meetod orijinal stringi değiştirmek
+isteriz. Bu durumda replace() metodu ve bu metodun diğer türevleri ihtiyacımızı karşılar. Bu metod orijinal stringi değiştirmek
 yerine yeni bir string değer döner.
 
 ```java

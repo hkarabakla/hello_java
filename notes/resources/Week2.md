@@ -1,10 +1,410 @@
 # Fibabanka Java Bootcamp - 2. Hafta
 
 ## Exception handling
+Exception runtime da yani uygulama çalışırken meydana gelen hatalardır. Bu hataların bir kısmı tolere edilebilirken bir kısmı 
+ise uygulamanın tamamen durmasına neden olur. Developer olarak bizim amacımız bu hataları yakalamak ve mümkünse tolere edip 
+uygulamanın çalışmaya devam etmesini sağlamaktır, tabi hatanın meydana gelmesini önlemek çok daha öncelikli hedefimiz.
+
+Java bizlere kullanılması kolay ve esnek bir hata yakalama mekanizması sunuyor. Detaylarına geçmeden önce hata hierarşisini
+anlamak önemli.
+
+Javada tüm hatalar sınıflar tarafından temsil edilir, yani bir hata oluştuğunda bir hata objesi oluşturulur. Java dilinde
+tüm hataların atası **Throwable** sınıfıdır. Throwable sınıfının iki tane doğrudan alt sınıfı bulunur, **Exception** ve **Error**.
+Error sınıfı doğrudan bizim kodumuzla ilgili olmayan JVM ile ilgili hatalar için kullanılır ve bu hatalar kontrolümüz dışındadır.
+O nedenle bunlardan çok bahsetmeyeceğiz. Exception sınıfı ise doğrudan yazdığımız kodla ilgili bizim kontrolümüzde olan
+hatalar için kullanılır.
+
+### Exception handling temelleri
+Javada hata yakalama beş anahtar kelime ile yönetilir; **try**, **catch**, **throw**, **throws** ve **finally**.
+Hata açısından izlemek istediğimiz kodları try bloğuna yazmalıyız. try bloğu içerisinde bir hata oluşursa bu hata fırlatırlır.
+Fırlatılan hatayı catch bloğu yakalar. Sistem tarafından oluşturulan hatalar otomatik olarak fırlatılır fakat bazı durumlarda 
+bizim de manuel olarak hata fırlatmamız gerekir, bu durumda throw ifadesi kullanılır. Bazı durumlarda yazdığımız metodun 
+hangi hataları fırlatabileceğini metod imzasında belirtmemiz gerekir. Bu durumda throws ifadesi kullanılır. Bir try bloğundan
+sonra hata olsun olmasın mutlaka yapılması gereken bir iş varsa o da finally bloğunda yapılır.
+
+try ve catch bloğunun genel yapısı aşağıdaki gibidir. try tek başına kullanılabilir ama catch ifadesi sadece try ile birlikte
+kullanılabilir.
+```java
+try {
+    // block of code to monitor for errors
+} catch(ExceptionType1 e) {
+    // handler for ExceptionType1
+} catch(ExceptionType2 e) {
+    // handler for ExceptionType2
+}
+```
+try bloğu içerisinde bir hata oluştuğu zaman hatadan sonraki try bloğu içinde kalan kod işletilmez. O noktadan itibaren 
+kodun akışı oluşan hata ile en çok uyumlu olan catch bloğuna geçer. O nedenle catch bloğunu oluştururken hata tipi seçimi
+önemlidir. catch bloğuna oluşan hatanın objesi verilir ve blok içerisinde hata işlenir.
+
+Eğer hiçbir hata oluşmaz ise kod akışı en son catch ifadesinden sonraki kod parçasıyla devam eder. catch blokları yalnızca 
+ilgili hata oluştuğu zaman çalıştırılır.
+
+Kod içerisinde şöyle bir akış olduğunu düşünelim; a() metodu içerisinde bir noktada b() metodunu çağırsın ve b() metodu 
+içinde bir noktada c() metodunu çağırsın ve c() metodu çalıştırılırken bir hata alalım. Eğer hata c() metodu içerisinde 
+yakalanmıyorsa hata hierarşide bir üst katmana aktarılır yani b() metodunda c() metodunu çağırdığımız noktaya. Eğer o noktada
+da hatayı yakalayan bir catch bloğu yoksa hata bir üst katmana yani a() metodu içinde b() metodunun çağrıldığı yere aktarılır.
+Eğer bu noktada bu hatayı yakalayacak bir catch bloğu varsa hata orada yakalınır ve işlenir. Yok ise bu hata main metoduna
+kadar aktarılır ve uygulamanın durmasına neden olabilir. 
+
+Şimdi bütün bu öğrendiklerimizi bir örnekle kod üzerinde görelim;
+
+```java
+public class ArrayOperations {
+
+    public void putValue(int[] array, int index, int value) {
+        System.out.println("    putValue method started");
+        array[index] = value;
+        System.out.println("    putValue method ended successfully");
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        ArrayOperations operations = new ArrayOperations();
+        int[] numbers = new int[7];
+        try {
+            System.out.println("try block is started");
+            operations.putValue(numbers, 10, 27);
+            System.out.println("try block is ended");
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            System.out.println("Exception catched " + ex.toString());
+        }
+
+        System.out.println("Program ends gracefully");
+    }
+}
+```
+Output :
+```
+try block is started
+    putValue method started
+Exception catched java.lang.ArrayIndexOutOfBoundsException: 10
+Program ends gracefully
+```
+
+Bu örnek bize hata yakalamanın nasıl işlediğine dair pek çok bilgi veriyor. Örnekte görüldüğü gibi putValue() metodunda 
+arraye bir int değer koymaya çalışırken ArrayIndexOutOfBoundsException alıyoruz ve bu hatadan sonraki satır işletilmeden 
+hata bu metodun çağırıldığı bir üst katmana iletiliyor, yani main() metoduna. main() metodu içinde putValue() metoduna 
+çağrı yaptığımız kod parçası try bloğu içinde yer alıyor. Ve catch bloğunda yakaladığımız hata türü runtime da aldığımız 
+hata türüyle eşleştiği için program akışı catch bloğuna geçiyor. catch bloğu içinde hata işleniyor ve buradan yeni bir hata 
+fırlatılmadığı için akış catch bloğu sonrasından devam ediyor. 
+
+Bu örnekte hatanın yakalanmadığını düşünelim;
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        ArrayOperations operations = new ArrayOperations();
+        int[] numbers = new int[7];
+
+        System.out.println("before calling put value");
+        operations.putValue(numbers, 10, 27);
+        System.out.println("after calling put value");
+    }
+}
+
+```
+Output :
+```
+before calling put value
+    putValue method started
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 10
+	at com.hkarabakla.inheritance.ArrayOperations.putValue(ArrayOperations.java:7)
+	at com.hkarabakla.inheritance.Main.main(Main.java:11)
+
+Process finished with exit code 1
+```
+Bu çıktı bize uygulamayı debug ederken hatanın yerini bulmak için yardımcı olurken başkalarının pek işine yaramayacaktır.
+O nedenle hatanın uygun şekilde işlenip uygun hata mesajlarının loga basılması önemli.
+
+Şimdi catch bloğunun bulunması fakat fırlatılan hata ile eşleşmemesi durumunda neler olur ona bakalım;
+```java
+public class Main {
+
+    public static void main(String[] args) {
+
+        ArrayOperations operations = new ArrayOperations();
+        int[] numbers = new int[7];
+        try {
+            System.out.println("try block is started");
+            operations.putValue(numbers, 10, 27);
+            System.out.println("try block is ended");
+        } catch (ArithmeticException ex) {
+            System.out.println("ArithmeticException catched " + ex.toString());
+        }
+
+        System.out.println("Program ends gracefully");
+    }
+}
+```
+Output : 
+```
+try block is started
+    putValue method started
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 10
+	at com.hkarabakla.inheritance.ArrayOperations.putValue(ArrayOperations.java:7)
+	at com.hkarabakla.inheritance.Main.main(Main.java:11)
+
+Process finished with exit code 1
+```
+Sonuç aynı, doğru hata türünü catch bloğunda kullanmak o nedenle önemli.
+
+Hatalar uygun bir şekilde yakalanırsa uygulamanın çalışmaya devam edeceğini söylemiştik, şimdi bunu bir [örnekle](../../examples/src/com/hkarabakla/exception/ExceptionDemo3.java) görelim;
+```java
+public class ExceptionDemo3 {
+
+    public static void main(String[] args) {
+        int[] numbers = new int[] {1, 34, 56, 23, 78};
+        int[] dividers = new int[] {5, 0, 12, 0, 34};
+
+        for (int i = 0; i < numbers.length; i++) {
+            try {
+                System.out.println(numbers[i] + "/" + dividers[i] + "=" + numbers[i]/dividers[i]);
+            } catch (ArithmeticException ex) {
+                System.out.println("Division by 0, " + numbers[i] + "/" + dividers[i]);
+            }
+        }
+
+        System.out.println("Program ended successfully");
+    }
+}
+```
+Output :
+```
+1/5=0
+Division by 0, 34/0
+56/12=4
+Division by 0, 23/0
+78/34=2
+Program ended successfully
+```
+
+### Exception yakalamada super class - subclass ilişkisi
+Bir try ifadesinin birden fazla catch bloğu ile ilişkilendirilebileceğini söylemiştik. Böyle bir durumda aralarında üst 
+sınıf alt sınıf ilişkisi bulunan hatalardan önce alt sınıf hatayı sonra üst sınıf hatayı catch blokları ile yakalamalıyız.
+Tersi durumda compiler hata verecektir. Şimdi bunu bir [örnekle](../../examples/src/com/hkarabakla/exception/ExceptionDemo4.java) görelim;
+```java
+public class ExceptionDemo4 {
+
+    public static void main(String[] args) {
+
+        int[] numbers = new int[] {1, 34, 56, 23, 78, 123, 49};
+        int[] dividers = new int[] {5, 0, 12, 0, 34};
+
+        for (int i = 0; i < numbers.length; i++) {
+            try {
+                System.out.println(numbers[i] + "/" + dividers[i] + "=" + numbers[i]/dividers[i]);
+            } catch (ArithmeticException ex) {
+                System.out.println("Division by 0, " + numbers[i] + "/" + dividers[i]);
+            } catch (RuntimeException ex) {
+                System.out.println("Another exception catched : " + ex);
+            }
+        }
+
+        System.out.println("Program ended successfully");
+    }
+}
+```
+Output :
+```
+1/5=0
+Division by 0, 34/0
+56/12=4
+Division by 0, 23/0
+78/34=2
+Another exception catched : java.lang.ArrayIndexOutOfBoundsException: 5
+Another exception catched : java.lang.ArrayIndexOutOfBoundsException: 6
+Program ended successfully
+```
+### throw ile hata fırlatma
+Daha önce fırlatılan hataların nasıl yakalanacağını gördük. Bazı durumlarda kod içerisinden manuel olarak bizim de hata fırlatmamız
+gerekebilir. Bu durumda bir hata objesi oluşturmamız ve onu throw ifadesi ile fırlatmamız gerekir. 
+Yada catch bloğu içinde yakaladığımız bir hatayı işledikten sonra onu bir üst katmana tekrar fırlatmamız gerekebilir. 
+Bu durumda tekrar hata objesi oluşturmamız gerekmez catch bloğuna gelen hatayı aynen fırlatabiliriz. Şimdi bunu 
+bir [örnekle](../../examples/src/com/hkarabakla/exception/ExceptionDemo5.java) görelim;
+
+```java
+public class ExceptionDemo5 {
+
+    public static void main(String[] args) {
+        try {
+            multipleDivision();
+        } catch (RuntimeException ex) {
+            System.out.println("Fatal error, program terminated");
+        }
+    }
+
+    private static void multipleDivision() {
+        int[] numbers = new int[] {1, 34, 56, 23, 78, 123, 49};
+        int[] dividers = new int[] {5, 0, 12, 0, 34};
+
+        for (int i = 0; i < numbers.length; i++) {
+            try {
+                System.out.println(numbers[i] + "/" + dividers[i] + "=" + numbers[i]/dividers[i]);
+            } catch (ArithmeticException ex) {
+                System.out.println("Division by 0, " + numbers[i] + "/" + dividers[i]);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                System.out.println("Array sizes are not equal");
+                throw new ArrayIndexOutOfBoundsException("Array sizes must be equal");
+            }
+        }
+
+        System.out.println("Program ended successfully");
+    }
+}
+```
+Output :
+```
+1/5=0
+Division by 0, 34/0
+56/12=4
+Division by 0, 23/0
+78/34=2
+Array sizes are not equal
+Fatal error, program terminated
+```
+
+### finally ifadesi
+Bazı durumlarda try-catch ifadesini terk etmeden hemen önce çalıştırmamız gerekn kodlar olabilir. Bu durumlar genelde 
+try bloğu içinde bir dosya açtıysak onu kapatmak için yada bir network bağlantısı kurduysak o bağlantıyı kapatmak için
+kullanılan kodlardır. Bu tarz durumlar programlamada oldukça yaygındır ve java bize bu durumu yönetmek için finally ifadesini
+sunuyor. Genel yapısı şu şekildedir;
+
+```java
+try {
+    // code to be monitored for error
+} catch(ExceptionType1 ex) {
+    // handling ExceptionType1
+} catch(ExceptionType2 ex) {
+    // handling ExceptionType2
+} finally {
+    // finally code to clean up all we created in try
+}
+```
+Bu yapıda finally bloğu catch bloğundan sonra gösterilmiştir ama teoride finally bloğu doğrudan try bloğunun ardından da
+gelebilir, bu durumda exception yakalanmaz. try bloğu içinden fırlatılan hata daha üst katmanlarda yakalanmaz ise uygulama 
+son bulur. Bu durum teoride mümkün olsa da pratikte hiç tercih edilmez.
+
+Şimdi finally bloğunu bir [örnekle](../../examples/src/com/hkarabakla/exception/ExceptionDemo6.java) görelim;
+
+```java
+public class ExceptionDemo6 {
+
+    public static void main(String[] args) {
+        FileInputStream input = null;
+        try {
+            ClassLoader classLoader = ExceptionDemo6.class.getClassLoader();
+            input = new FileInputStream(classLoader.getResource("file.txt").getFile());
+
+            int data = input.read();
+            while (data != -1) {
+                System.out.print((char) data);
+                data = input.read();
+            }
+        } catch (IOException e) {
+            System.out.println("Exception occurred while reading file");
+            e.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    System.out.println("Exception occurred while closing file");
+                }
+            }
+        }
+    }
+}
+```
+
+### throws ifadesi
+Bazı durumlarda bir metod bir yada birkaç hata yarattığı halde bu hataları kendi içinde yakalamak yerine hata yakalama işini
+kendisini çağıran metodlara bırakır. Bu durumda yakalanmayan hatalar metod imzasına throws ifadesi ile eklenir. Genel yapı şu
+şekildedir;
+
+```java
+return_type methodName(parameter_list) throws exception_list {
+}
+```
+Burada exception_list virgül ile ayrılmış hata listesini içerir.
+Şimdi bir önceki örneği biraz değiştirerek throws ifadesinin nasıl kullanıldığını bir [örnekle](../../examples/src/com/hkarabakla/exception/ExceptionDemo7.java) görelim;
+
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class ExceptionDemo7 {
+
+    public static void main(String[] args) throws IOException {
+        FileInputStream input = null;
+        try {
+            ClassLoader classLoader = ExceptionDemo7.class.getClassLoader();
+            input = new FileInputStream(classLoader.getResource("file.txt").getFile());
+
+            int data = input.read();
+            while (data != -1) {
+                System.out.print((char) data);
+                data = input.read();
+            }
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    System.out.println("Exception occurred while closing file");
+                }
+            }
+        }
+    }
+}
+```
+catch bloğunun ortadan kalktığına ve throws IOException ifadesinin metod imzasına eklendiğine dikkat edelim.
+
+### try-with-resource
+Önceki örneklerde gördüğümüz gibi eğer try bloğu içeerisinde bir dosya yada bir network bağlantısı açıyorsak o kaynağın
+finally bloğu içinde kapatılması gerekiyor. Java 7 ile birlikte bu tarz durumlar için try-catch-finally blokları yeerine
+try-with-resource kavramı geldi. try-with-resource içerisinde açılan kaynaklar try bloğu sonrasında otomatik olarak kapatılır.
+Bu kaynakların otomatik kapatılabilmeleri için AutoClosable interface ini implemente etmeleri gerekir.
+
+Daha önceki örneklerdee gördüğümüz dosya okuma işlemini şimdi try-with-resource ile [tekrar](../../examples/src/com/hkarabakla/exception/ExceptionDemo8.java) yapalım;
+
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class ExceptionDemo8 {
+
+    public static void main(String[] args) {
+        ClassLoader classLoader = ExceptionDemo8.class.getClassLoader();
+
+        try (FileInputStream input = new FileInputStream(classLoader.getResource("file.txt").getFile())) {
+
+            int data = input.read();
+            while (data != -1) {
+                System.out.print((char) data);
+                data = input.read();
+            }
+        } catch (IOException e) {
+            System.out.println("Exception occurred while reading file");
+            e.printStackTrace();
+        }
+    }
+}
+```
+Görüldüğü gibi aynı işi yapan kod çok daha kısa ve sade.
+
+Eğer birden fazla kaynağa erişmemiz gerekirse try bloğu içinde bu drumda aşağıdaki örnekte gösterildiği gibi eerişilebilir.
+
+## Multithreaded programlama
 
 TODO
 
-## Generics (Janaerikler)
+## Generics (Jenaerikler)
 Java dilinde pek çok özellik çoğunlukla 1.0 versiyonunda eklenmiştir. Eklenen diğer tüm özellikler dilin kapsamını genişletmiştir 
 ki bunlardan biri olan Jenerikler dili en çok şekillendirenlerdendir.
 
@@ -701,3 +1101,212 @@ public class Main {
 
 Örnekte görüldüğü gibi InputStreamReader sınıfının read metodu bir checked exception fırlattığı için StringFunc interfaceinin 
 func metodu throws IOException ifadesini bulundurmak zorunda.
+
+### Metod referanslar
+Daha önceki bölümlerde fonksiyonale interfaceler tarafından bize sunulan abstract metodların anonim lambda ifadeleri
+tarafından nasıl implemente edildiğini gördük. Şimdi varolan metodlarımızı nasıl lambda ifadeleri ile ilişkilendirebileceğimizi
+göreceğiz. Burada önemli olan referans edeceğimiz metodun imzasının fonksiyonel interface tarafından sunulan abstract 
+metodun imzası ile eşleşiyor olması, aksi durumda compiler hatası oluşur.
+
+#### static metodlara metod referans verme
+Daha önce oluşturulmuş bir static metodu aşağıda gösterilen şekilde metod referans olarak kullanabiliriz;
+
+```java
+ClassName::methodName
+```
+
+Sınıf ismi ve metod ismi arasında yeralan çift iki nokta **::** ifadesi Java'ya metod referanslar için JDK8 versiyonuyla 
+birlikte eklenmiştir.
+
+```java
+public interface IntPredicate {
+
+    boolean test(int a);
+}
+
+public class MyIntPredicates {
+
+    static boolean isPrime(int value) {
+
+        if (value < 2) {
+            return false;
+        }
+
+        for (int i = 2; i < value / i; i++) {
+            if (value % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static boolean isEven(int value) {
+        return value % 2 == 0;
+    }
+
+    static boolean isNegative(int value) {
+        return value < 0;
+    }
+
+    static boolean isPositive(int value) {
+        return value > 0;
+    }
+}
+
+public class Main {
+
+    static boolean numberTest(IntPredicate predicate, int value) {
+        return predicate.test(value);
+    }
+
+    public static void main(String[] args) {
+
+        boolean result = numberTest(MyIntPredicates::isPrime, 17);
+        System.out.println("17 is prime : " + result);
+
+        result = numberTest(MyIntPredicates::isEven, 22);
+        System.out.println("22 is even : " + result);
+
+        result = numberTest(MyIntPredicates::isNegative, 13);
+        System.out.println("13 is negative : " + result);
+
+        result = numberTest(MyIntPredicates::isPositive, -1);
+        System.out.println("-1 is positive : " + result);
+    }
+}
+```
+Output :
+```
+17 is prime : true
+22 is even : true
+13 is negative : false
+-1 is positive : false
+```
+Aynı anonim lambda ifadelerinde olduğu gibi test metodunu çağırana kadar lambda ifadesi çalıştırılmaz.
+
+#### objeler üzerinden metod referans verme
+Aşağıda gösterilen şekilde objeler üzerinden metod referansları verilebilir.
+
+```java
+objectName::methodName
+```
+Daha önce static metodlar ile oluşturduğumuz örneği şimdi biraz değiştirelim,
+
+```java
+public interface IntPredicate {
+
+    boolean test(int a);
+}
+
+public class MyIntPredicates {
+
+    boolean isPrime(int value) {
+
+        if (value < 2) {
+            return false;
+        }
+
+        for (int i = 2; i < value / i; i++) {
+            if (value % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    boolean isEven(int value) {
+        return value % 2 == 0;
+    }
+
+    boolean isNegative(int value) {
+        return value < 0;
+    }
+
+    boolean isPositive(int value) {
+        return value > 0;
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        MyIntPredicates predicates = new MyIntPredicates();
+
+        IntPredicate intPredicate = predicates::isPrime;
+        System.out.println("17 is prime : " + intPredicate.test(17));
+
+        intPredicate = predicates::isEven;
+        System.out.println("22 is even : " + intPredicate.test(22));
+
+        intPredicate = predicates::isNegative;
+        System.out.println("13 is negative : " + intPredicate.test(13));
+
+        intPredicate = predicates::isPositive;
+        System.out.println("-1 is positive : " + intPredicate.test(-1));
+    }
+}
+```
+
+#### Constructor referans
+Lambda ifadeleri aracılığı ile obje yaratmak da mümkün, bunun için yaratmak istediğimiz objenin constructor ına referans 
+vermek yeterli.
+
+```java
+ClassName::new
+```
+
+```java
+public interface MyStringFunc {
+
+    String build(char[] chars);
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+        MyStringFunc stringFunc = String::new;
+        char[] chars = new char[]{'J', 'a', 'v', 'a', ' ', 'i', 's', ' ', 'a', 'w', 'e', 's', 'o', 'm', 'e', '!'};
+        String newString = stringFunc.build(chars);
+        System.out.println(newString);
+    }
+}
+```
+Output :
+```
+Java is awesome!
+```
+### Öntanımlı fonksiyonel interfaceler
+Daha önceki örneklerimizde lambda ifadeleri kullanmak için fonksiyonel interfaceleri kendimiz tanımlamıştık. Fakat Java 
+tafından bize sunulan öntanımlı interfaceler pek çok durumda işimizi görecek ve kendi interface imizi tanımlama gereğini
+ortadan kaldıracktır. Bu interfaceler java.util.function paketi altına yeralır.
+
+
+| Interface        | Amacı           |
+| ---------------- |:-------------|
+| Consumer&lt;T&gt;      | T tipinde bir obje gönderip üzerinde işlem yapmak için kullanılır. Metodu **accept()** |
+| Supplier&lt;T&gt;      | T tipinde bir obje dönmek için kullanılır. Metodu **get()**      |
+| Function&lt;T,R&gt;    | T tipinde bir obje gönderip üzerinde işlem yapıp R tipinde bir obje dönmek için kullanılır. Metodu **apply()**      |
+| Predicate&lt;T&gt;     | T tipinde bir obje gönderip üzerinde işlem yapıp boolean değer dönmek için kullanılır. Metodu **test()**      |
+
+```java
+import java.util.function.Predicate;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Predicate<Integer> isEven = n -> n % 2 == 0;
+
+        System.out.println("5 is even : " + isEven.test(5));
+        System.out.println("12 is even : " + isEven.test(12));
+    }
+}
+```
+Output:
+```
+5 is even : false
+12 is even : true
+```

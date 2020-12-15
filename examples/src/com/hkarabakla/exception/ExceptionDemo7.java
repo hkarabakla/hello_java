@@ -3,12 +3,12 @@ package com.hkarabakla.exception;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class ExceptionDemo6 {
+public class ExceptionDemo7 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         FileInputStream input = null;
         try {
-            ClassLoader classLoader = ExceptionDemo6.class.getClassLoader();
+            ClassLoader classLoader = ExceptionDemo7.class.getClassLoader();
             input = new FileInputStream(classLoader.getResource("file.txt").getFile());
 
             int data = input.read();
@@ -16,9 +16,6 @@ public class ExceptionDemo6 {
                 System.out.print((char) data);
                 data = input.read();
             }
-        } catch (IOException e) {
-            System.out.println("Exception occurred while reading file");
-            e.printStackTrace();
         } finally {
             if (input != null) {
                 try {
