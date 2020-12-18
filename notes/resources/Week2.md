@@ -437,7 +437,208 @@ yok ise unchecked exception kullanmak faydalı.
 
 ## Multithreaded programlama
 
-TODO
+Pekçoğumuz bilgisayarı açtığımız zaman aynı anda birkaç uygulamayı başlatırız. Öğrneğin kod yazarken bir yandan internette
+birşeyler arar bir yandan müzik dinler bir yandan da gelen maillerimizi kontrol ederiz. Bütün bunlar aynı anda olur yada bize
+öyle oluyormuş gibi gelir. İşte bu olaya multitasking denilir, yani eş zamanlı görevler. 
+
+Bilgisayarda multi tasking yapmanın iki yolu vardır; process ler aracılığıyla yada threadler aracılığıyla. Process dediğimiz
+şey işletim sistemi tarafından çalıştırılan her bir uygulamadır, az önce bahsettiğimiz gibi kod yazarken aynı anda müzik
+dinlemek gibi. Thread ise processler tarafından yaratılan en küçük iş birimidir, aynı process içinde paralel işler yapmaya yarar.
+Örneğin müzik uygulamanızda bir yandan müzik dinlerken bir yandan da listelerde gezinebilirsiniz.
+
+Multithreading çok daha verimli uygulamalar yazmak için önemlidir. Çünkü gerçek hayatta pek çok uygulama bir iş yaparken 
+ya bir input bekler yada yaptığı bir işin sonucunun dönmesini bekler. Bu durumda CPU idle kalır, işte multithreading ile
+bu idle zamanlar daha verimli hale gelir.
+
+Son yıllarda multicore yani çok çekirdekli CPU teknolojisi oldukça yaygın bir hale geldi. Tek çekirdekli bir CPU kullanan 
+bir sistemde aynı anda çalıştırılan threadler aynı CPU yu paylaşır, her bir thread sırayla CPU dan çalışma zamanı alarak.
+Bu durumda aslında thread ler aynı anda çalışmaz, sırayla çalışır fakat CPU okadar hızlıdır ki bu kullanıcı eş zamanlı hissi
+yaratır. Çok çekirdekli CPU bulunduran sistemlerde aynı anda gerçekten iki farklı thread farklı çekirdekler üzerinde çalıştırılarak
+gerçekten eş zamanlı görevler yaratılabilir. Fakat teoride kod yazarken multithreading denilince tek çekirdekli CPU varmış gibi düşünmek 
+gerekir, bu nedenle multithreading denildiği zaman akla gelmesi gereken ilk konu CPU kullanımı olmalıdır.
+
+### Thread sınıfı ve Runnable interface 
+Her bir process en az bir tane thread içermek zorundadır, bu threade _main thread_ denilir. main thread gerekli durumda başka 
+threadleri de yaratabilir.
+
+Java'da multithread kavramı Thread sınıfı ve Runnable interface üzerine kurulmuştur. Yeni bir thread yaratmak için Thread
+sınıfını extend etmeli ya da Runnable interface ini implemente etmeliyiz. Hangi metodu seçeceğimizin yarattığımız thread 
+bir önemi yok, ikisini de kullanabiliriz.
+
+```java
+public class MyThread extends Thread {
+    
+    public void run() {
+        // any code    
+    }
+}
+
+public class MyThread2 implements Runnable {
+
+    public void run() {
+        // any code    
+    }
+}
+```
+
+run() metodu oluşturacağımız thread çalıştığı zaman çağrılacak, bu metodun uygulama içindeki diğer metodlardan hiçbir farkı yoktur.
+Sadece farklı bir thread tarafından çalıştırılır.
+
+Bu noktaya kadar sadece thread in nasıl çalışacağını tanımlamış olduk, henüze thread i yaratmadık. Thread i yaratmak için 
+aşağıda gösterildiği gibi new ile yeni bir thread objesi yaratmamız gerekir.
+
+```java
+MyThread myThread = new MyThread();
+Thread realThread = new Thread(myThread); 
+```
+
+Artık gerçek bir thread objemiz var. Bu thread biz start() metodunu çağırana kadar çalışmayacaktır. 
+Şimdi bu noktaya kadar gördüklerimizi bir örnekle [kod üzerinde](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain1.java) inceleyelim.
+
+```java
+public class MultiThreadDemo1 implements Runnable {
+
+    private String threadName;
+
+    public MultiThreadDemo1(String name) {
+        this.threadName = name;
+    }
+
+    public void run() {
+        System.out.println(threadName + " is starting.");
+        for (int i = 0; i < 10; i++) {
+            try {
+                Thread.sleep(400);
+                System.out.println("In " + threadName + " count is " + i);
+            } catch (InterruptedException e) {
+                System.out.println(threadName + " is interrupted");
+            }
+        }
+
+        System.out.println(threadName + " is terminating");
+    }
+}
+
+public class MultiThreadDemoMain1 {
+
+    public static void main(String[] args) {
+        System.out.println("Main thread is starting");
+
+        MultiThreadDemo1 myThread = new MultiThreadDemo1("child1");
+
+        Thread thread = new Thread(myThread);
+
+        thread.start();
+
+        for (int i = 0; i < 10; i++) {
+            System.out.print(".");
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println("Main thread is interrupted");
+            }
+        }
+
+        System.out.println("Main thread is terminating");
+    }
+}
+```
+Output : 
+```
+Main thread is starting
+.child1 is starting.
+...In child1 count is 0
+....In child1 count is 1
+..Main thread is terminating
+In child1 count is 2
+In child1 count is 3
+In child1 count is 4
+In child1 count is 5
+In child1 count is 6
+In child1 count is 7
+In child1 count is 8
+In child1 count is 9
+child1 is terminating
+```
+
+Örnekte görüldüğü gibi main thread child1 isminde bir thread yaratı ve child1 isimli threadi başlattı. Bu noktadan itibaren 
+iki thread paralel olarak çalıştı ve ekrana çıktı üretti. Bu işlemi yaparken de belli aralıklarla çalışan threadler sleeep
+metodu çağrılarak durduruldu. 
+
+Bir uygulama o uygulama tarafından yaratılan bütün threadler son bulduğunda uygulama da son bulur. Örneğin çıktısına 
+baktığımız zaman main threadin child thread den daha önce sonlandığını görüyoruz. Normalde önerilen main threadin en son 
+bitmesidir fakat threadlerin birbirini nasıl beklediğini daha sonra göreceğiz.
+
+Bu örnekte MultiThreadDemo1 sınıfının bir name değişkeni tuttuğunu, ve MultiThreadDemo1 sınıfından bir obje oluşturup bu
+objeyi oluşturacağımız Thread tipinde objeye input olarak verdiğimizi görüyoruz. Bu Runnable interface i kullanarak yaptığımız
+örnekti, şimdi bir de aynı örneği Thread sınıfını extend ederek oluşturalım.
+
+```java
+public class MultiThreadDemo2 extends Thread {
+
+    public MultiThreadDemo2(String name) {
+        super(name);
+    }
+
+    public void run() {
+        System.out.println(getName() + " is starting.");
+        for (int i = 0; i < 10; i++) {
+            try {
+                Thread.sleep(400);
+                System.out.println("In " + getName() + " count is " + i);
+            } catch (InterruptedException e) {
+                System.out.println(getName() + " is interrupted");
+            }
+        }
+
+        System.out.println(getName() + " is terminating");
+    }
+}
+
+public class MultiThreadDemoMain2 {
+
+    public static void main(String[] args) {
+        System.out.println("Main thread is starting");
+
+        MultiThreadDemo2 myThread = new MultiThreadDemo2("child1");
+
+        myThread.start();
+
+        for (int i = 0; i < 10; i++) {
+            System.out.print(".");
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println("Main thread is interrupted");
+            }
+        }
+
+        System.out.println("Main thread is terminating");
+    }
+}
+```
+Output :
+```
+Main thread is starting
+.child1 is starting.
+...In child1 count is 0
+....In child1 count is 1
+..Main thread is terminating
+In child1 count is 2
+In child1 count is 3
+In child1 count is 4
+In child1 count is 5
+In child1 count is 6
+In child1 count is 7
+In child1 count is 8
+In child1 count is 9
+child1 is terminating
+```
+Görüldüğü gibi aynı çıktılar elde ediliyor ve doğrudan Thread sınıfını extend ettiğimiz için ayrı bir thread objesi oluşturmak 
+gerekmiyor doğrudan start metodunu çalıştırabiliyoruz, ihtiyaca göre Runnable yada Thread tercih edilebilir.
+
+### DETERMINING WHEN A THREAD ENDS
+
 
 ## Generics (Jenerikler)
 Java dilinde pek çok özellik çoğunlukla 1.0 versiyonunda eklenmiştir. Eklenen diğer tüm özellikler dilin kapsamını genişletmiştir 

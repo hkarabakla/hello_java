@@ -1,19 +1,45 @@
 # Fibabanka Java Bootcamp - 1. Hafta
 
-## Java nedir ve neden önemlidir ?
-- Java ilk olarak 1995 yılında release edildi
-- Sınıf tabanlı, nesne yönelimli bir programlama dili olarak tasarlandı
-- Ilk gunden itibaren write-once-run-everywhere slogani ile yoluna devam etti
-- Yazilimcilar tarafından okadar sevildi ki Github’in yayinladigi raporda 2019 yılında en çok tercih edilen 3. programlama dili oldu
-- 2019 yilinda 9 milyondan fazla yazilimci Java programlama dilini tercih etti
+## Java prgramlama dilinin temelleri
+### Java nedir ve neden önemlidir ?
 
-## Java ile geliştirme yapmak icin nelere ihtiyacım var ?
+Java ilk olarak 1991 yılında OAK ismiyle ortaya çıktı daha sonra 1995 yılında Java ismiyle ilk kez piyasaya sürüldü.
+En başta tos makinası, elektikli süpürge gibi son kullanıcı elektronik ürünler için tasarlanmış olsa da daha sonra 
+internetin programlama dili oldu ve internetin bu denli gelişmesinde kilit rol oynadı. Bu nedenle ilk günden itibaren
+platform bağımsız olarak tasarlandı. Güçlü yapısı, sunduğu güvenlik ve taşınabilirliği ve genel bir programlama dili olması
+popülerliğini biranda artırdı.
+
+Javanın başarısının arkasında yatan sihir Bytecode. Java kodları doğrudan CPU üzerinde çalıştırılmaz. Önce Bytecode a çevrilir
+sonra Bytecode, Java Virtual Machine(JVM) dediğimiz sistem tarafından yorumlanır. Bu bytecode dönüşümü ve JVM mantığı 
+Javaya platform bağımsızlık ve güvenlik özelliklerini kazandırmıştır.
+
+Diğer bir güçlü özelliği de nesne tabanlı olmasıdır. Bu özellik dile gerçek dünyayı kolayca modelleme ve programlama 
+gücü katmıştır.
+
+Kolay öğrenilebilen bir dil olması ve yukarıda saydığımız özellikler Javayı yıllardır programcıların gözünde hep zirvede
+tuttu.
+
+### Java ile geliştirme yapmak için nelere ihtiyacım var ?
 - Algoritmik dusunme yetenegine
 - JDK (Java Development Kit)
-- JRE (Java Runtime Environement)
 - IDE (Integrated Development Environment)*
 
-## Java ile ilk program
+#### JDK ya yakından bakış
+JDK, Java dilinde yazdığımız uygulamaları compile etmek ve çalıştırmak için gerekli olan altyapıyı sunar. Şuanda güncel
+olarak 15. veersiyonu yayınlanan JDK, Oracle firmasının [adresinden](https://www.oracle.com/java/technologies/javase-downloads.html)
+ve open source olarak piyasaya sunulan [adresten](http://jdk.java.net/) indirilip kurulabilir. Bu eğitim serisinde biz 
+en son devrim niteliği taşıyan JDK'nın 8 numaralı versiyonunu kullanacağız.
+
+JDK bize iki temel program sunar; birincisi kodları compile eetmek için kullanılan **javac**, ikincisi ise compile edilmiş 
+kodları yorumlayan ve uygulamayı çalıştıran **java**. Bu anlamda JDK ekranları olan bir uygulama değildir, sadece komut satırı
+uygulamalrı sunan bir platformdur. Bir IDE de değildir, IDE'ler de kodları derlemek ve çalıştırmak için JDK kullanır.
+
+#### IDE
+Java dilinde uygulama yazmayı kolaylaştıran bunun yanında da yazılımcının üretkenliğini destekleyen pek çok IDE mevcuttur 
+piyasada. Bunlardan en popüler olanları Eclipse, IntelliJ IDE denilebilir. IDE sadece kodlamayı kolaylaştırmak ve daha verimli 
+hale getirmek için vardır, IDE olmadan da sadece JDK kullanarak geliştirme yapılabilir.
+
+### Java ile ilk program
 ``` java
 package com.hkarabakla;
  
@@ -24,41 +50,42 @@ package com.hkarabakla;
      }
  }
 ```
-- package : Iliskili siniflari guruplamamıza yarayan dizinler olarak dusunebiliriz. 
-- class   : Nesne yonelimli bir programlama dili olan Java’da hersey bir class ile iliskilendirilmek zorundadır. Class gercek dünyayı yazılımda modellememize yardimci olur
-- method  : Fonksiyon olarak da bilinen methodlar yazilimi oluşturan en kucuk birimlerdir. Yazılıma davranış kazandirirlar.
+- package : İlişkili sınıfları gruplamamıza yarayan dizinler olarak düşünebiliriz. 
+- class   : Nesne yönelimli bir programlama dili olan Java’da herşey bir class ile ilişkilendirilmek zorundadır. 
+  Class gerçek dünyayı yazılımda modellememize yardımcı olur
+- method  : Fonksiyon olarak da bilinen methodlar yazılımı oluşturan en küçük birimlerdir. Yazılıma davranış kazandırırlar.
 
-## Veri tipleri
-Java **strongly typed** bir dildir. Yani butun islemler compile zamaninda type checking (veri tipi kontrolu) isleminden 
-gecirilir.
+## Veri tipleri ve operatörler
+Java **strongly typed** bir dildir. Yani bütün işlemler compile zamanında type checking (veri tipi kontrolü) işleminden 
+geçirilir.
 
 ### Primitive (basit) veri tipleri
 Primitive tipler belli bir boyuta sahiptir ve ekstra fonksiyon sunmazlar.
 
-| Data type | Size | Description |
+| Veri tipi | Boyut | Açıklama |
 | ----------- | ----------- | ---------- |
-|byte	| 1 byte	| Stores whole numbers from -128 to 127 |
-|short	| 2 bytes	| Stores whole numbers from -32,768 to 32,767 |
-|int	| 4 bytes	| Stores whole numbers from -2,147,483,648 to 2,147,483,647 |
-|long	| 8 bytes	| Stores whole numbers from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 |
-|float	| 4 bytes	| Stores fractional numbers. Sufficient for storing 6 to 7 decimal digits |
-|double	| 8 bytes	| Stores fractional numbers. Sufficient for storing 15 decimal digits |
-|boolean	| 1 bit	| Stores true or false values |
-|char	| 2 bytes	| Stores a single character/letter or ASCII values |
+|byte	| 1 byte	| -128 den 127 e kadar tüm sayıları tutar |
+|short	| 2 bytes	| -32,768 den 32,767 e kadar tüm sayıları tutar |
+|int	| 4 bytes	| -2,147,483,648 den 2,147,483,647 e kadar tüm sayıları tutar |
+|long	| 8 bytes	| -9,223,372,036,854,775,808 den 9,223,372,036,854,775,807 e kadar tüm sayıları tutar |
+|float	| 4 bytes	| Ondalıklı sayıları tutar. 6 ila 7 aded rakam içeren sayılar için uygundur |
+|double	| 8 bytes	| Ondalıklı sayıları tutar. 15 aded rakam içeren sayılar için uygundur |
+|boolean	| 1 bit	| true yada false değerlerini tutar |
+|char	| 2 bytes	| Tek bir karakter yada harf tutar |
 
 ### Non-Primitive veri tipleri
-Referans tipler olarak da bilinen tum objeler.
+Referans tipler olarak da bilinen tum objeler bu gruba girer.
 ``` java
 String name = "Huseyin";
 Car myNewCar = new Car("A4", "Audi");
 ```
 
 #### Primitive tipler ve non-primitive tipler arasındaki farklar
-- Primitive tipler java tarafından predefined olarak sunulmaktadır fakat non-primitive tipler yazilimci tarafından yaratılır. (String hariç)
-- Non-primitive tipler tuttukları deger uzerinde islem yapmaya yarayan metodlar sunabilirler
-- Primitive tipler her zaman bir degere sahip olmak zorundadır bu nedenle default degerleri vardır, non-primitive tipler ise null olabilir
+- Primitive tipler java tarafından öntanımlı olarak sunulmaktadır fakat non-primitive tipler yazılımcı tarafından yaratılır. (String hariç)
+- Non-primitive tipler tuttukları değer üzerinde işlem yapmaya yarayan metodlar sunabilirler
+- Primitive tipler her zaman bir değere sahip olmak zorundadır bu nedenle default değerleri vardır, non-primitive tipler ise null olabilir
 
-## Değişkenler
+### Değişkenler
 Değişkenler verileri (data) depolamaya yarar.
 ``` java
 // type variable = value*;
@@ -79,31 +106,33 @@ int minutesPerHour = 60;
 // OK, but hard to understand its purpose
 int m = 60;
 ```
-### Değişken isimleri belirlemede genel kurallar:
-- Değişken isimleri anlamlı ve değişkenin gorevini açıklar nitelikte olmalıdır
+#### Değişken isimlerini belirlemede uyulması gereken kurallar:
+- Değişken isimleri anlamlı ve değişkenin görevini açıklar nitelikte olmalıdır
 - Değişken isimleri harf, rakam, alt çizgi(_) ve dolar işareti($) bulundurabilir
-- Sadece harf ile baslayabilir
-- Kucuk harfle baslamalıdır ve boşluk içeremez
-- $ ve _ ile de baslayabilir fakat yaygın olarak tercih edilmez
-- Değişken isimleri büyük kucuk harfe duyarlıdır
-- Int, boolean… gibi Java icin rezerve edilmiş kelimeler değişken ismi olamaz
+- Sadece harf ile başlayabilir
+- Küçük harfle başlamalıdır ve boşluk içeremez
+- $ ve _ ile de başlayabilir fakat yaygın olarak tercih edilmez
+- Değişken isimleri büyük küçük harfe duyarlıdır
+- Int, boolean… gibi Java için rezerve edilmiş kelimeler değişken ismi olamaz
 
-#### Tanimlama sirasinda deger atama
+#### Tanımlama sırasında değer atama
 ```java
 int age = 10;
 String organisation = "Kodluyoruz";
 boolean isCool = true;
 ```
-#### Dinamik deger atama
+#### Dinamik değer atama
 ```java
 int x = 2, y = 3, z = 5, w;
 w = x * y * z;
 ```
-#### Degiskenlerde scope kavrami
+#### Degişkenlerde scope kavramı
+Java dilinde her değişken  kıvırcık parantezler içinde tanımlanmalıdır. Kıvırcık parantez içinde tanımlanan değişken
+parantezler dışında ulaşılazmadır, alt kıvırcık parantezler içinde de ulaşılabilirdir. [Örneğimizi](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo1.java)) inceleyelim.
 ```java
 package com.hkarabakla;
 
-public class ScopeDemo {
+public class FundamentalsDemo1 {
 
     public static void main(String[] args) {
         int x = 10; // known to all code within main
@@ -125,12 +154,12 @@ public class ScopeDemo {
     }
 }
 ```
-#### Tip donusturme (Type casting)
-Bir tipte tanimlanmis degerin baska bir tipte tanimlanmis degiskene atanmasidir. Iki sekilde olur :
+#### Tip dönüştürme (Type casting)
+Bir tipte tanımlanmış değerin başka bir tipte tanımlanmış değişkene atanmasıdır. İki şekilde olur :
 
-**Otomatik tip donusumu**
+**Otomatik tip dönüşümü**
 
-Kucuk boyutlu bir degerin daha butuk boyutlu bir bir tipte degiskene atanmasi
+küçük boyutlu bir değerin daha büyük boyutlu bir tipte değişkene atanması
 _byte -> short -> char -> int -> long -> float -> double_
 
 ```java
@@ -147,7 +176,7 @@ public class MyClass {
 
 **Manuel tip donusumu**
 
-Kucuk boyutlu bir degerin daha buyuk boyutlu bir tipte degiskene atanmasi (deger kaybi)
+küçük boyutlu bir degerin daha buyuk boyutlu bir tipte degiskene atanmasi (deger kaybi)
 _double -> float -> long -> int -> char -> short -> byte_ 
 
 ```java
@@ -162,7 +191,7 @@ public class MyClass {
 }
 ```
 
-## Operatorler
+### Operatorler
 Operatorler degiskenler ve degerler uzerinde islem yapmaya yarar.
 
 #### Aritmetik operatorler
@@ -208,7 +237,7 @@ Operatorler degiskenler ve degerler uzerinde islem yapmaya yarar.
 | || 	|Logical or	|Returns true if one of the statements is true	|x < 5 \|\| x < 4|	
 |!	|Logical not	|Reverse the result, returns false if the result is true	|!(x < 5 && x < 10)|
 
-## Java'da karar mekanizmalari
+## Karar mekanizmaları ve döngüler
 
 ### Konsoldan Scanner yardımıyla input alma
 ```java
@@ -362,10 +391,10 @@ fruit
 
 
 
-## Donguler
-Java'da donguler tekrarli isleri gerceklestirmek icin kullanilir.
+### Donguler
+Java'da donguler tekrarli isleri gerceklestirmek için kullanilir.
 
-### for dongusu
+#### for dongusu
 ```java
     for(initialization; condition; iteration) {
         statement sequence;
@@ -422,7 +451,7 @@ Output :
 ```
 for dongusunun farkli bir versiyonu olan foreach dongusune daha sonra array konusunu isledigimiz zaman deginecegiz
 
-### while dongusu
+#### while dongusu
 ```java
     while(condition) {
         statement sequence;
@@ -439,7 +468,7 @@ Condition ifadesi ise dongunun hangi sartlar altinda devam edecegini belirledigi
     }
 ```
 
-while dongusu iterasyone condition ifadesinin sonucunu test ederek baslar, condition ifadesi true doner ise dongu icindeki
+while dongusu iterasyone condition ifadesinin sonucunu test ederek başlar, condition ifadesi true doner ise dongu içindeki
 kod calistirilir.
 
 ```java
@@ -451,7 +480,7 @@ kod calistirilir.
     >Output>
     Iteration: 6
 ```
-do-while dongusunde ise once do ifadesinin icinde bulunan kod calistirilir daha sonra while ifadesinin icinde yeralan 
+do-while dongusunde ise once do ifadesinin içinde bulunan kod calistirilir daha sonra while ifadesinin içinde yeralan 
 condition ifadesinin dondurdugu degere bakilir. do-while dongusunde dongunun en az bir kere calismasi garantidir.
 
 #### break ve continue ifadeleri
@@ -477,7 +506,7 @@ break ifadesi dongulerde, donguyu manuel olarak bitirmeye yarar
     }
 ```
 
-continue ifadesi dongulerde, continue'dan sonra gelen dongu icindeki kodun calistirilmadan bir sonraki dongu adimina gecilmesini saglar
+continue ifadesi dongulerde, continue'dan sonra gelen dongu içindeki kodun calistirilmadan bir sonraki dongu adimina gecilmesini saglar
 
 ```java
     for (int i = 0; i < 100; i++) {
