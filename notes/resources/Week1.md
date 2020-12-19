@@ -1,10 +1,12 @@
 # Fibabanka Java Bootcamp - 1. Hafta
 
-## Java prgramlama dilinin temelleri
+## Java programlama dilinin temelleri
 ### Java nedir ve neden önemlidir ?
 
+![Java Dilinin Özellikleri](images/features_of_java.jpg)
+
 Java ilk olarak 1991 yılında OAK ismiyle ortaya çıktı daha sonra 1995 yılında Java ismiyle ilk kez piyasaya sürüldü.
-En başta tos makinası, elektikli süpürge gibi son kullanıcı elektronik ürünler için tasarlanmış olsa da daha sonra 
+En başta tost makinası, elektikli süpürge gibi son kullanıcı elektronik ürünler için tasarlanmış olsa da daha sonra 
 internetin programlama dili oldu ve internetin bu denli gelişmesinde kilit rol oynadı. Bu nedenle ilk günden itibaren
 platform bağımsız olarak tasarlandı. Güçlü yapısı, sunduğu güvenlik ve taşınabilirliği ve genel bir programlama dili olması
 popülerliğini biranda artırdı.
@@ -24,9 +26,14 @@ tuttu.
 - JDK (Java Development Kit)
 - IDE (Integrated Development Environment)*
 
+#### Bootcamp için nelere ihtiyacım var
+- Git
+- Github
+
+
 #### JDK ya yakından bakış
 JDK, Java dilinde yazdığımız uygulamaları compile etmek ve çalıştırmak için gerekli olan altyapıyı sunar. Şuanda güncel
-olarak 15. veersiyonu yayınlanan JDK, Oracle firmasının [adresinden](https://www.oracle.com/java/technologies/javase-downloads.html)
+olarak 15. versiyonu yayınlanan JDK, Oracle firmasının [adresinden](https://www.oracle.com/java/technologies/javase-downloads.html)
 ve open source olarak piyasaya sunulan [adresten](http://jdk.java.net/) indirilip kurulabilir. Bu eğitim serisinde biz 
 en son devrim niteliği taşıyan JDK'nın 8 numaralı versiyonunu kullanacağız.
 
@@ -46,7 +53,13 @@ package com.hkarabakla;
  public class Main {
  
      public static void main(String[] args) {
- 	    System.out.println("Hello Java World !");
+        // Bu tek satırlık bir yorum
+        
+        /*
+            Bu çok satırlık
+            bir yorum
+         */
+ 	    System.out.println("Merhaba Java Bootcamp !");
      }
  }
 ```
@@ -84,10 +97,13 @@ Car myNewCar = new Car("A4", "Audi");
 - Primitive tipler java tarafından öntanımlı olarak sunulmaktadır fakat non-primitive tipler yazılımcı tarafından yaratılır. (String hariç)
 - Non-primitive tipler tuttukları değer üzerinde işlem yapmaya yarayan metodlar sunabilirler
 - Primitive tipler her zaman bir değere sahip olmak zorundadır bu nedenle default değerleri vardır, non-primitive tipler ise null olabilir
+- Primitive tipler hafızada stack denilen bir bölgede saklanırken, referans tiplerin referans kısımları stack'de referansların
+işaret ettiği gerçek objeler heap denilen özel alanda saklanır.
 
 ### Değişkenler
 Değişkenler verileri (data) depolamaya yarar.
 ``` java
+// Genel değiken tanımlama
 // type variable = value*;
 
 int age = 10;
@@ -128,7 +144,7 @@ w = x * y * z;
 ```
 #### Degişkenlerde scope kavramı
 Java dilinde her değişken  kıvırcık parantezler içinde tanımlanmalıdır. Kıvırcık parantez içinde tanımlanan değişken
-parantezler dışında ulaşılazmadır, alt kıvırcık parantezler içinde de ulaşılabilirdir. [Örneğimizi](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo1.java)) inceleyelim.
+parantezler dışında ulaşılazmadır, alt kıvırcık parantezler içinde de ulaşılabilirdir. [Örneğimizi](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo1.java) inceleyelim.
 ```java
 package com.hkarabakla;
 
@@ -159,7 +175,7 @@ Bir tipte tanımlanmış değerin başka bir tipte tanımlanmış değişkene at
 
 **Otomatik tip dönüşümü**
 
-küçük boyutlu bir değerin daha büyük boyutlu bir tipte değişkene atanması
+Küçük boyutlu bir değerin daha büyük boyutlu bir tipte değişkene atanmasıdır.
 _byte -> short -> char -> int -> long -> float -> double_
 
 ```java
@@ -174,9 +190,9 @@ public class MyClass {
 }
 ```
 
-**Manuel tip donusumu**
+**Manuel tip dönüşümü**
 
-küçük boyutlu bir degerin daha buyuk boyutlu bir tipte degiskene atanmasi (deger kaybi)
+Büyük boyutlu bir değerin daha küçük boyutlu bir tipte değişkene atanmasıdır, bu durumda değer kaybı yaşanabilir.
 _double -> float -> long -> int -> char -> short -> byte_ 
 
 ```java
@@ -191,10 +207,10 @@ public class MyClass {
 }
 ```
 
-### Operatorler
-Operatorler degiskenler ve degerler uzerinde islem yapmaya yarar.
+### Operatörler
+Operatörler değişkenler ve değerler üzerinde işlem yapmaya yarar.
 
-#### Aritmetik operatorler
+#### Aritmetik operatörler
 |Operator	|Name	|Description	|Example|
 | ----------- | ----------- | ---------- | ---------- |
 |+	|Addition	|Adds together two values	|x + y	|
@@ -205,7 +221,7 @@ Operatorler degiskenler ve degerler uzerinde islem yapmaya yarar.
 |++	|Increment	|Increases the value of a variable by 1	|++x|	
 |--	|Decrement	|Decreases the value of a variable by 1	|--x|
 
-#### Atama operatorleri
+#### Atama operatörleri
 |Operator	|Example	|Same As|
 | ----------- | ----------- | ---------- |
 |=	|x = 5|	x = 5|	
@@ -220,7 +236,7 @@ Operatorler degiskenler ve degerler uzerinde islem yapmaya yarar.
 |>>=	|x >>= 3|	x = x >> 3|	
 |<<=	|x <<= 3|	x = x << 3|
 
-#### Karsilastirma operatorleri
+#### Karşılaştırma operatörleri
 |Operator	|Name	|Example|
 | ----------- | ----------- | ---------- |
 |==|	Equal to|	x == y|	
@@ -230,44 +246,79 @@ Operatorler degiskenler ve degerler uzerinde islem yapmaya yarar.
 |>=|	Greater than or equal to|	x >= y|	
 |<=|	Less than or equal to|	x <= y|
 
-#### Mantiksal operatorler //TODO fix me
+#### Mantıksal operatörler
 |Operator	|Name	|Description	|Example|
 | ----------- | ----------- | ---------- | ---------- |
 |&& 	|Logical and	|Returns true if both statements are true	|x < 5 &&  x < 10|	
-| || 	|Logical or	|Returns true if one of the statements is true	|x < 5 \|\| x < 4|	
+| &#124;&#124; 	|Logical or	|Returns true if one of the statements is true	|x < 5 &#124;&#124; x < 4|	
 |!	|Logical not	|Reverse the result, returns false if the result is true	|!(x < 5 && x < 10)|
 
 ## Karar mekanizmaları ve döngüler
 
+![karar](images/decision.jpg)
+
+Karar mekanizmaları ve döngüler uygulama içindeki akışı kontrol etmek için kullanılır. Kimi zaman bazı koşullar altında
+bir kod parçasının çalıştırılmasını isterken kimi zaman da o koşulun gerçek olmaması durumunda başka kod parçalarının 
+çalıştırılmasını isteriz, işte bu durumda yardımımıza **if**, **if-else** ve **switch** ifadeleri yetişir. Bazen ise bir 
+kod parçasının defalarca çalıştırılması gerekir, bu durumda ise **for** ve **while** döngü ifadeleri istediğimiz kadar tekrarlı 
+kod çalıştırmamızı sağlar. Şimdi bu ifadelerin detaylarına ve örneklerine bakalım.
+
 ### Konsoldan Scanner yardımıyla input alma
+Karar mekanizmaları ve döngü ifadeleri örneklerini zenginleştirmek için konsoldan değer okuma işleminin Scanner sınıfı
+ile [nasıl yapıldığına](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo2.java) bakalım.
+
 ```java
 import java.util.Scanner;
 
-public class Main {
+public class FundamentalsDemo2 {
 
     public static void main(String[] args) {
 
-        System.out.println("Welcome " + getUserName());
+        System.out.println("Welcome " + getUserDeatils());
     }
 
-    private static String getUserName() {
+    private static String getUserDeatils() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter your name : ");
         String name = scanner.next();
         System.out.println();
-        System.out.print("Enter your surname : ");
-        String surname = scanner.next();
+        System.out.print("Enter your age : ");
+        int age = scanner.nextInt();
 
-        return name + " " + surname;
+        return name + " " + age;
     }
 }
 ```
+Output :
+```
+Enter your name : Huseyin
+
+Enter your age : 33
+Welcome Huseyin 33
+```
+Örnekte Scanner sınıfından bir obje yarattık (Obje ve sınıf kavramlarına daha sonra değineceğiz), Scanner sınıfına klavyeden 
+girilen değerleri okuması için System.in input stream objesini verdik. scanner objesinin next() metodu consoldan girilen 
+ilk kelimeyi okur ve String tipinde geri döner, nextInt() metodu ise ilk kelimeyi okur ve int tipinde geri döner. 
+Böylece kullanıcı ile etkileşim kurmuş oluruz. Bundan sonraki örnekleri anlayabilmek için bu kadar bilgi yeterli.
 
 ### if-else ifadesi
-if ifadesi belirli bir kosul altinda program akisimizin ne sekilde devam edecegini belirlemeye yarar.
+if ifadesi belirli bir koşul altında program akışımının hangi yöne devam edeceğini belirler. [Örneğin](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo3.java);
 
 ```java
-    public boolean isEligibleToHaveADrivingLicence(int age) {
+import java.util.Scanner;
+
+public class FundamentalsDemo3 {
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your age : ");
+        int age = scanner.nextInt();
+        System.out.println("Your availability for driving licence : " + isEligibleToHaveADrivingLicence(age));
+    }
+
+    public static boolean isEligibleToHaveADrivingLicence(int age) {
+
         if(age < 18) {
             System.out.println("It's too early to drive !!!");
             return false;
@@ -275,48 +326,98 @@ if ifadesi belirli bir kosul altinda program akisimizin ne sekilde devam edecegi
 
         return true;
     }
+}
+```
+Output :
+```
+Enter your age : 11
+It's too early to drive !!!
+Your availability for driving licence : false
 ```
 
-else ifadesi ise if kosulu gerceklesmemesi durumda program akisimizin ne sekilde devam edecegini belirlemeye yarar.
+else ifadesi ise if koşulu gerçekleşmemesi durumda program akışının gideceği yönü belirlemeye yarar. [Örneğin](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo4.java);
 
 ```java
-    public boolean isEqual(int value1, int value2) {
-        if(value1 == value2) {
-            return true;
+import java.util.Scanner;
+
+public class FundamentalsDemo4 {
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("What is the time : ");
+        int time = scanner.nextInt();
+
+        if (time < 18) {
+            System.out.println("Good day.");
         } else {
-            return false;
+            System.out.println("Good evening.");
         }
     }
+}
+```
+```
+What is the time : 19
+Good evening.
 ```
 
-if-else-if ifadesi ise if kosulu gerceklesmedigi taktirde ikinci bir kosulu test etmemizi ve bu kosul gerceklesmesi 
-durumunda program akisimizi kontrol etmeye yarar.
+if-else-if ifadesi ise if koşulu gerçekleşmediği taktirde ikinci bir koşulu test etmeye yarar. [Örneğin](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo5.java);
 
 ```java
-    public int isEqual(int value1, int value2) {
-        if(value1 < value2) {
-            return -1;
-        } else if (value1 > value2) {
-            return 1;
-        } else {
-            return 0;
-        }       
-    }
-``` 
+import java.util.Scanner;
 
-Istedigimiz kadar if-else-if ifadesi kullanabiliriz, fakat if-else-if ifadesi nekadar cok kullanilirsa kodun okunabilirligi 
-okadar azalir. Bu nedenle Java'da daha okunabilir, daha sade ve daha cok esneklik sunan switch ifadesi **bazi durumlarda** 
-if-else-if ifadesi yerine tercih edilebilir.
+public class FundamentalsDemo5 {
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("What is the temperature today : ");
+
+        int temperature = scanner.nextInt();
+
+        if (temperature < 20) {
+            System.out.println("A little bit cold.");
+        } else if (temperature < 25) {
+            System.out.println("It's cool.");
+        } else {
+            System.out.println("It's warm, drink water.");
+        }
+    }
+}
+```
+Output :
+```
+What is the temperature today : 23
+It's cool.
+```
+
+İstediğimiz kadar if-else-if ifadesini zincirleme kullanabiliriz, fakat if-else-if ifadesi nekadar çok kullanılırsa 
+kodun okunabilirliği okadar azalır. Bu nedenle Java'da daha okunabilir, daha sade ve daha çok esneklik sunan 
+switch ifadesi **bir değişkenin birden fazla değer alabildiği durumlarda** if-else-if ifadesi yerine tercih edilebilir.
 
 ### switch ifadesi
-Bir degere bagli olarak birden fazla kosul ve kod akis olasiligi oldugu durumlarda switch ifadesi kullanilabilir.
-Bu deger **byte, short, int, char yada String** tipinde olabilir.
+Bir değere bağlı olarak birden fazla koşul ve kod akışı olasılığı söz konusu olduğu durumlarda switch ifadesi kullanılabilir.
+Bu değer **byte, short, int, char yada String** tipinde olabilir. [Örneğin](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo6.java);
 
 ```java
-    public String getDayNameOfWeek(int dayOfTheWeek) {
-        
+import java.util.Scanner;
+
+public class FundamentalsDemo6 {
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of the day : ");
+
+        int numberOfTheDay = scanner.nextInt();
+
+        System.out.println("Today is " + getDayNameOfWeek(numberOfTheDay));
+    }
+
+    public static String getDayNameOfWeek(int dayOfTheWeek) {
+
         String nameOfTheDay;
-        
+
         switch (dayOfTheWeek) {
             case 1:
                 nameOfTheDay = "Monday";
@@ -342,13 +443,39 @@ Bu deger **byte, short, int, char yada String** tipinde olabilir.
             default:
                 nameOfTheDay = "Unknown";
         }
-        
+
         return nameOfTheDay;
     }
+}
 ``` 
-switch ifadesi bize birden fazla kosuldan herhangi birinin gerceklesmesi durumunda ayni kod akisinin isletilmesine olanak saglar
+Output :
+```
+Enter the number of the day : 3
+Today is Wednesday
+```
+switch ile test ettiğimiz değer hiçbir case ifadesi ile eşleşmezse default ifadesi altında yeralan kod çalıştırılır. Burada
+default ifadesi opsiyoneldir, eğer default olarak çalıştırmak istediğimiz bir kod yoksa hiç switch ifadesine eklenmeyebilir.
+
+break ifadesi eşleşen case ifadeisnin işletilmesinden sonra switch ifadesinden kod akışının çıkmasını sağlar. switch ifadesi 
+bizim için birden fazla koşuldan herhangi birinin gerçekleşmesi durumunda aynı kod akışının işletilmesine olanak sağlar,
+[Örneğin](../../examples/src/com/hkarabakla/fundamentals/FundamentalsDemo7.java);
+
 ```java
-    public String classifyFood(String nameOfTheFood) {
+    import java.util.Scanner;
+
+public class FundamentalsDemo7 {
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("What would you like to eat ? : ");
+
+        String nameOfTheFood = scanner.next();
+
+        System.out.println("This is " + classifyFood(nameOfTheFood));
+    }
+
+    public static String classifyFood(String nameOfTheFood) {
         String foodType;
 
         switch (nameOfTheFood) {
@@ -371,45 +498,45 @@ switch ifadesi bize birden fazla kosuldan herhangi birinin gerceklesmesi durumun
 
         return foodType;
     }
+}
 ``` 
-Yukardaki metodun farkli parametreler ile calistirilmasi durumunda asagikadi ciktilari uretecektir:
-```java
-1. System.out.println(classifyFood("banana"));
-This can be an apple or banana
-fruit
-
-2. System.out.println(classifyFood("banana"));
+Output :
+```
+What would you like to eat ? : apple
 This is an apple
 This can be an apple or banana
-fruit
+This is fruit
 
+---------------------------------------
+
+What would you like to eat ? : banana
+This can be an apple or banana
+This is fruit
 ``` 
-
-```
-:raised_hands: Ne zaman if-else-if nezaman switch kullanmaliyiz ?
-```
+Bu örnekte switch ifadesinde test edilen değişkenin hangi case durumu ile eşleştiyse o case'den itibaren altındaki tüm caselerin 
+break ifadesi ile karşılaşıncaya kadar işletildiğine dikkat edelim. 
 
 
+### Döngüler
+Java'da döngüler tekrarlı işleri gerçekleştirmek için kullanılır.
 
-### Donguler
-Java'da donguler tekrarli isleri gerceklestirmek için kullanilir.
+#### for döngüsü
+Bu döngü tipi kaç defa kod bloğunun çalıştırılması gerektiği bilindiği durumlarda kullanılır. Genel yapısı aşağıdaki gibidir;
 
-#### for dongusu
 ```java
     for(initialization; condition; iteration) {
         statement sequence;
     }
 ```
-Initialization ifadesi dongu kontrol degiskeninin ilk degerini aldigi kisimdir.
-Condition ifadesi ise dongunun hangi sartlar altinda devam edecegini belirledigimiz kisimdir.
-Iteration ifadesi dongu kontrol ifadesinin her bir dongu adiminda nasil degisecegini belirledigimiz kisimdir.
+Initialization ifadesi döngü kontrol değişkeninin tanımlandığı ve ilk değerini aldığı kısımdır.
+Condition ifadesi döngünün hangi şartlar altında devam edeceğinin belirlendiği kısımdır.
+Iteration ifadesi ise döngü kontrol ifadesinin her bir döngü adımında nasıl değişeceğinin belirlendiği kısımdır.
 
 ```java
     for (int i = 0; i < 5; i++) {
       System.out.println(i);
     }
 ```
-
 Output :
 ```
     0
@@ -418,13 +545,14 @@ Output :
     3
     4
 ```
+Yukarıdaki örnekte int tipinde i değeri 0 olarak tanımlanmış ve döngünün i 5den küçük olduğu sürece tekrarlanması istenmiş.
+Döngünün her adımı tamamlanınca yani if bloğunun içi çalıştırılıp bitince i değeri 1 artırılmış.
 
 ```java
     for(int i = 0, j = 10; i < j; i++, j--) {
         System.out.println("i and j :" + i + " " + j);
     }
 ```
-
 Output :
 ```
     i and j :0 10
@@ -433,6 +561,8 @@ Output :
     i and j :3 7
     i and j :4 6
 ```
+Bu örnekte ise i ve j olmak üzere iki farklı değer kullanılmış döngüyü kontrol etmek için. Her döngü adımında i değeri 1 artırılırken
+j değeri ise 1 azaltılmış ve i j'den küçük olduğu sürece döngünün tekrarlanması sağlanmış.
 
 ```java
     int i = 0;
@@ -440,7 +570,6 @@ Output :
         System.out.println("i :" + i++);
     }
 ```
-
 Output :
 ```
     i :0
@@ -449,16 +578,23 @@ Output :
     i :3
     i :4
 ```
-for dongusunun farkli bir versiyonu olan foreach dongusune daha sonra array konusunu isledigimiz zaman deginecegiz
+Bu örnekte ise i değeri döngü dışında tanımlanmış ve döngünün i değeri 5ten küçük olduğu sürece çalışması istenmiş. i değerinin
+değiştirilmesi işi ise döngü bloğunun içinde yapılmış.
+
+> Not : for döngüsünün farklı bir versiyonu olan foreach döngüsüne daha sonra array konusuna işlediğimiz zaman değineceğiz.
 
 #### while dongusu
+while döngüsü ise döngünün kaç defa işletileceğinin bilinmediği ama hangi koşul devam ettiği sürece tekrar edeceği bilindiği
+durumlarda kullanılır. Genel yapısı aşağıdaki gibidir;
+
 ```java
     while(condition) {
         statement sequence;
     }
 ```
 
-Condition ifadesi ise dongunun hangi sartlar altinda devam edecegini belirledigimiz kisimdir.
+Condition ifadesi döngünün hangi şartlar altında devam edeceğine karar verilen kısımdır, condition true olduğu sürece döngü
+tekrar eder.
 
 ```java
     int i = 0;
@@ -468,23 +604,27 @@ Condition ifadesi ise dongunun hangi sartlar altinda devam edecegini belirledigi
     }
 ```
 
-while dongusu iterasyone condition ifadesinin sonucunu test ederek başlar, condition ifadesi true doner ise dongu içindeki
-kod calistirilir.
+while döngüsü çalışmaya condition ifadesinin sonucunu kontrol ederek başlar ve her adımda değer kontrol edilir, condition 
+ifadesi true döner ise döngü içindeki kod çalıştırılır. false döndüğü durumda döngü son bulur.
+
+while döngüsünün özel bir şekli olan do-while döngüsünde ise önce do ifadesinin içinde bulunan kod öalıştırılır daha 
+sonra while ifadesinin içinde yeralan condition ifadesinin döndüğü değere bakılır. do-while döngüsünde döngünün en az 
+bir kere çalışması garantidir.
 
 ```java
     int i = 5;
       do {
          System.out.println("Iteration: "+ ++i);
       } while(i < 5);
-
-    >Output>
-    Iteration: 6
 ```
-do-while dongusunde ise once do ifadesinin içinde bulunan kod calistirilir daha sonra while ifadesinin içinde yeralan 
-condition ifadesinin dondurdugu degere bakilir. do-while dongusunde dongunun en az bir kere calismasi garantidir.
+Output :
+```
+Iteration: 6
+```
 
 #### break ve continue ifadeleri
-break ifadesi dongulerde, donguyu manuel olarak bitirmeye yarar
+Bazı durumlarda döngünün ne zaman sonlanacağına döngü içerisinde karar vermek gerekebilir. Bu durumda break ifadesi 
+döngüyü bitirmeye yarar.
 
 ```java
     for (int i = 0; i < 10; i++) {
@@ -494,6 +634,17 @@ break ifadesi dongulerde, donguyu manuel olarak bitirmeye yarar
       System.out.println(i);
     }
 ```
+Output :
+```
+0
+1
+2
+3
+4
+```
+Bu örnekte döngünün normalde 10 adımda sonlanması gerektiği döngü tanımında belirlenmiştir, fakat döngü içerisinde 5. adımda
+i değerinin 4 e eşit olduğu durumda break ile döngüden çıkılmıştır. break ifadesi tüm döngü yapılarında (for, while ve do-while)
+kullanılabilir.
 
 ```java
     while (true) {
@@ -506,7 +657,8 @@ break ifadesi dongulerde, donguyu manuel olarak bitirmeye yarar
     }
 ```
 
-continue ifadesi dongulerde, continue'dan sonra gelen dongu içindeki kodun calistirilmadan bir sonraki dongu adimina gecilmesini saglar
+Bazı durumlarda ise döngü içerisinde işletilen adımın pas geçilmesi istenebilir. Bu durumda continue ifadesi, döngü iöerisinde 
+continue'dan sonra gelen kodun çalıştırılmadan bir sonraki döngü adımına geçilmesini sağlar.
 
 ```java
     for (int i = 0; i < 100; i++) {
@@ -530,27 +682,33 @@ Output :
     I : 80
     I : 90
 ```
+Yukardaki örnekte 0dan 99a kadar sayılmış ve sadece onun katlarında konsola değer yazılması sağlanmıştır, diğer durumlarda
+döngü adımı pas geçilmiş.
 
 ## Nesneye Yönelik Programlama (OOP)
-Nesne (object) Java dilinin özüdür temelde. Nesneler classlardan üretilir ve class kavramı Javanın temel yapı taşıdır.
-Bu nedenle Javayı anlamak için class ve object kavramını çok iyi anlamak gerekir.
+Nesne (object) Java dilinin özüdür temelde. Nesneler sınıflardan (class) üretilir ve sınıf kavramı Java dilinin temel yapı taşıdır.
+Bu nedenle Java dilini anlamak için sınıf ve nesne kavramını çok iyi anlamak gerekir.
 
-Etrafımızda gördüğümüz herşey bir obje olarak modellenebilir. Nesneye dayalı programlamanın gücü de burdan gelir. Gerçek hayatı
+Etrafımızda gördüğümüz herşey bir nesne olarak modellenebilir. Nesneye dayalı programlamanın gücü de burdan gelir. Gerçek hayatı
 modellemek için iyi bir araçtır.
 
 ### Class ve Object kavramları
-Javada hersey classların içinde döner, aslında eğitimin başından beri classları çokca kullandık fakat oldukça basit classlardı bunlar.
-Bir class çeşitli türden veriler ve bu veriler üzerinde işlem yapmaya yarayan metodlar içerir. Bu haliyle class objeler için
-bir şablon görevi görür, yani tek başına class bir işe yaramaz. Onun hafızada bir yer kaplaması ve programın döngüsüne katılabilmesi için
-kendisinden objeler yaratılmalıdır.
+
+![class-object](images/class-object-featured-image.png)
+
+Javada hersey sınıfların içinde döner, aslında eğitimin başından beri sınıfları çokca kullandık fakat oldukça basit sınıflardı bunlar.
+Bir sınıf çeşitli türden veriler ve bu veriler üzerinde işlem yapmaya yarayan metodlar içerir. Bu haliyle sınıf nesneler için
+bir şablon görevi görür, yani tek başına sınıf bir işe yaramaz. Onun hafızada bir yer kaplaması ve programın döngüsüne katılabilmesi için
+kendisinden nesneler yaratılmalıdır.
 
 Sınıfın içinde bulunan verilere ve metodlara sınıfın üyeleri adı verilir. Sınıfın içinde bulunan verilere tek başına 
 instance variable da denir.
 
-Bir sınıf hem veri hem metod barındırabileceği gibi bunlardan sadece birini de barındırabilir.
+Bir sınıf hem veri hem metod barındırabileceği gibi bunlardan sadece birini de barındırabilir. Bir sınıfın genel tanımı 
+aşağıdaki gibidir;
 
 ```java
-class classname {
+class ClassName {
     // declare instance variables
     type var1;
     type var2;
@@ -571,13 +729,14 @@ class classname {
 }
 ```
 
-Bir class tanımlarken burada önemli olan sınıfın birbiri ile alakalı bilgiler içeriyor olmasıdır. Örneğin bir kullanıcı sınıfı
-tanımlıyorsak içine kullanıcı adı, email adresi gibi bilgiler koyarken stok bilgisi ile ilakalı veriler koymaktan kaçınmalıyız.
+Bir sınıf tanımlarken burada önemli olan sınıfın birbiri ile alakalı bilgiler içeriyor olmasıdır. Örneğin bir kullanıcı sınıfı
+tanımlıyorsak içine kullanıcı adı, email adresi gibi bilgiler koyarken stok bilgisi ile alakalı veriler koymaktan kaçınmalıyız.
 
-Bir java uygulamasında main() metodu uygulamanın başlangıç noktasını işaret eder. O nedenle eğer yazdığımız sınıf uygulamanın 
+> Bir java uygulamasında main() metodu uygulamanın başlangıç noktasını işaret eder. O nedenle eğer yazdığımız sınıf uygulamanın 
 başlangıç noktası değilse o sınıf main() metodunu içermemelidir.
 
-Şimdi bir Vehicle sınıfı yaratalım ve bundan instancelar üretelim :
+Şimdi bir Vehicle sınıfı yaratalım ve [bundan nesneler üretelim](../../examples/src/com/hkarabakla/oop/demo1/OopDemo1.java);
+
 ```java
 public class Vehicle {
 
@@ -585,10 +744,8 @@ public class Vehicle {
     double fuelCapacity;
     int fuelConsumptionPerKm;
 }
-```
 
-```java
-public class Main {
+public class OopDemo1 {
 
     public static void main(String[] args) {
 
@@ -608,9 +765,9 @@ Minivan can carry 7 people for 11.666666666666666 km
 ```
 
 #### Instance variables
-Daha önce class degişkenlerine instance variables denildiğini öğrenmiştik. Şimdi bu değikenlere biraz daha yakından bakalım.
-Bu değişkenlerin default değerleri vardır, yani bir classdan bir instance yarattığımızda eğer değişkenlerine biz değer atamazsak
-Java arka planda bu değişkenlere bir değer ataması yapar.
+Daha önce sinif degişkenlerine instance variables denildiğini öğrenmiştik. Şimdi bu değikenlere biraz daha yakından bakalım.
+Bu değişkenlerin default değerleri vardır, yani bir sınıftan bir instance yarattığımızda eğer değişkenlerine biz değer atamaz ise
+Java arka planda bu değişkenlere bir default değer ataması yapar. [Örneğin](../../examples/src/com/hkarabakla/oop/demo2/OopDemo2.java);
 
 ```java
 public class Vehicle {
@@ -620,9 +777,8 @@ public class Vehicle {
     boolean isSport;
     String brand;
 }
-```
-```java
-public class Main {
+
+public class OopDemo2 {
 
     public static void main(String[] args) {
 
@@ -641,22 +797,25 @@ Output :
 ```
 Brand null passengers : 0 fuel capacity : 0.0 consumption per km : 0 is sport car : false
 ```
-Burada gördüğümüz gibi instance değişkenleri biz onlara değer atamazsak default değerleri java tarafından atanır.
+Burada gördüğümüz gibi instance değişkenlere değer atanmadığı için default değerleri java tarafından atandı.
 
 #### Metodlar
 Daha önce instance değişkenlerini görmüştük şimdi ise bu değişkenler üzerinde işlem yapmak için metod tanımına bakacağız.
+Metodların genel yapısı aşağıdaki gibidir;
+
 ```java
 return-type methodName( parameter-list ) {
     // body of method
 }
 ```
-Burada methodName metodumuzun ismini temsil etmektedir ve daha sonra bu metoda erişmek istediğimizde kullanacağız.
-parameter-list ise metodumuzun kabul ettiği argüman listesini temsil etmektedir. Son olarak return-type metod işletildiği
-zaman metodun çağırıldığı yere hangi tipte bir veri döneceğini belirtir. Return tipi bir primitive tip olabileceği gibi
- bir class da olabilir(yani metod bir obje dönebilir). Bazı durumlarda bir metod hiçbir değer de dönmeyebilir,
-yine de bu durumda metodun dönüş tipini özel bir kelime ile belirtmemiz gerekir; **void**
 
-Şimdi daha önce yarattığımız Vehicle sınıfına bir metod ekleyelim.
+Burada methodName metodun ismini temsil etmektedir ve daha sonra bu metoda erişmek istediğinde kullanılır.
+parameter-list ise metodun kabul ettiği argüman listesini temsil etmektedir. Son olarak return-type metod işletildiği
+zaman metodun çağırıldığı yere hangi tipte bir veri döneceğini belirtir. Return tipi bir primitive tip olabileceği gibi
+ bir nesne de olabilir(yani metod bir obje dönebilir). Bazı durumlarda bir metod hiçbir değer de dönmeyebilir,
+yine de bu durumda metodun dönüş tipini özel bir kelime ile belirtmek gerekir; **void**
+
+Şimdi daha önce yarattığımız Vehicle sınıfına bir metod [ekleyelim](../../examples/src/com/hkarabakla/oop/demo3/OopDemo3.java);
 ```java
 public class Vehicle {
     int passengers;
@@ -669,10 +828,8 @@ public class Vehicle {
         return fuelCapacity / fuelConsumptionPerKm;
     }
 }
-```
 
-```java
-public class Main {
+public class OopDemo3 {
 
     public static void main(String[] args) {
 
@@ -690,8 +847,10 @@ Output :
 ```
 Minivan can carry 7 people for 11.666666666666666 km
 ```
-Burada range() metodunun fuelCapacity ve fuelConsumptionPerKm değerlerine obje ismi kullanmadan eriştiğine dikkat ediniz.
+Burada range() metodunun fuelCapacity ve fuelConsumptionPerKm değerlerine obje ismi kullanmadan eriştiğine dikkat edelim.
 Ayrıca metoddan çıkmak ve değer dönmek için **return** ifadesinin kullanıldığına da dikkat ediniz.
+
+Aşağıdaki örnekte return ifadesi ve farklı tipte değer return etme [örnekleri](../../examples/src/com/hkarabakla/oop/demo4/OopDemo4.java) verilmiştir; 
 
 ```java
 public class SimpleMath {
@@ -731,9 +890,8 @@ public class SimpleMath {
         return sum;
     }
 }
-``` 
-```java
-public class Main {
+
+public class OopDemo4 {
 
     public static void main(String[] args) {
 
@@ -776,7 +934,8 @@ public class Vehicle {
 }
 ```
 
-Burada görülen constructor hiç bir parametre almazken içinde bütün instance değişkenlerine default değerler atanmıştır.
+Burada görülen constructor hiç bir parametre almazken içinde bütün instance değişkenlerine default değerler hard-coded 
+olarak atanmıştır.
 
 ```java
 public class Main {
@@ -815,15 +974,15 @@ public Vehicle(int passengers, double fuelCapacity, int fuelConsumptionPerKm, bo
 Vehicle bmw = new Vehicle(4, 75, 7, false, "Volkswagen");
 ```
 
-Eğer hiç bir constructor eklemezsek sınıfa bu durumda Java otomatik olarak default constructoru ekler (hiçbir parametre almayan constructor)
-ve değişkenler default değerlerini alır.
+Eğer hiç bir constructor eklemezsek sınıfa bu durumda Java otomatik olarak default constructoru ekler 
+(hiçbir parametre almayan constructor) ve değişkenler ait oldukları tipe göre default değerlerini alır.
 
  #### Bir obje yaratıldığında arka planda neler olur ? 
  
 ![memory model](images/java-memory-model.png)
 
 Jvm (Java virtual machine)'de memory yönetimi şu şekilde yapılır :
-Memory ikiye ayrılmıştır, Stack ve Heap. Yaratılan her bir obje memoryde Heap adı verilen bu özel alanda saklanır. 
+Memory ikiye ayrılmıştır, Stack ve Heap. Yaratılan her bir obje memoryde Heap adı verilen özel alanda saklanır. 
 Bunun yanında uygulama sırasında yaratılan her bir thread için bir Stack alanı açılır ve bu alan threadin çaşıltırdığı metodları
 sırası ile tutar. Çalıştırılan metodların yanında local değişkenler de stackde saklanır. 
 
@@ -834,16 +993,16 @@ Bunun yanında bir method içinde bir lokal değişken bir objeye referans ediyo
 heap alanında saklanır. 
 
 Peki heap ve stack alanlarında ne kadar veri saklayabiliriz ? Memory dediğmiz kısım fiziksel bir cihazdan ibaret olduğu için
-tabiki maksimum kullanabileceğimiz bir limit var. Fakat basit bir uygulamada bu limiti doldurmak okadar kolay değil merak etmeyin
-sadece döngüler içinde obje yaratırken dikkatli olun yeter =) Yinede jvm parametreleri ile stack ve heap için nekadar 
-yerayırmak istediğimizi kontrol edebiliyoruz. Olurda yinede ayırdığımız stack alanı yeterli gelmezse java.lang.StackOverFlowError 
+tabiki maksimum kullanabileceğimiz bir limit var. Fakat basit bir uygulamada bu limiti doldurmak okadar kolay değil
+sadece döngüler içinde obje yaratırken dikkatli olmak yeterlidir. Yinede jvm parametreleri ile stack ve heap için nekadar 
+yer ayırmak istediğimizi kontrol edebiliyoruz. Olurda yinede ayırdığımız stack alanı yeterli gelmezse java.lang.StackOverFlowError 
 exceptionı fırlatılır. Eğer heap alanı yeterli gelmez ise java.lang.OutOfMemoryError hatası fırlatılır.
 
 #### new ve this anahtar kelimeleri
-new operatorünün yeni nesne yaratmak için kullanıldığını daha önce görmüştük. new operatoru ile yarattığımız nesneyi bir
+new operatörünün yeni nesne yaratmak için kullanıldığını daha önce görmüştük. new operatörü ile yarattığımız nesneyi bir
 referans değişkenine atayarak bu referans değişkenin ismiyle objenin fieldlarına ve metodlarına erişebildiğimizi de görmüştük.
 
-Şimdi this anahtar kelimesine bakalım biraz da ;
+Şimdi de this anahtar kelimesine yakından bakalım ;
 ```java
 public class Power {
     int base;
@@ -872,7 +1031,7 @@ objenin kendi içinde erişme imkanı verir. Yani sadece bir objenin içinde obj
 Mülakatlarda en çok karşımıza çıkan konseptlerden birisi budur. Daha önce metodlara argüman verilebildiğini görmüştük.
 Peki bir metoda bir değişkeni gönderdiğimizi düşünelim, ve bu metodun da gönderdiğimiz değişkenin değerinde değişiklik yaptığını 
 varsayalım. Bu durumda metodu çağırdığımız yerde tekrar parametre olarak gönderdiğimiz değişkenlere erişmek istersek hangi
-değere erişiriz ?
+değere erişiriz ? [Örnek](../../examples/src/com/hkarabakla/oop/demo5/OopDemo5.java);
 
 ```java
 public static void main(String[] args) {
@@ -914,13 +1073,13 @@ Yani Javada metodlar hem pass by value hemde pass by refernce dir. Metoda ne gö
 
 ### Garbage Collector
 Daha önce objelerin memorynin heap adı verilen özel alanlarında tutulduğunu ve bu alanın bir limitinin olduğundan bahsetmiştik.
-BU nedenle uygulamada yarattığımız objelerin kendilerine ihtiyaç kalmadığından memoryden temizlenmesi gerekir. C gibi bazı
-dillerde bu işlem manuel olarak uygulamanın içinden yapıldığı gibi Javada bu işlem tamemn JVM tarafından Garbage Collector
+BU nedenle uygulamada yarattığımız objelerin kendilerine ihtiyaç kalmadığında memoryden temizlenmesi gerekir. C gibi bazı
+dillerde bu işlem manuel olarak uygulamanın içinden yapıldığı gibi Javada bu işlem tamamen JVM tarafından Garbage Collector
 dediğimiz bileşen tarafından otomatik olarak yürütülür. Yani developer olarak bizim birşey yapmamıza gerek yok. 
 
-Garbage collector bir nesneye ait referans kalmadığında memeoryde bu nesnenin memoryde tuttuğu alanı temizler ve tekrar kullanıma 
-açar. Bu işlemi kod içinde tetiklemenin bir yolu yok. Masraflı bir işlem olduğu için işlemin zamanına Garbage Collector kendisi
-karar verir. 
+Garbage collector bir nesneye ait referans kalmadığında memeoryde, bu nesnenin memoryde tuttuğu alanı temizler ve tekrar kullanıma 
+açar. Bu işlemi kod içinde tetiklemenin bir yolu yok, garbage collectora işleme başlamasını tavsiye edebiliriz fakat 
+masraflı bir işlem olduğu için işlemin zamanına Garbage Collector kendisi karar verir. 
 
 ## Inheritance, Polymorphism, Encapsulation
 
@@ -931,7 +1090,7 @@ hierarşi oluşturmak ve ortak özellikleri başka sınıflara aktarmak mümkün
 Kalıtımda iki ana unsur vardır, ortak özellikleri taşıyan ve diğer sınıflara aktaran superclass ve superclass dan kalıtımla 
 ortak özellikleri alıp üzerine kendine has özellikleri ekleyen subclass.
 
-Kalıtımı sağlamak için Javada **extends** ifadesini kullanırız. Genel syntax şu şekildedir.
+Kalıtımı sağlamak için Javada **extends** ifadesini kullanırız. Genel tanım şu şekildedir.
 
 ```java
 class SuperClass {
