@@ -211,18 +211,18 @@ public class MyClass {
 Operatörler değişkenler ve değerler üzerinde işlem yapmaya yarar.
 
 #### Aritmetik operatörler
-|Operator	|Name	|Description	|Example|
+|Operator	|İsim	|Açıklama	|Örnek|
 | ----------- | ----------- | ---------- | ---------- |
-|+	|Addition	|Adds together two values	|x + y	|
-|-	|Subtraction	|Subtracts one value from another	|x - y|	
-|*	|Multiplication	|Multiplies two values	|x * y	|
-|/	|Division	|Divides one value by another	|x / y	|
-|%	|Modulus	|Returns the division remainder	|x % y	|
-|++	|Increment	|Increases the value of a variable by 1	|++x|	
-|--	|Decrement	|Decreases the value of a variable by 1	|--x|
+|+	|Toplama	|İki değeri toplar	|x + y	|
+|-	|Çıkarma	|İki değeri birbirinden çıkarır	|x - y|	
+|*	|Çarpma	|İki değeri çarpar	|x * y	|
+|/	|Bölme	|İki değeri böler ve tam sonucu döner	|x / y	|
+|%	|Mod alma	|İki değerin birbirine bölümünden sonra kalanı verir	|x % y	|
+|++	|Artırma	|Bir değişkenin değerini 1 artırır	|++x|	
+|--	|Azaltma	|Bir değişkenin değerini 1 azaltır	|--x|
 
 #### Atama operatörleri
-|Operator	|Example	|Same As|
+|Operator	|Örnek	|Eşleniği|
 | ----------- | ----------- | ---------- |
 |=	|x = 5|	x = 5|	
 |+=	|x += 3|	x = x + 3|	
@@ -237,21 +237,21 @@ Operatörler değişkenler ve değerler üzerinde işlem yapmaya yarar.
 |<<=	|x <<= 3|	x = x << 3|
 
 #### Karşılaştırma operatörleri
-|Operator	|Name	|Example|
+|Operator	|İsim	|Örnek|
 | ----------- | ----------- | ---------- |
-|==|	Equal to|	x == y|	
-|!=|	Not equal|	x != y|	
-|\>	|Greater than|	x > y|	
-|<|	Less than|	x < y|	
-|>=|	Greater than or equal to|	x >= y|	
-|<=|	Less than or equal to|	x <= y|
+|==|	Eşitlik|	x == y|	
+|!=|	Eşit olmama|	x != y|	
+|\>	|Büyüktür|	x > y|	
+|<|	Küçüktür|	x < y|	
+|>=|	Büyüktür yada eşittir|	x >= y|	
+|<=|	Küçüktür yada eşittir|	x <= y|
 
 #### Mantıksal operatörler
-|Operator	|Name	|Description	|Example|
+|Operator	|İsim	|Açıklama	|Örnek|
 | ----------- | ----------- | ---------- | ---------- |
-|&& 	|Logical and	|Returns true if both statements are true	|x < 5 &&  x < 10|	
-| &#124;&#124; 	|Logical or	|Returns true if one of the statements is true	|x < 5 &#124;&#124; x < 4|	
-|!	|Logical not	|Reverse the result, returns false if the result is true	|!(x < 5 && x < 10)|
+|&& 	|Mantıksal ve	|True döner eğer iki ifade de true ise	|x < 5 &&  x < 10|	
+| &#124;&#124; 	|Mantıksal veya	|True döner eğer iki ifadeden en az birisi true ise	|x < 5 &#124;&#124; x < 4|	
+|!	|Mantıksal değil	|Değeri tersine çevirir, ifade true ise false false ise true yapar	|!(x < 5 && x < 10)|
 
 ## Karar mekanizmaları ve döngüler
 
