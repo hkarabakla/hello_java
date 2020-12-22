@@ -24,7 +24,7 @@ public class FundamentalsDemo6 {
                 break;
             case 2:
                 nameOfTheDay = "Tuesday";
-                break;
+                //break;
             case 3:
                 nameOfTheDay = "Wednesday";
                 break;

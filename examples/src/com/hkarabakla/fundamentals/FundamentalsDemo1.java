@@ -14,7 +14,7 @@ public class FundamentalsDemo1 {
             x = y * 2;
         }
 
-        // y = 100; error y not known here
+         int y = 100; //error y not known here
 
         // x still known here
         System.out.println("x is " + x);

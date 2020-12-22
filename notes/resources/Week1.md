@@ -640,7 +640,6 @@ Output :
 1
 2
 3
-4
 ```
 Bu örnekte döngünün normalde 10 adımda sonlanması gerektiği döngü tanımında belirlenmiştir, fakat döngü içerisinde 5. adımda
 i değerinin 4 e eşit olduğu durumda break ile döngüden çıkılmıştır. break ifadesi tüm döngü yapılarında (for, while ve do-while)
@@ -686,6 +685,9 @@ Yukardaki örnekte 0dan 99a kadar sayılmış ve sadece onun katlarında konsola
 döngü adımı pas geçilmiş.
 
 ## Nesneye Yönelik Programlama (OOP)
+
+![OOP Concepts](images/Object-Oriented-Programming-Concepts.jpg)
+
 Nesne (object) Java dilinin özüdür temelde. Nesneler sınıflardan (class) üretilir ve sınıf kavramı Java dilinin temel yapı taşıdır.
 Bu nedenle Java dilini anlamak için sınıf ve nesne kavramını çok iyi anlamak gerekir.
 
@@ -696,13 +698,15 @@ modellemek için iyi bir araçtır.
 
 ![class-object](images/class-object-featured-image.png)
 
-Javada hersey sınıfların içinde döner, aslında eğitimin başından beri sınıfları çokca kullandık fakat oldukça basit sınıflardı bunlar.
+Javada bütün olay sınıfların içinde döner, aslında eğitimin başından beri sınıfları çokca kullandık fakat oldukça basit sınıflardı bunlar.
 Bir sınıf çeşitli türden veriler ve bu veriler üzerinde işlem yapmaya yarayan metodlar içerir. Bu haliyle sınıf nesneler için
 bir şablon görevi görür, yani tek başına sınıf bir işe yaramaz. Onun hafızada bir yer kaplaması ve programın döngüsüne katılabilmesi için
 kendisinden nesneler yaratılmalıdır.
 
 Sınıfın içinde bulunan verilere ve metodlara sınıfın üyeleri adı verilir. Sınıfın içinde bulunan verilere tek başına 
 instance variable da denir.
+
+![concepts of objects](images/concepts-object.gif)
 
 Bir sınıf hem veri hem metod barındırabileceği gibi bunlardan sadece birini de barındırabilir. Bir sınıfın genel tanımı 
 aşağıdaki gibidir;
@@ -729,11 +733,9 @@ class ClassName {
 }
 ```
 
-Bir sınıf tanımlarken burada önemli olan sınıfın birbiri ile alakalı bilgiler içeriyor olmasıdır. Örneğin bir kullanıcı sınıfı
-tanımlıyorsak içine kullanıcı adı, email adresi gibi bilgiler koyarken stok bilgisi ile alakalı veriler koymaktan kaçınmalıyız.
-
-> Bir java uygulamasında main() metodu uygulamanın başlangıç noktasını işaret eder. O nedenle eğer yazdığımız sınıf uygulamanın 
-başlangıç noktası değilse o sınıf main() metodunu içermemelidir.
+Bir sınıf tanımlarken burada önemli olan sınıfın birbiri ile alakalı bilgiler içeriyor olmasıdır. Örneğin bür stok 
+yönetimi uygulamasında bir kullanıcı sınıfı tanımlıyorsak içine kullanıcı adı, email adresi gibi bilgiler koyarken 
+stok bilgisi ile alakalı veriler koymaktan kaçınmalıyız.
 
 Şimdi bir Vehicle sınıfı yaratalım ve [bundan nesneler üretelim](../../examples/src/com/hkarabakla/oop/demo1/OopDemo1.java);
 
@@ -1065,7 +1067,7 @@ Brand of vehicle : Mercedes
 Burada görüldüğü gibi metoda bir primitive tipte değişken gönderirsek o değişkenin değerinin bir kopyası metoda ulaşmış olur
 ve orijinal değer üzerinde yapacağımız değişikliklerden etkilenmez. Buna pass by value denir.
 
-Fakat bir metoda bir objeyi parametre olarak gönderirsek aslında metoda o objenin referansı yani memorydeki adresi ulaşmış olur
+Fakat bir metoda bir objenin referansını parametre olarak gönderirsek aslında metoda o objenin referansı yani memorydeki adresi ulaşmış olur
 bizde metodun içinde o referansı kullanark objeye erişir ve değerleri değiştirirsek orijinal objede değişiklik yapmış olur.
 Buna pass by reference denir.
 
@@ -1080,6 +1082,24 @@ dediğimiz bileşen tarafından otomatik olarak yürütülür. Yani developer ol
 Garbage collector bir nesneye ait referans kalmadığında memeoryde, bu nesnenin memoryde tuttuğu alanı temizler ve tekrar kullanıma 
 açar. Bu işlemi kod içinde tetiklemenin bir yolu yok, garbage collectora işleme başlamasını tavsiye edebiliriz fakat 
 masraflı bir işlem olduğu için işlemin zamanına Garbage Collector kendisi karar verir. 
+
+
+```java
+public class Main {
+
+
+    public static void main(String[] args) {
+        Bicycle bianchi = new Bicycle("Bianchi", 21, 1);
+
+        //bianchi.finalize();
+
+        System.gc();
+
+        System.out.println(bianchi.brand + " " + bianchi.numberOfSits + " " + bianchi.gear);
+    }
+
+}
+```
 
 ## Inheritance, Polymorphism, Encapsulation
 
@@ -1575,7 +1595,7 @@ class ClassName extends SuperClass implements Interface1, Interface2, Interface3
 ```
 
 Bir class hem bir super class ı extend edip hemde bir yada birden fazla interface i implemente edebilir. Bir interface i
-implemente etmek için yukarda görüldüğü gibi implements anahtar kelimesini kullanmak yeterlidir. Eğer birden fazla interface i
+implemente etmek için yukarda görüldüğü gibi **implements** anahtar kelimesini kullanmak yeterlidir. Eğer birden fazla interface i
 implemente etmek gerekirse bunları virgül ile ayırmak yeterli olur.
 
 Eğer bir sınıf bir yada birkaç interface i implemente ediyor ise bu interfacelerde yer alan tüm metodları implemente etmek zorundadır.
@@ -1722,6 +1742,27 @@ Daha önce bir sınıfın birden fazla sınıfı extend edemeyeceğini söylemi�
 Diyelim ki A sınıfının operation() adında bir metodu var ve B sınıfının da aynı operation() metoduna sahip olduğunu düşünelim.
 Bu durumda C sınıfı hem A sınıfını hem de B sınıfını extend ederse bu durumda JVM hangi operation() metodunun inherit edilip 
 kullanılacağını anlayamıyor. Başka programlama dillerinde bunu yapmak mümkün fakat JAVA dilinde en başından beri buna izin verilmiyor.
+Bu sınıflar abstract sınıf bile olsa bir sınıfın birden fazla abstract sınıfı implemente etmesine izin verilmiyor.
+[Örnek](../../examples/src/com/hkarabakla/oop/demo6/SubClass.java)
+
+```java
+public abstract class AbstractClass1 {
+
+    abstract void doSomething();
+}
+
+public abstract class AbstractClass2 {
+
+    abstract void doSomething();
+}
+
+public class SubClass extends AbstractClass1, AbstractClass2 { // Hata
+
+    void doSomething() {
+
+    }
+}
+```
 
 Fakat bir sınıfın birden fazla interface i implemente edebildiğini ve Java 8 ile birlikte interfacelerin default metodlar yardımı
 aracılığıyla metod implementasyonları içerebildiğini görmüştük. Bu durumda iki interface aynı default metodlara sahipse 
@@ -1786,7 +1827,7 @@ Burada interfacelerden birinin metodunu çağırmak için **interfaceName.super.
 #### final anahtar kelimesi
 Daha önce Java dilinde sınıfların nasıl extend edildiğini ve metodların nasıl override edildiğini gördük. Fakat bazı durumlarda
 bir sınıfı oluştururken bu sınıfın hiçbir şekilde extend edilememesini isteriz. Yada bu sınıfta yer alan bir metodun 
-sub class lar tarafından override edilememsini. Yada bir değişkenin ilk değerinin değiştirilememesini isteriz. Bu durumlar 
+sub class lar tarafından override edilememesini. Yada bir değişkenin ilk değerinin değiştirilememesini isteriz. Bu durumlar 
 gerçek hayatta yazılımcılar sıklıkla karşılaştıkları durumlardır. 
 
 Bütün bu senaryolarda kullanmamız için Java dilinde **final** anahtar kelimesi bizlere sunulmuştur. Bu senaryolarda görüldüğü
@@ -2056,10 +2097,10 @@ Bir boyutlu arrayler aynı türden birbiri ile alakalı verileri tutmak için ku
     type array_name[] = new type[array_capacity];
 ```
 
-type : array içinde saklamak istediğimiz veri tipi
-array_name : arrayimizin adı
-new : yeni obje yaratma anahtar kelimesi (daha sonra detaylı göreceğiz)
-array_capacity : arrayimizin saklayabileceği maksimum veri sayısı
+* type : array içinde saklamak istediğimiz veri tipi
+* array_name : arrayimizin adı
+* new : yeni obje yaratma anahtar kelimesi (daha sonra detaylı göreceğiz)
+* array_capacity : arrayimizin saklayabileceği maksimum veri sayısı
 
 ```java
     int sample[] = new int[10];
@@ -2103,8 +2144,13 @@ Output :
     Sample [9] is 9
 ```
 
-Arraylerde indeks değeri herzaman sıfırdan başlar. Yani 10 elemanlı bir array oluşturursak arrayimizin ilk elamnına 
-sıfırncı indeks ile ulaşırız ve en büyük indeksimiz de 9 olur.
+Tek boyutlu arraylerde ilk değer verme işlemi aşağıdaki gibi yapılır;
+```java
+type array_name[] ={value1, value2, value3}
+```
+
+Arraylerde indeks değeri herzaman sıfırdan başlar. Yani 10 elemanlı bir array oluşturursak arrayimizin ilk elamanına 
+sıfırıncı indeks ile ulaşırız ve en büyük indeksimiz de 9 olur.
 
 ![array yapısı](images/array%20structure.png)
 
@@ -2136,7 +2182,7 @@ Peki kapasitesi 10 olan bir arrayimiz var diyelim, -1. veya 10. indexe erişmeye
 ```
 
 Şuana kadar öğrendiğimiz bilgilerle arraylerde sıralama yapabiliriz. Bunun için küçük arraylerde iyi performans gösteren
-ama büyük arrayler için önerilmeyen bubble sort algoritmasını kullanacağız.
+ama büyük arrayler için önerilmeyen bubble sort algoritmasını kullanacağız. [Örnek](../../examples/src/com/hkarabakla/array/Demo1.java)
 
 ![bubble sort animasyon](images/Bubble-sort.gif)
 
@@ -2159,11 +2205,11 @@ public class Main {
 
     public static void sort(int[] array) {
         for (int i = 0; i < array.length - 1; i++) {
-            for (int j = i + 1; j < array.length; j++) {
-                if (array[i] > array[j]) {
-                    int bigger = array[i];
-                    array[i] = array[j];
-                    array[j] = bigger;
+            for (int j = 0; j < array.length - i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
                 }
             }
         }
@@ -2277,7 +2323,7 @@ Ve siz uygulamanızda bir string literali yaratırsanız string poolda bir değe
 refrans eder. Eğer aynı değerle başka bir string literal daha yaratırsanız bu sefer string poolda yeni bir değer yaratılmaz
 sadece yeni değişkenin daha önce yaratılan değere referans etmesi sağlanır. 
 
-String objeleri ise hafızada Heap adı verilen özel bölmede saklanır, diğer bğtğn objeler gibi. 
+String objeleri ise hafızada Heap adı verilen özel bölmede saklanır, diğer bütün objeler gibi. 
 
 ![string pool](images/string_pool.png)
 
@@ -2311,6 +2357,8 @@ Output :
     user2.equals(user3) : true
     user3.equals(user4) : true
 ```
+
+== operatörü ile referans karşılaştırma equals() metodu ile de değer karşılaştırma yapabiliriz.
 
 ### string işlemleri
 String sınıfı oldukça büyük bir sınıf, iyi bir Java developer olmak için bu sınıfı iyi anlamak ve string objeleri üzerinde 
@@ -2371,18 +2419,18 @@ karakteri stringin içinde arar ve ilk bulduğu eşleşmenin indeks değerini bi
 -1 değerini döner.
 
 ```java
-String userEmail = "user@email.com";
+String userEmail = "usercom@email.com";
 int positionOfChar = userEmail.indexOf('@');
 
 System.out.println("Position of @ : " + userEmail.indexOf('@'));
 System.out.println("Position of 'email' : " + userEmail.indexOf("email"));
-System.out.println("Position of 'email' : " + userEmail.indexOf("com", userEmail.indexOf('@')));
+System.out.println("Position of 'com' : " + userEmail.indexOf("com", userEmail.indexOf('@')));
 ```
 Output :
 ```
-Position of @ : 4
-Position of 'email' : 5
-Position of 'email' : 11
+Position of @ : 7
+Position of 'email' : 8
+Position of 'com' : 14
 ```
 
 #### replace() metodu
@@ -2460,12 +2508,10 @@ System.out.println(sb.toString());
 ```  
 > Henüz thread-safety konusunu görmediğimiz için StringBuffer'dan daha sonra bahsedeceğiz.
 
-## Sayılar
-// TODO bu kisim eksik tamamlanacak
 
 ## Tarih işlemleri
-Java dilinde built in olarak tarih ve zaman sınıfları yer almaz. Tarih ve zaman işlemleri yapabilmek için java.time paketinden
-ihtiyacımız olan sınıfı import etmemiz gerekir. Bu pakette yer alan sınıflardan başlıcaları olan LocalDate, LocalTime, LocalDateTime,
+Tarih ve zaman işlemleri yapabilmek için java.time paketinden ihtiyacımız olan sınıfı import etmemiz gerekir. 
+Bu pakette yer alan sınıflardan başlıcaları olan LocalDate, LocalTime, LocalDateTime,
 DateTimeFormatter ve Duration sınıflarını ve bunların kullanımı yakından inceleyelim.
 
 ### LocalDate

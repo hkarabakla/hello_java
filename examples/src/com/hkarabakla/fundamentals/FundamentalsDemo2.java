@@ -12,11 +12,11 @@ public class FundamentalsDemo2 {
     private static String getUserDeatils() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter your name : ");
-        String name = scanner.next();
+        String name = scanner.nextLine();
         System.out.println();
         System.out.print("Enter your age : ");
         int age = scanner.nextInt();
-        
+
         return name + " " + age;
     }
 }

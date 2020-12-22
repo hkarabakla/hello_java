@@ -10,6 +10,7 @@ public class OopDemo1 {
         minivan.fuelConsumptionPerKm = 6;
 
         double range = minivan.fuelCapacity / minivan.fuelConsumptionPerKm;
-        System.out.println("Minivan can carry " + minivan.passengers + " people for " + range + " km");
+        System.out.println("Minivan can carry " + minivan.passengers +
+                " people for " + range + " km");
     }
 }

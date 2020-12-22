@@ -14,7 +14,7 @@ public class FundamentalsDemo3 {
 
     public static boolean isEligibleToHaveADrivingLicence(int age) {
 
-        if(age < 18) {
+        if(age < 18 && age > 50) {
             System.out.println("It's too early to drive !!!");
             return false;
         }
