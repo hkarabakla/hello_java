@@ -714,7 +714,7 @@ Value of generic type --Generics--
 
 Bu örnekte dikkat etmemiz gereken bir kaç nokta var. Birincisi jenerik sınıfımıza parametre tipini nasıl geçtiğimiz. Sınıf
 isminden hemen sonra gelen <> sembolleri arasına tip ismini veriyoruz. Burada tek harflik bir isim seçmek ve T, V, E gibi
-çok kullanılan tip isimlerini seçmek iyi olacaktır. Daha sonra bu tip ismini sınıf içindefarklı yerlerde kullanacağız.
+çok kullanılan tip isimlerini seçmek iyi olacaktır. Daha sonra bu tip ismini sınıf içinde farklı yerlerde kullanacağız.
 
 Aynı T tipinde bir değişken tuttuğumuza ve sınıfın constructor unda bu değişkeni initialize ettiğimize dikkat edelim.
 
@@ -724,7 +724,7 @@ ulaşmak için kullanılacak.
 Jenerik sınıfın sonunda da bu parametre tipinin gerçek ismini ekrana basan bir metod ekledik.
 
 Bu jenerik sınıftan obje yaratmak için Integer ve String tip parametrelerini ve bu tiplerden değerler kullandık. Bu jenerik 
-sınaftan türettiğimiz objelerin değerlerine ulaşmak için getObj metodunu çağırdık ve type casting yapmadık.
+sınıftan türettiğimiz objelerin değerlerine ulaşmak için getObj metodunu çağırdık ve type casting yapmadık.
  
 Jenerik sınıflar birden fazla tip parametresi ile çalışabilir :
 
@@ -968,14 +968,14 @@ Contains 5 : false
 Contains 7 : true
 ```
 
-Jenerik interfacelerde dikkat edilmesi gerek birkaç nokta var.
+Jenerik interfacelerde dikkat edilmesi gereken birkaç nokta var.
 
 Birincisi jenerik interface i implemente eden sınıf belli bir tip kullanmadığı sürece jenerik olmalıdır ve tip parametresini
 aynen interface e de geçmelidir.
 ```java
 class GenericInterfaceDemo<T> implements ContainChecker<T> // Doğru
 class GenericInterfaceDemo implements ContainChecker<T> // Hata
-class GenericInterfaceDemo implements ContainChecker<Double> // Doğruu
+class GenericInterfaceDemo implements ContainChecker<Double> // Doğru
 ```
 
 Bir diğer önemli nokta sınırlamadır, eğer jenerik bir interface tip parametresinde sınırlamaya gitmiş ise onu implemente eden 
