@@ -1,6 +1,8 @@
 # Fibabanka Java Bootcamp - 2. Hafta
 
 ## Exception handling
+
+![exception](images/exception_wrong_way.jpg)
 Exception runtime da yani uygulama çalışırken meydana gelen hatalardır. Bu hataların bir kısmı tolere edilebilirken bir kısmı 
 ise uygulamanın tamamen durmasına neden olur. Developer olarak bizim amacımız bu hataları yakalamak ve mümkünse tolere edip 
 uygulamanın çalışmaya devam etmesini sağlamaktır, tabi hatanın meydana gelmesini önlemek çok daha öncelikli hedefimiz.
@@ -184,10 +186,18 @@ Division by 0, 23/0
 Program ended successfully
 ```
 
+Bu örnekte eşit sayıda int değer taşıyan iki array tanımlanmış ve bir for döngüsü yardımıyla arrayler üzerinde dönülüyor.
+Her adımda numbers arrayi içindeki ilgili indekste bulunan int değer dividers arrayi içinde ilgili indekste bulunan int değere
+bölünüyor ve sonuç ekrana yazdırılıyor. dividers arrayi içinde sıfır değerleri bulunduğu için sıfıra bölmeden dolayı
+ArithmeticException oluşuyor fakat bu hata yakalandığı için döngü sonraki adımdan devam ediyor ve uygulama normal bir şekilde
+son buluyor.
+
 ### Exception yakalamada super class - subclass ilişkisi
 Bir try ifadesinin birden fazla catch bloğu ile ilişkilendirilebileceğini söylemiştik. Böyle bir durumda aralarında üst 
 sınıf alt sınıf ilişkisi bulunan hatalardan önce alt sınıf hatayı sonra üst sınıf hatayı catch blokları ile yakalamalıyız.
-Tersi durumda compiler hata verecektir. Şimdi bunu bir [örnekle](../../examples/src/com/hkarabakla/exception/ExceptionDemo4.java) görelim;
+Yani herzaman hata sıralamasında özelden genele doğru gidilmeli. Tersi durumda compiler hata verecektir. 
+Şimdi bunu bir [örnekle](../../examples/src/com/hkarabakla/exception/ExceptionDemo4.java) görelim;
+
 ```java
 public class ExceptionDemo4 {
 
@@ -233,24 +243,27 @@ public class ExceptionDemo5 {
 
     public static void main(String[] args) {
         try {
-            multipleDivision();
+            int[] numbers = new int[]{1, 34, 56, 23, 78, 123, 49};
+            int[] dividers = new int[]{5, 0, 12, 0, 34};
+
+            multipleDivision(numbers, dividers);
         } catch (RuntimeException ex) {
             System.out.println("Fatal error, program terminated");
         }
     }
 
-    private static void multipleDivision() {
-        int[] numbers = new int[] {1, 34, 56, 23, 78, 123, 49};
-        int[] dividers = new int[] {5, 0, 12, 0, 34};
+    private static void multipleDivision(int[] numbers, int[] dividers) {
+
+        if (numbers.length != dividers.length) {
+            System.out.println("Array sizes are not equal");
+            throw new IllegalArgumentException("Array sizes must be equal");
+        }
 
         for (int i = 0; i < numbers.length; i++) {
             try {
-                System.out.println(numbers[i] + "/" + dividers[i] + "=" + numbers[i]/dividers[i]);
+                System.out.println(numbers[i] + "/" + dividers[i] + "=" + numbers[i] / dividers[i]);
             } catch (ArithmeticException ex) {
                 System.out.println("Division by 0, " + numbers[i] + "/" + dividers[i]);
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                System.out.println("Array sizes are not equal");
-                throw new ArrayIndexOutOfBoundsException("Array sizes must be equal");
             }
         }
 
@@ -260,17 +273,12 @@ public class ExceptionDemo5 {
 ```
 Output :
 ```
-1/5=0
-Division by 0, 34/0
-56/12=4
-Division by 0, 23/0
-78/34=2
 Array sizes are not equal
 Fatal error, program terminated
 ```
 
 ### finally ifadesi
-Bazı durumlarda try-catch ifadesini terk etmeden hemen önce çalıştırmamız gerekn kodlar olabilir. Bu durumlar genelde 
+Bazı durumlarda try-catch ifadesini terk etmeden hemen önce çalıştırmamız gereken kodlar olabilir. Bu durumlar genelde 
 try bloğu içinde bir dosya açtıysak onu kapatmak için yada bir network bağlantısı kurduysak o bağlantıyı kapatmak için
 kullanılan kodlardır. Bu tarz durumlar programlamada oldukça yaygındır ve java bize bu durumu yönetmek için finally ifadesini
 sunuyor. Genel yapısı şu şekildedir;
@@ -321,6 +329,10 @@ public class ExceptionDemo6 {
     }
 }
 ```
+Bu örnekte try bloğu içerisinde bir dosya okuma işlemi yapılıyor. Bu işlem sırasında dosyadaki verileri almak için bir
+FileInputStream açılıyor, bu stream işlem sonrasında kapatılması gerekiyor. Bu kapatma işlemini finally bloğu içinde yapabiliriz.
+FileInputStream kapanma sırasında IOException fırlatabileceği için (önceden kapanma durumunda olduğu gibi) input.close(); 
+ifadesi de try bloğu içerisine alınmıştır.
 
 ### throws ifadesi
 Bazı durumlarda bir metod bir yada birkaç hata yarattığı halde bu hataları kendi içinde yakalamak yerine hata yakalama işini
@@ -366,8 +378,8 @@ public class ExceptionDemo7 {
 catch bloğunun ortadan kalktığına ve throws IOException ifadesinin metod imzasına eklendiğine dikkat edelim.
 
 ### try-with-resource
-Önceki örneklerde gördüğümüz gibi eğer try bloğu içeerisinde bir dosya yada bir network bağlantısı açıyorsak o kaynağın
-finally bloğu içinde kapatılması gerekiyor. Java 7 ile birlikte bu tarz durumlar için try-catch-finally blokları yeerine
+Önceki örneklerde gördüğümüz gibi eğer try bloğu içerisinde bir dosya yada bir network bağlantısı açıyorsak o kaynağın
+finally bloğu içinde kapatılması gerekiyor. Java 7 ile birlikte bu tarz durumlar için try-catch-finally blokları yerine
 try-with-resource kavramı geldi. try-with-resource içerisinde açılan kaynaklar try bloğu sonrasında otomatik olarak kapatılır.
 Bu kaynakların otomatik kapatılabilmeleri için AutoClosable interface ini implemente etmeleri gerekir.
 
@@ -398,7 +410,7 @@ public class ExceptionDemo8 {
 ```
 Görüldüğü gibi aynı işi yapan kod çok daha kısa ve sade.
 
-Eğer birden fazla kaynağa erişmemiz gerekirse try bloğu içinde bu drumda aşağıdaki örnekte gösterildiği gibi eerişilebilir.
+Eğer birden fazla kaynağa erişmemiz gerekirse try bloğu içinde bu drumda aşağıdaki örnekte gösterildiği gibi erişilebilir.
 
 ```java
 try (Scanner scanner = new Scanner(new File("testRead.txt"));
@@ -414,7 +426,7 @@ Daha önce tüm exceptionların Throwable sınıfından türediğini onun altın
 
 ![exception hierarchy](images/exception_hierarchy.png)
 
-Grafikte görüldüğü gibi tüm exceptionların atası Throwable sınıfı, onun altın Error sınıfı ve Exception sınıfı yer alıyor.
+Grafikte görüldüğü gibi tüm exceptionların atası Throwable sınıfı, onun altında Error sınıfı ve Exception sınıfı yer alıyor.
 Exception sınıfının altında ise RuntimeException sınıfı ve diğer pekçok exception sınıfı bulunuyor. Bu kısımda daha çok 
 RuntimeException ve diğer kardeşlerinden bahsedeceğiz.
 
