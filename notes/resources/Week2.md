@@ -1379,7 +1379,7 @@ Bu beraberinde hem performans kaybı hemde runtime da hatalar almamıza neden ol
 İşte bu sorunlara çözüm olarak Java dilini tasarlayanlar Jenerikleri dile kazandırdı. Jenerikler sayesinde algoritmalarda 
 veri tipinden bağımsız genelleme, kodun tekrar kullanılabilirliği ve güvenlik arttı.
 
-Şimdi basit bir jenerik implementasyonu görelim :
+Şimdi basit bir jenerik implementasyonu [görelim](../../examples/src/com/hkarabakla/generics/demo1/Main.java) :
 
 ```java
 public class GenericType<T> {
@@ -1405,7 +1405,7 @@ public class Main {
         GenericType<Integer> integerGenericType = new GenericType<>(7);
         integerGenericType.showType();
         Integer value1 = integerGenericType.getObj();
-        System.out.println("Value of generic obj " + value1));
+        System.out.println("Value of generic obj " + value1);
 
         GenericType<String> stringGenericType = new GenericType<>("--Generics--");
         stringGenericType.showType();
@@ -1436,7 +1436,7 @@ Jenerik sınıfın sonunda da bu parametre tipinin gerçek ismini ekrana basan b
 Bu jenerik sınıftan obje yaratmak için Integer ve String tip parametrelerini ve bu tiplerden değerler kullandık. Bu jenerik 
 sınıftan türettiğimiz objelerin değerlerine ulaşmak için getObj metodunu çağırdık ve type casting yapmadık.
  
-Jenerik sınıflar birden fazla tip parametresi ile çalışabilir :
+Jenerik sınıflar birden fazla tip parametresi ile çalışabilir, [örneğin](../../examples/src/com/hkarabakla/generics/demo2/Main.java) :
 
 ```java
 public class KeyValuePair<K, V> {
@@ -1484,7 +1484,7 @@ Type of V java.lang.Integer
 ### Sınırlandırılmış jenerikler
 Daha önceki örneklerde herhangi bir referans tipin bir jenerik sınıf için tip parametresi olabildiğini gördük. Bazı durumlarda
 bu bir avantaj olurken bazen de sadece belli tiplerde tip parametresi kabul etmek isteriz. Örneğin matematiksel işlemler yapan 
-bir jenerik sınıf yaratacaksak sadece nümerik değerlerin parametre olmasını isteriz.
+bir jenerik sınıf yaratacaksak sadece nümerik değerlerin parametre olmasını isteriz. [örneğin](../../examples/src/com/hkarabakla/generics/demo3/Main.java) :
 
 ```java
 public class NumericOperation<T extends Number> {
@@ -1532,7 +1532,7 @@ veri üzerinde işlem yapmaya zorluyor. Bazen farklı veri tipleri üzerinde iş
 ile bir float değeri karşılaştırmak gibi. Bu gibi durumlarda wildcard **?** ifadesini kullanabiliriz.
 
 Daha önce gördüğümüz NumericOperation sınıfına iki sayısal değişkenin mutlak değerlerini karşılaştıran ve sonucunu dönen
-bir metod ekleyelim. Bu metod tüm Number sınıfından türeyen değerleri karşılaştırabilsin.
+bir metod ekleyelim. Bu metod tüm Number sınıfından türeyen değerleri karşılaştırabilsin. [Örneğin](../../examples/src/com/hkarabakla/generics/demo4/Main.java) :
 
 ```java
 public class NumericOperation<T extends Number> {
@@ -1582,7 +1582,7 @@ yeralan tüm metodlar bu jenerik tip üzerinde işlem yapabilme imkanına sahip 
 metodlar üzerinde kullanmak gerekebilir. Bunun için metodun bulunduğu sınıfın tamamen jenerik olması gerekmez.
 
 Örneğin jenerik olmayan bir sınıfta jenerik bir metodun nasıl yer alabileceğine bir bakalım. Bunun için iki arrayi karşılaştıran
-bir örnek yapalım;
+bir [örnek](../../examples/src/com/hkarabakla/generics/demo5/Main.java) yapalım;
 
 ```java
 public class GenericMethodDemo {
@@ -1638,7 +1638,7 @@ hata verecektir.
 
 ### Jenerik interface
 Jeneriklerin sınıflara ve metodlara uygulanabilir olduğunu gördük. Şimdi sıra geldi interfacelere. Jenerikliğin uygulanışı 
-bakımından sınıf ve interface in hiçbir farkı yoktur. 
+bakımından sınıf ve interface in hiçbir farkı yoktur. [örnek](../../examples/src/com/hkarabakla/generics/demo6/Main.java)
 
 ```java
 public interface ContainChecker<T> {
