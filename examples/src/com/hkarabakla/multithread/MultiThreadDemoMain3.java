@@ -1,6 +1,6 @@
 package com.hkarabakla.multithread;
 
-public class MultiThreadDemoMain2 {
+public class MultiThreadDemoMain3 {
 
     public static void main(String[] args) {
         System.out.println("Main thread is starting");
@@ -13,14 +13,14 @@ public class MultiThreadDemoMain2 {
         myThread2.start();
         myThread3.start();
 
-        for (int i = 0; i < 10; i++) {
+        do {
             System.out.print(".");
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 System.out.println("Main thread is interrupted");
             }
-        }
+        } while (myThread.isAlive() || myThread2.isAlive() || myThread3.isAlive());
 
         System.out.println("Main thread is terminating");
     }

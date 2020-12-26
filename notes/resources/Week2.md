@@ -464,18 +464,18 @@ bu idle zamanlar daha verimli hale gelir.
 
 Son yıllarda multicore yani çok çekirdekli CPU teknolojisi oldukça yaygın bir hale geldi. Tek çekirdekli bir CPU kullanan 
 bir sistemde aynı anda çalıştırılan threadler aynı CPU yu paylaşır, her bir thread sırayla CPU dan çalışma zamanı alarak.
-Bu durumda aslında thread ler aynı anda çalışmaz, sırayla çalışır fakat CPU okadar hızlıdır ki bu kullanıcı eş zamanlı hissi
+Bu durumda aslında thread ler aynı anda çalışmaz, sırayla çalışır fakat CPU okadar hızlıdır ki bu kullanıcıda eş zamanlılık hissi
 yaratır. Çok çekirdekli CPU bulunduran sistemlerde aynı anda gerçekten iki farklı thread farklı çekirdekler üzerinde çalıştırılarak
 gerçekten eş zamanlı görevler yaratılabilir. Fakat teoride kod yazarken multithreading denilince tek çekirdekli CPU varmış gibi düşünmek 
 gerekir, bu nedenle multithreading denildiği zaman akla gelmesi gereken ilk konu CPU kullanımı olmalıdır.
 
 ### Thread sınıfı ve Runnable interface 
-Her bir process en az bir tane thread içermek zorundadır, bu threade _main thread_ denilir. main thread gerekli durumda başka 
+Her bir process en az bir tane thread içermek zorundadır, bu threade _**main thread**_ denilir. main thread gerekli durumda başka 
 threadleri de yaratabilir.
 
 Java'da multithread kavramı Thread sınıfı ve Runnable interface üzerine kurulmuştur. Yeni bir thread yaratmak için Thread
 sınıfını extend etmeli ya da Runnable interface ini implemente etmeliyiz. Hangi metodu seçeceğimizin yarattığımız thread 
-bir önemi yok, ikisini de kullanabiliriz.
+açısından bir önemi yok, ikisini de kullanabiliriz.
 
 ```java
 public class MyThread extends Thread {
@@ -496,7 +496,7 @@ public class MyThread2 implements Runnable {
 run() metodu oluşturacağımız thread çalıştığı zaman çağrılacak, bu metodun uygulama içindeki diğer metodlardan hiçbir farkı yoktur.
 Sadece farklı bir thread tarafından çalıştırılır.
 
-Bu noktaya kadar sadece thread in nasıl çalışacağını tanımlamış olduk, henüze thread i yaratmadık. Thread i yaratmak için 
+Bu noktaya kadar sadece thread in nasıl çalışacağını tanımlamış olduk, henüz thread i yaratmadık. Thread i yaratmak için 
 aşağıda gösterildiği gibi new ile yeni bir thread objesi yaratmamız gerekir.
 
 ```java
@@ -574,7 +574,7 @@ child1 is terminating
 ```
 
 Örnekte görüldüğü gibi main thread child1 isminde bir thread yaratı ve child1 isimli threadi başlattı. Bu noktadan itibaren 
-iki thread paralel olarak çalıştı ve ekrana çıktı üretti. Bu işlemi yaparken de belli aralıklarla çalışan threadler sleeep
+iki thread paralel olarak çalıştı ve ekrana çıktı üretti. Bu işlemi yaparken de belli aralıklarla çalışan threadler sleep
 metodu çağrılarak durduruldu. 
 
 Bir uygulama o uygulama tarafından yaratılan bütün threadler son bulduğunda uygulama da son bulur. Örneğin çıktısına 
@@ -583,7 +583,8 @@ bitmesidir fakat threadlerin birbirini nasıl beklediğini daha sonra göreceği
 
 Bu örnekte MultiThreadDemo1 sınıfının bir name değişkeni tuttuğunu, ve MultiThreadDemo1 sınıfından bir obje oluşturup bu
 objeyi oluşturacağımız Thread tipinde objeye input olarak verdiğimizi görüyoruz. Bu Runnable interface i kullanarak yaptığımız
-örnekti, şimdi bir de aynı örneği Thread sınıfını extend ederek oluşturalım.
+örnekti, şimdi bir de aynı [örneği](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain2.java) Thread 
+sınıfını extend ederek ve daha fazla thread yaratarak oluşturalım.
 
 ```java
 public class MultiThreadDemo2 extends Thread {
@@ -613,8 +614,12 @@ public class MultiThreadDemoMain2 {
         System.out.println("Main thread is starting");
 
         MultiThreadDemo2 myThread = new MultiThreadDemo2("child1");
+        MultiThreadDemo2 myThread2 = new MultiThreadDemo2("child2");
+        MultiThreadDemo2 myThread3 = new MultiThreadDemo2("child3");
 
         myThread.start();
+        myThread2.start();
+        myThread3.start();
 
         for (int i = 0; i < 10; i++) {
             System.out.print(".");
@@ -632,24 +637,729 @@ public class MultiThreadDemoMain2 {
 Output :
 ```
 Main thread is starting
-.child1 is starting.
-...In child1 count is 0
-....In child1 count is 1
+.child2 is starting.
+child1 is starting.
+child3 is starting.
+....In child2 count is 0
+In child1 count is 0
+In child3 count is 0
+...In child1 count is 1
+In child2 count is 1
+In child3 count is 1
 ..Main thread is terminating
+In child3 count is 2
 In child1 count is 2
+In child2 count is 2
+In child3 count is 3
 In child1 count is 3
+In child2 count is 3
+In child3 count is 4
 In child1 count is 4
+In child2 count is 4
+In child3 count is 5
 In child1 count is 5
+In child2 count is 5
+In child3 count is 6
 In child1 count is 6
+In child2 count is 6
+In child3 count is 7
 In child1 count is 7
+In child2 count is 7
+In child3 count is 8
 In child1 count is 8
+In child2 count is 8
+In child3 count is 9
+child3 is terminating
+In child2 count is 9
+child2 is terminating
 In child1 count is 9
 child1 is terminating
-```
-Görüldüğü gibi aynı çıktılar elde ediliyor ve doğrudan Thread sınıfını extend ettiğimiz için ayrı bir thread objesi oluşturmak 
-gerekmiyor doğrudan start metodunu çalıştırabiliyoruz, ihtiyaca göre Runnable yada Thread tercih edilebilir.
 
-### DETERMINING WHEN A THREAD ENDS
+```
+Görüldüğü gibi doğrudan Thread sınıfını extend ettiğimiz için ayrı bir thread objesi oluşturmak gerekmiyor, direk start()
+metodunu çalıştırabiliyoruz, ihtiyaca göre Runnable yada Thread tercih edilebilir.
+
+Burada dikkat edilmesi gereken threadlerin bizim start() metodunu çağırdığımız sırada başlamamış olması, burada yarattığımız
+threadleri JVM arka tarafta istediği gibi planlayabiliyor. Bu nedenle aynı kodu kendi bilgisayarınızda çalıştırmanız 
+durumunda bilgisayarınızın ve CPUnun durumuna göre farklı sırada çıktılar görmek mümkün.
+
+### Bir threadin bitmesini nasıl bekleriz ?
+Önceki örneklerde child threadleri yaratan main threadin child threadler işlemini bitirmeden son bulduğunu ve bunun iyi bir
+pratik olmadığını söylemiştik. Normalde main thread yarattığı tüm threadler çalışmasını bitirene kadar beklemeli sonra kendisi
+bitmeliydi. Java dilinde bunu yapmanın üç tane yolu bulunuyor;
+
+Birincisi main threadin uzunca bir süre, child threadlerin çalışma süresini kapsayacak şekilde, sleep() metodu ile uyutulması.
+Bu yöntem child threadlerin nekadar süre çalışacağını kestiremediğimiz için uyuma süresini belirlemek çok zor olduğundan 
+tercih edilebilecek en kötü yöntem olarak karşımıza çıkıyor.
+
+İki yöntem ise her bir threadin isAlive() metodunu çağırarak threadlerin çalışma durumunu bir döngü ile takip etmek ve bu süre
+zarfında main threadi sürekli uyutmak. isAlive() metodu söz konusu thread çalıştığı sürece true döner ve thread son bulduğu 
+zaman dönüş değeri false değerini alır. [Örneği](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain3.java) inceleyelim;
+
+```java
+public class MultiThreadDemo2 extends Thread {
+
+    public MultiThreadDemo2(String name) {
+        super(name);
+    }
+
+    public void run() {
+        System.out.println(getName() + " is starting.");
+        for (int i = 0; i < 10; i++) {
+            try {
+                Thread.sleep(400);
+                System.out.println("In " + getName() + " count is " + i);
+            } catch (InterruptedException e) {
+                System.out.println(getName() + " is interrupted");
+            }
+        }
+
+        System.out.println(getName() + " is terminating");
+    }
+}
+
+public class MultiThreadDemoMain3 {
+
+    public static void main(String[] args) {
+        System.out.println("Main thread is starting");
+
+        MultiThreadDemo2 myThread = new MultiThreadDemo2("child1");
+        MultiThreadDemo2 myThread2 = new MultiThreadDemo2("child2");
+        MultiThreadDemo2 myThread3 = new MultiThreadDemo2("child3");
+
+        myThread.start();
+        myThread2.start();
+        myThread3.start();
+
+        do {
+            System.out.print(".");
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println("Main thread is interrupted");
+            }
+        } while (myThread.isAlive() || myThread2.isAlive() || myThread3.isAlive());
+
+        System.out.println("Main thread is terminating");
+    }
+}
+```
+Output:
+
+```
+Main thread is starting
+.child2 is starting.
+child3 is starting.
+child1 is starting.
+...In child3 count is 0
+In child2 count is 0
+In child1 count is 0
+....In child3 count is 1
+In child2 count is 1
+In child1 count is 1
+....In child2 count is 2
+In child1 count is 2
+In child3 count is 2
+....In child2 count is 3
+In child3 count is 3
+In child1 count is 3
+....In child2 count is 4
+In child3 count is 4
+In child1 count is 4
+....In child2 count is 5
+In child3 count is 5
+In child1 count is 5
+....In child2 count is 6
+In child3 count is 6
+In child1 count is 6
+....In child2 count is 7
+In child3 count is 7
+In child1 count is 7
+....In child2 count is 8
+In child3 count is 8
+In child1 count is 8
+....In child2 count is 9
+In child3 count is 9
+child3 is terminating
+In child1 count is 9
+child1 is terminating
+child2 is terminating
+Main thread is terminating
+```
+Örnekte görüldüğü gibi main thread son olarak son bulmuştur. Bu yöntem ilk yönteme göre daha verimli olsa da yine de
+zaman yönetimi konusunda en ideal yöntem değil.
+
+Üçüncü ve en verimli yöntem ise join() metodunun kullanımıdır. join() metodu child threadleri yaratan thread tarafından
+çağrılır ve isminden de anlaşılacağı gibi child threadlerin işlerini bitirip tekrar main threade katılmalarını söyler.
+Böylece sleep metodunu kullanmaya gerek kalmaz ve işi biten child thread main threadi bunun hakkında bilgilendirir.
+Şimdi thread join metodunun nasıl kullanıldığını [örnekle](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain4.java) görelim;
+
+```java
+public class MultiThreadDemo2 extends Thread {
+
+    public MultiThreadDemo2(String name) {
+        super(name);
+    }
+
+    public void run() {
+        System.out.println(getName() + " is starting.");
+        for (int i = 0; i < 10; i++) {
+            try {
+                Thread.sleep(400);
+                System.out.println("In " + getName() + " count is " + i);
+            } catch (InterruptedException e) {
+                System.out.println(getName() + " is interrupted");
+            }
+        }
+
+        System.out.println(getName() + " is terminating");
+    }
+}
+
+public class MultiThreadDemoMain4 {
+
+    public static void main(String[] args) {
+        System.out.println("Main thread is starting");
+
+        MultiThreadDemo2 myThread = new MultiThreadDemo2("child1");
+        MultiThreadDemo2 myThread2 = new MultiThreadDemo2("child2");
+        MultiThreadDemo2 myThread3 = new MultiThreadDemo2("child3");
+
+        myThread.start();
+        myThread2.start();
+        myThread3.start();
+
+
+        try {
+            myThread.join();
+            myThread2.join();
+            myThread3.join();
+        } catch (InterruptedException e) {
+            System.out.println("Main thread is interrupted");
+        }
+
+        System.out.println("Main thread is terminating");
+    }
+}
+```
+Output :
+```
+Main thread is starting
+child1 is starting.
+child3 is starting.
+child2 is starting.
+In child1 count is 0
+In child2 count is 0
+In child3 count is 0
+In child2 count is 1
+In child1 count is 1
+In child3 count is 1
+In child2 count is 2
+In child1 count is 2
+In child3 count is 2
+In child2 count is 3
+In child1 count is 3
+In child3 count is 3
+In child1 count is 4
+In child3 count is 4
+In child2 count is 4
+In child1 count is 5
+In child3 count is 5
+In child2 count is 5
+In child3 count is 6
+In child1 count is 6
+In child2 count is 6
+In child3 count is 7
+In child2 count is 7
+In child1 count is 7
+In child3 count is 8
+In child1 count is 8
+In child2 count is 8
+In child1 count is 9
+In child2 count is 9
+child2 is terminating
+In child3 count is 9
+child3 is terminating
+child1 is terminating
+Main thread is terminating
+```
+Örnekte görüldüğü gibi main thread son olarak son bulmuştur. Threadler arası iletişim yardımıyla main threadin child threadleri
+beklemesi sağlanmıştır. 
+
+### Thread önceliklendirme
+Çok threadli bir uygulamada threadlerin CPU zamanını paylaşarak çalıştığından bahsetmiştik. Hangi threadin ne kadar CPU 
+zamanı, diğer threadlere görece, alacağına threadin öncelik değerine göre karar verilir. 
+
+Bir threadin görece olarak daha yüksek önceliğer sahip olması o threadin daha düşük öncelikli bir threade göre daha hızlı 
+yada daha fazla CPU zamanı alarak çalışacağı anlamına gelmez. Çünkü bir threadin ne kadar CPU zamanı alacağını belirlemede
+öncelik dışında başka faktörler de vardır. Bunlar arasında işletim sisteminin multitaskingi nasıl uyguladığı, öncelikli threadin
+çeşitli nedenlerle bloklanıp bloklanmadığı sayılabilir.
+
+Her threadin bir öncelik değeri vardır, bu değer 1 ve 10 arasında değişir. Biz bir değer atamazsak yarattığımız thread 
+5 ortalama öncelik değerine sahip olur. En düşük değer için MIN_PRIORITY, en yüksek değer için MAX_PRIORITY ve ortalama 
+değer için NORM_PRIORITY Thread sınıfı içinde sabit olarak tanımlanmıştır. Bir threadin önceliğini atamak için setPriority()
+metodu, aynı şekilde öncelik değerini okumak için de getPriority() metodu kullanılır. Şimdi thread önceliklendirmenin 
+nasıl yapıldığını [örnekle](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain5.java) görelim;
+
+```java
+public class MultiThreadDemo5 extends Thread {
+    private int count = 0;
+    public static boolean counting = true;
+    private static final int maxCount = 100_000_000;
+
+    @Override
+    public void run() {
+        System.out.println(this.getName() + " is starting.");
+        do {
+            this.count++;
+            if(this.count == maxCount) {
+                counting = false;
+            }
+        } while (counting && this.count < maxCount);
+
+        System.out.println("In " + this.getName() + " count : " + count);
+    }
+}
+
+public class MultiThreadDemoMain5 {
+    public static void main(String[] args) {
+
+        System.out.println("Number of processors : " + Runtime.getRuntime().availableProcessors());
+
+        MultiThreadDemo5[] threads = new MultiThreadDemo5[30];
+
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new MultiThreadDemo5();
+        }
+
+        threads[0].setPriority(Thread.MAX_PRIORITY);
+        threads[1].setPriority(Thread.MAX_PRIORITY);
+        threads[2].setPriority(Thread.MAX_PRIORITY);
+        threads[3].setPriority(Thread.MAX_PRIORITY);
+        threads[4].setPriority(Thread.MIN_PRIORITY);
+        threads[5].setPriority(Thread.MIN_PRIORITY);
+        threads[6].setPriority(Thread.MIN_PRIORITY);
+
+        for (MultiThreadDemo5 thead : threads) {
+            thead.start();
+        }
+
+        try {
+            for (MultiThreadDemo5 thread : threads) {
+                thread.join();
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Main thread interrupted");
+        }
+    }
+}
+```
+Output :
+```
+Number of processors : 12
+Thread-1 is starting.
+Thread-0 is starting.
+Thread-2 is starting.
+Thread-3 is starting.
+Thread-4 is starting.
+Thread-5 is starting.
+Thread-6 is starting.
+Thread-7 is starting.
+Thread-8 is starting.
+Thread-9 is starting.
+Thread-10 is starting.
+Thread-11 is starting.
+Thread-12 is starting.
+Thread-13 is starting.
+Thread-14 is starting.
+Thread-15 is starting.
+Thread-16 is starting.
+Thread-17 is starting.
+In Thread-7 count : 100000000
+In Thread-17 count : 1
+In Thread-0 count : 100000000
+In Thread-1 count : 100000000
+In Thread-14 count : 9296
+In Thread-10 count : 74334
+Thread-19 is starting.
+In Thread-19 count : 1
+In Thread-15 count : 6878
+Thread-21 is starting.
+In Thread-21 count : 1
+Thread-22 is starting.
+In Thread-22 count : 1
+In Thread-5 count : 120781
+Thread-23 is starting.
+In Thread-12 count : 100000000
+Thread-24 is starting.
+In Thread-24 count : 1
+In Thread-13 count : 4180
+Thread-25 is starting.
+In Thread-4 count : 100000000
+In Thread-23 count : 1
+In Thread-3 count : 100000000
+Thread-27 is starting.
+Thread-28 is starting.
+Thread-20 is starting.
+Thread-18 is starting.
+In Thread-8 count : 100000000
+In Thread-2 count : 100000000
+In Thread-6 count : 100000000
+In Thread-9 count : 100000000
+In Thread-16 count : 8193
+In Thread-11 count : 100000000
+In Thread-18 count : 1
+In Thread-20 count : 1
+Thread-29 is starting.
+In Thread-29 count : 1
+In Thread-28 count : 1
+In Thread-27 count : 1
+Thread-26 is starting.
+In Thread-25 count : 1
+In Thread-26 count : 1
+```
+
+Bu örnekte bir thread sınıfı yarattık ve threadin sıfırdan yüz milyona kadar saymasını istedik. main() metodu içerisinde
+ise 30 tane thread objesi yarattık bu sınıftan. Bu thread objelerinden bazılarına MAX_PRIORITY bazılarına ise MIN_PRIORITY
+öncelik değerini atadık. Yüz milyona ulaşan threadin diğer threadlerin çalışmasını durdurmak için de thread sınıfına static
+bir boolean değer koyduk. Yüz milyona ulaşan ilk thread bu boolean değişkenin değerine false atadı ve diğer threadlerin de
+sayma işlemini sonlandırmasını sağladık. Sonuç olarak da yukarıdaki çıktıyı elde ettek. 12 çekirdeğe sahip bir bilgisayarda
+çalıştırdığımız bu kod thread öncelik değerinin ne kadar etkili olduğunu bunun yanında maksimum thread önceliğine sahip olan
+başka threadlerin de sayma işlemini aynı zamanda bitirebildiğini gösterdi.
+
+### Senkronizasyon
+Çok threadli bir uygulama söz konusu olduğu zaman threadlerin aktivitelerini kontrol etmek gerekebilir. Bazı durumlarda 
+iki yada daha fazla thread paylaşılan bir kaynağa aynı anda erişmek ve üzerinde değişiklik yapmak isteyebilir. Örneğin bir
+threadin bir dosyaya yazma işlemi yaptığı sırada bir başka threadin de aynı işlemi yapmak istemesi gibi. Böyle durumlarda
+kaynağa ilk ulaşan threadin işini tamamlayıncaya kadar ilgili kaynağın lock dediğimiz kilit mekanizması ile erişime kapatılması
+daha sonra ise tekrar erişime açılması gerekir. Java programlama dilinde her obje bu lock mekanizması ile koruma altına alınabilir
+ve bu işlem **synchronized** ifadesi ile sağlanır.
+
+#### Metodlar ile synchronized kullanımı
+synchronized ifadesi ile metodlara erişim kontrol altına alınabilir. Bir sınıftaki herhangi bir metod synchronized ifadesini
+aldığı zaman o metoda bir thread girdiğinde metodun bulunduğu obje otomatikman olarak lock mekanizması ile erişime kapatılır.
+Bu durumda başka bir thread o sınıf içindeki hiçbir synchronized metoda erişemez. synchronized metod üzerinde işlem yapan thread 
+metoddan çıktığı zaman ise lock kaldırılır ve tüm obje yeniden erişilebilir hale gelir. Şimdi bu işlemin nasıl yapıldığını 
+[örnekle](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain6.java) görelim;
+
+```java
+public class ArrayOperations {
+
+    int sum = 0;
+
+    synchronized int sum(int[] array) {
+
+        for (int value : array) {
+            sum += value;
+            System.out.println("Sum : " + sum + " Thread name : " + Thread.currentThread().getName());
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                System.out.println("Main thread interrupted");
+            }
+        }
+
+        return sum;
+    }
+}
+
+public class MultiThreadDemo6 extends Thread {
+
+    int[] array;
+    static ArrayOperations op = new ArrayOperations();
+
+    public MultiThreadDemo6(int[] array) {
+        super();
+        this.array = array;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(this.getName() + " is starting");
+        System.out.println("Sum of the array is : " + op.sum(this.array));
+
+        System.out.println(this.getName() + " is finishing");
+    }
+}
+
+public class MultiThreadDemoMain6 {
+
+    public static void main(String[] args) {
+
+        int[] array = {1, 23, 45, 9, 52, 78};
+
+        MultiThreadDemo6 thread1 = new MultiThreadDemo6(array);
+        MultiThreadDemo6 thread2 = new MultiThreadDemo6(array);
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            System.out.println("Main thread is interrupted");
+        }
+
+        System.out.println("Main thread is finishing");
+    }
+}
+```
+Output :
+```
+Thread-0 is starting
+Thread-1 is starting
+Sum : 1 Thread name : Thread-0
+Sum : 24 Thread name : Thread-0
+Sum : 69 Thread name : Thread-0
+Sum : 78 Thread name : Thread-0
+Sum : 130 Thread name : Thread-0
+Sum : 208 Thread name : Thread-0
+Sum of the array is : 208
+Sum : 209 Thread name : Thread-1
+Thread-0 is finishing
+Sum : 232 Thread name : Thread-1
+Sum : 277 Thread name : Thread-1
+Sum : 286 Thread name : Thread-1
+Sum : 338 Thread name : Thread-1
+Sum : 416 Thread name : Thread-1
+Sum of the array is : 416
+Thread-1 is finishing
+Main thread is finishing
+```
+Örnekte bir int arrayinin tüm elemanlarını toplamak için ArrayOperations sınıfı içerisinde synchronized bir sum() metodu 
+yarattık. Daha sonra bu sınıftan sınıf düzeyinde static bir obje yaratarak oluşturduğumuz thread sınıfından sum() metodunu
+çağırdık. Burda amaç threadlerin aynı obje üzerinde işlem yapmasını sağlamak. sum() metodu içerisinde de multitaskingi 
+mümkün kılmak için sleep() metodunu bilinçli olarak çağırdık. Son olarak main() metodu içerisinden 2 tane thread 
+yaratarak bu threadlere oluşturduğumuz int arrayini toplamalarını istedik. Bu işlem sonunda yukarıdaki çıktıyı alarak 
+synchronized ifadesinin threadleri nasıl blokladığını gördük.
+
+#### synchronized blok kullanımı
+synchronized ifadesini kontrolü bizde olan metodlara uygulanabilir. Fakat herzaman bu mümkün olmayabilir. Bazı durumlarda 
+kontrolü bizde olmayan yani başkası tarafından yaılmış metodları synchronized olarak çağırmamız gerekebilir. Böyle durumlarda
+synchronized blok yardımımıza yetişiyor. synchronized metod [örneğini](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain7.java) 
+şimdi bir de synchronized blok ile yapalım;
+
+```java
+public class ArrayOperations2 {
+
+    int sum = 0;
+
+    int sum(int[] array) {
+
+        for (int value : array) {
+            sum += value;
+            System.out.println("Sum : " + sum + " Thread name : " + Thread.currentThread().getName());
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                System.out.println("Main thread interrupted");
+            }
+        }
+
+        return sum;
+    }
+}
+
+public class MultiThreadDemo7 extends Thread {
+
+    int[] array;
+    static ArrayOperations op = new ArrayOperations();
+
+    public MultiThreadDemo7(int[] array) {
+        super();
+        this.array = array;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(this.getName() + " is starting");
+        synchronized (op) {
+            System.out.println("Sum of the array is : " + op.sum(this.array));
+        }
+
+        System.out.println(this.getName() + " is finishing");
+    }
+}
+
+public class MultiThreadDemoMain7 {
+
+    public static void main(String[] args) {
+
+        int[] array = {1, 23, 45, 9, 52, 78};
+
+        MultiThreadDemo7 thread1 = new MultiThreadDemo7(array);
+        MultiThreadDemo7 thread2 = new MultiThreadDemo7(array);
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            System.out.println("Main thread is interrupted");
+        }
+
+        System.out.println("Main thread is finishing");
+    }
+}
+```
+Output :
+```
+Thread-0 is starting
+Thread-1 is starting
+Sum : 1 Thread name : Thread-0
+Sum : 24 Thread name : Thread-0
+Sum : 69 Thread name : Thread-0
+Sum : 78 Thread name : Thread-0
+Sum : 130 Thread name : Thread-0
+Sum : 208 Thread name : Thread-0
+Sum of the array is : 208
+Thread-0 is finishing
+Sum : 209 Thread name : Thread-1
+Sum : 232 Thread name : Thread-1
+Sum : 277 Thread name : Thread-1
+Sum : 286 Thread name : Thread-1
+Sum : 338 Thread name : Thread-1
+Sum : 416 Thread name : Thread-1
+Sum of the array is : 416
+Thread-1 is finishing
+Main thread is finishing
+```
+Çıktıda görüldüğü gibi synchronized blok synchronized metod ile benzer bir davranış sergiledi. sum() metodunda bulunan
+synchronized ifadesini kaldırıp thread sınıfı içerisinde ArrayOperations2 objesine synchronized blok içerisinden eriştik.
+
+### Threadler arası iletişim
+Bazı durumlarda birden fazla thread tarafından paylaşılan obje geçici olarak kullanıma uygun olmayabilir. Bu durumda thread
+objeyi kullanmak yerine wait() metodunu çağırarak kendini beklemeye alır ve diğer threadlerin işlemleri bitirmesi için 
+beklemeye geçer. Bu durumu notify() yada notifyAll() metodlarını çağırarak obje üzerinde işlem yapmak için bekleyen diğer 
+threadlere bildirir. O threadler de işlemlerini bitirince aynı biçimde notify() yada notifyAll() metodlarını çağırarak 
+diğer bekleyen threadleri uyarır. wait(), notify() ve notifyAll() metodları Object sınıfından gelir ve synchronized kapsamı
+içinden çağrılmalıdır.
+
+Bu durumu basit bir tick tock [uygulaması](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain8.java) yaparak yakından görelim; 
+
+```java
+public class MessageGenerator {
+
+    String state;
+
+    synchronized void tick(boolean running) {
+
+        if (!running) {
+            state = "ticked";
+            notify();
+            return;
+        }
+
+        System.out.print("Tick ");
+        state = "ticked";
+
+        notify();
+
+        try {
+            while (!state.equals("tocked")) {
+                wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    synchronized void tock(boolean running) {
+
+        if (!running) {
+            state = "tocked";
+            notify();
+            return;
+        }
+
+        System.out.println("tock");
+        state = "tocked";
+
+        notify();
+
+        try {
+            while (!state.equals("ticked")) {
+                wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class MultiThreadDemo8 extends Thread {
+
+    MessageGenerator generator;
+
+    public MultiThreadDemo8(String name, MessageGenerator generator) {
+        super(name);
+        this.generator = generator;
+    }
+
+    @Override
+    public void run() {
+        System.out.println(this.getName() + " is starting");
+
+        if(this.getName().equals("Tick")) {
+            for (int i = 0; i < 5; i++) {
+                generator.tick(true);
+            }
+            generator.tick(false);
+        }  else {
+            for (int i = 0; i < 5; i++) {
+                generator.tock(true);
+            }
+            generator.tock(false);
+        }
+
+        System.out.println(this.getName() + " is finishing");
+    }
+}
+
+public class MultiThreadDemoMain8 {
+
+    public static void main(String[] args) {
+
+        MessageGenerator generator = new MessageGenerator();
+        MultiThreadDemo8 thread1 = new MultiThreadDemo8("Tick", generator);
+        MultiThreadDemo8 thread2 = new MultiThreadDemo8("Tock", generator);
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            System.out.println("Main thread is interrupted");
+        }
+
+        System.out.println("Main thread is finishing");
+    }
+}
+```
+Output :
+```
+Tick is starting
+Tock is starting
+Tick tock
+Tick tock
+Tick tock
+Tick tock
+Tick tock
+Tick is finishing
+Tock is finishing
+Main thread is finishing
+```
+Örnekte görüldüğü gibi iki thread farklı mesajları ekrana bastırmak için ayarlanmıştır ve threadler mesajları yazdırmak 
+için birbirini beklemektedir. İlk thread 'Tick' mesajını yazdırdıktan sonra beklemeye geçer ve topu diğer threade atar.
+O thread de aynı şekilde 'tock' mesajını yazdıktan sonra beklemey geçer ve yeni den 'tick' mesajı yazılması için diğer threadi
+uyarır.
 
 
 ## Generics (Jenerikler)
@@ -1558,3 +2268,8 @@ Output:
 5 is even : false
 12 is even : true
 ```
+
+## Thread konusuna geri dönüş
+### ThreadLocal
+### Concurrency
+### ThreadPool and Executor Service
