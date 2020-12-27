@@ -473,9 +473,11 @@ gerekir, bu nedenle multithreading denildiği zaman akla gelmesi gereken ilk kon
 Her bir process en az bir tane thread içermek zorundadır, bu threade _**main thread**_ denilir. main thread gerekli durumda başka 
 threadleri de yaratabilir.
 
-Java'da multithread kavramı Thread sınıfı ve Runnable interface üzerine kurulmuştur. Yeni bir thread yaratmak için Thread
-sınıfını extend etmeli ya da Runnable interface ini implemente etmeliyiz. Hangi metodu seçeceğimizin yarattığımız thread 
-açısından bir önemi yok, ikisini de kullanabiliriz.
+Java'da multithread kavramı Thread sınıfı ve Runnable interface üzerine kurulmuştur. Yeni bir thread yaratmak ve ona bir görev
+atamak için bu iki sınıfı kullanabiliriz; birinci yöntemde doğrudan Thread sınıfını extend edip run metodunu override edebiliriz
+böylece yeni bir thread sınıfı yaratmış oluruz ve onun objelerini yaratarak doğrudan thread yaratmış ve çalıştırmış oluruz.
+İkinci yöntemde ise Runnable sınıfını implemente eder ve run metodunu override ederek yeni bir task oluştururuz ve bu oluşturduğumuz
+taskı bir thread objesine verip çalıştırmasını isteriz.
 
 ```java
 public class MyThread extends Thread {
@@ -500,12 +502,14 @@ Bu noktaya kadar sadece thread in nasıl çalışacağını tanımlamış olduk,
 aşağıda gösterildiği gibi new ile yeni bir thread objesi yaratmamız gerekir.
 
 ```java
-MyThread myThread = new MyThread();
-Thread realThread = new Thread(myThread); 
+1. Yöntem - MyThread myThread = new MyThread();
+2. Yöntem - MyThread2 task - new MyThread2();
+            Thread realThread = new Thread(task); 
 ```
 
-Artık gerçek bir thread objemiz var. Bu thread biz start() metodunu çağırana kadar çalışmayacaktır. 
-Şimdi bu noktaya kadar gördüklerimizi bir örnekle [kod üzerinde](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain1.java) inceleyelim.
+Artık gerçek bir thread objemiz var, fakat bu sadece thread objesinin yaratılma kısmı, bu thread biz start() metodunu 
+çağırana kadar çalışmayacaktır. Şimdi bu noktaya kadar gördüklerimizi bir örnekle 
+[kod üzerinde](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain1.java) inceleyelim.
 
 ```java
 public class MultiThreadDemo1 implements Runnable {
@@ -536,9 +540,9 @@ public class MultiThreadDemoMain1 {
     public static void main(String[] args) {
         System.out.println("Main thread is starting");
 
-        MultiThreadDemo1 myThread = new MultiThreadDemo1("child1");
+        MultiThreadDemo1 task = new MultiThreadDemo1("child1");
 
-        Thread thread = new Thread(myThread);
+        Thread thread = new Thread(task);
 
         thread.start();
 
@@ -573,9 +577,9 @@ In child1 count is 9
 child1 is terminating
 ```
 
-Örnekte görüldüğü gibi main thread child1 isminde bir thread yaratı ve child1 isimli threadi başlattı. Bu noktadan itibaren 
-iki thread paralel olarak çalıştı ve ekrana çıktı üretti. Bu işlemi yaparken de belli aralıklarla çalışan threadler sleep
-metodu çağrılarak durduruldu. 
+Örnekte görüldüğü gibi main thread child1 isminde bir task yarattı ve child1 isimli task ile bir thread yaratıp başlattı. 
+Bu noktadan itibaren iki thread paralel olarak çalıştı ve ekrana çıktı üretti. Bu işlemi yaparken de belli aralıklarla 
+çalışan threadler sleep metodu çağrılarak durduruldu. 
 
 Bir uygulama o uygulama tarafından yaratılan bütün threadler son bulduğunda uygulama da son bulur. Örneğin çıktısına 
 baktığımız zaman main threadin child thread den daha önce sonlandığını görüyoruz. Normalde önerilen main threadin en son 
@@ -676,8 +680,8 @@ In child1 count is 9
 child1 is terminating
 
 ```
-Görüldüğü gibi doğrudan Thread sınıfını extend ettiğimiz için ayrı bir thread objesi oluşturmak gerekmiyor, direk start()
-metodunu çalıştırabiliyoruz, ihtiyaca göre Runnable yada Thread tercih edilebilir.
+Görüldüğü gibi task yaratmak yerine doğrudan Thread sınıfını extend ettiğimiz için direk start() metodunu çalıştırabiliyoruz, 
+ihtiyaca göre Runnable yada Thread tercih edilebilir.
 
 Burada dikkat edilmesi gereken threadlerin bizim start() metodunu çağırdığımız sırada başlamamış olması, burada yarattığımız
 threadleri JVM arka tarafta istediği gibi planlayabiliyor. Bu nedenle aynı kodu kendi bilgisayarınızda çalıştırmanız 
@@ -786,12 +790,12 @@ child1 is terminating
 child2 is terminating
 Main thread is terminating
 ```
-Örnekte görüldüğü gibi main thread son olarak son bulmuştur. Bu yöntem ilk yönteme göre daha verimli olsa da yine de
-zaman yönetimi konusunda en ideal yöntem değil.
+Örnekte görüldüğü gibi main thread yarattığı child threadlerden sonra son bulmuştur. Bu yöntem ilk yönteme göre daha 
+verimli olsa da yine de zaman yönetimi konusunda en ideal yöntem değildir.
 
 Üçüncü ve en verimli yöntem ise join() metodunun kullanımıdır. join() metodu child threadleri yaratan thread tarafından
 çağrılır ve isminden de anlaşılacağı gibi child threadlerin işlerini bitirip tekrar main threade katılmalarını söyler.
-Böylece sleep metodunu kullanmaya gerek kalmaz ve işi biten child thread main threadi bunun hakkında bilgilendirir.
+Böylece sleep() metodunu kullanmaya gerek kalmaz ve işi biten child thread main threadi bunun hakkında bilgilendirir.
 Şimdi thread join metodunun nasıl kullanıldığını [örnekle](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain4.java) görelim;
 
 ```java
@@ -828,7 +832,6 @@ public class MultiThreadDemoMain4 {
         myThread.start();
         myThread2.start();
         myThread3.start();
-
 
         try {
             myThread.join();
@@ -883,8 +886,8 @@ child3 is terminating
 child1 is terminating
 Main thread is terminating
 ```
-Örnekte görüldüğü gibi main thread son olarak son bulmuştur. Threadler arası iletişim yardımıyla main threadin child threadleri
-beklemesi sağlanmıştır. 
+Örnekte görüldüğü gibi main thread yarattığı child threadlerden sonra son bulmuştur. Threadler arası iletişim yardımıyla
+main threadin child threadleri beklemesi sağlanmıştır. 
 
 ### Thread önceliklendirme
 Çok threadli bir uygulamada threadlerin CPU zamanını paylaşarak çalıştığından bahsetmiştik. Hangi threadin ne kadar CPU 
@@ -1024,7 +1027,7 @@ ise 30 tane thread objesi yarattık bu sınıftan. Bu thread objelerinden bazıl
 öncelik değerini atadık. Yüz milyona ulaşan threadin diğer threadlerin çalışmasını durdurmak için de thread sınıfına static
 bir boolean değer koyduk. Yüz milyona ulaşan ilk thread bu boolean değişkenin değerine false atadı ve diğer threadlerin de
 sayma işlemini sonlandırmasını sağladık. Sonuç olarak da yukarıdaki çıktıyı elde ettek. 12 çekirdeğe sahip bir bilgisayarda
-çalıştırdığımız bu kod thread öncelik değerinin ne kadar etkili olduğunu bunun yanında maksimum thread önceliğine sahip olan
+çalıştırdığımız bu kod thread öncelik değerinin ne kadar etkili olduğunu bunun yanında maksimum thread önceliğine sahip olmayan
 başka threadlerin de sayma işlemini aynı zamanda bitirebildiğini gösterdi.
 
 ### Senkronizasyon
@@ -1137,7 +1140,7 @@ synchronized ifadesinin threadleri nasıl blokladığını gördük.
 
 #### synchronized blok kullanımı
 synchronized ifadesini kontrolü bizde olan metodlara uygulanabilir. Fakat herzaman bu mümkün olmayabilir. Bazı durumlarda 
-kontrolü bizde olmayan yani başkası tarafından yaılmış metodları synchronized olarak çağırmamız gerekebilir. Böyle durumlarda
+kontrolü bizde olmayan yani başkası tarafından yazılmış metodları synchronized olarak çağırmamız gerekebilir. Böyle durumlarda
 synchronized blok yardımımıza yetişiyor. synchronized metod [örneğini](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain7.java) 
 şimdi bir de synchronized blok ile yapalım;
 
@@ -1358,8 +1361,40 @@ Main thread is finishing
 ```
 Örnekte görüldüğü gibi iki thread farklı mesajları ekrana bastırmak için ayarlanmıştır ve threadler mesajları yazdırmak 
 için birbirini beklemektedir. İlk thread 'Tick' mesajını yazdırdıktan sonra beklemeye geçer ve topu diğer threade atar.
-O thread de aynı şekilde 'tock' mesajını yazdıktan sonra beklemey geçer ve yeni den 'tick' mesajı yazılması için diğer threadi
-uyarır.
+O thread de aynı şekilde 'tock' mesajını yazdıktan sonra beklemeye geçer ve yeni den 'tick' mesajı yazılması için diğer 
+threadi uyarır.
+
+### Thread yaşam döngüsü
+Bir thread var olmaya başladığı andan itibaren bir durum(state) bilgisine sahip olur. Bu state bilgisi threadin o anki
+durumuna göre aşağıdaki değerleri alabilir.
+New, Runnable, Blocked, Waiting, Timed Waiting ve Terminated.
+![thread life cycle](images/threadLifeCycle.jpg)
+
+New : Bir thread ilk yaratıldığı anda bu state bilgisine sahip olur.
+Runnable : start() metodunu çağırdığımız anda threadin state bilgisi Runnable olarak atanır ve artık thread çalışmaya hazırdır.
+Fakata biz start() metodunu çağırdığımızda direk çalışmaya başlamaz sadece scheduler (planlayıcı) ın kendisi CPU zamanı
+vermesini bekler.
+Blocked : Bir thread bir input beklerken yada başka bir thread tarafından lock edilmiş bir obje üzerinde çalışmayı beklerken 
+Blocked durumuna geçer.
+Waiting : Bir thread başka bir threadin çalışıp işini bitirmesini bekliyorsa sahip olduğu durumdur.
+Timed Waiting : sleep() yada wait() metodlarının timeout bilgisi ile çağırılması sonucu threadin sahip olduğu durumdur.
+Terminated : Bir threadin başarıyla yada hata olarak son bulması durumunda sahip olduğu durumdur.
+
+### Alıştırma
+[örneğini](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain7.java) yaptığımız multithread array toplama 
+işlemini lambda ifadeler ile yeniden yazalım.
+
+### Thread pool ve ExecutorService (WIP)
+Bu kısma kadar thread yaratma işlemini manuel olarak kendimiz yaptık fakat Java bize asenkron task çalıştırma ve thread 
+yaratma ve yönetme görevini arka planda kendisi yöneten ExecutorService sınıfını da sunuyor. Bu işlemi yaparken taskları
+çalıştırmak için arka planda sürekli thread yaratmak yerine bir thread pool kullanıyor. 
+
+Çok fazla CPU kullanan tasklarımız olduğunu ve bu taskları çalıştırmak için sürekli thread yarattığımızı düşünelim.
+Bu durumda yarattığımız thread sayısı CPUda bulunan core sayısını geçtiği zaman bu durumda tüm CPU sadece bizim yarattığımız
+tasklar ile bloklanmış olacak ve performans sorunları ortaya çıkacak. İşte bu sorunu çözmek için sürekli thread yaratmak yerine
+bir thread pool kullanmak ve yaratacağımız taskları çalıştırılmak üzere bu thread poola vermek CPU kullanımı açısından çok
+daha verimli olacaktır. Şimdi bütün bu anlattıklarımı ExecutorService ile 
+[nasıl yapabildiğimize](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain9.java) bir bakalım;
 
 
 ## Generics (Jenerikler)
@@ -1709,7 +1744,7 @@ parametre listesi sağ tarafında ise implementasyonu yer alır.
 ```java
 () -> 3.4
 ```
-Yukardaki ifade aşağıdaki ifadeye dengtir
+Yukardaki ifade aşağıdaki ifadeye denktir
 ```java
 boolean getValue() {
     return 3.4;
@@ -1736,9 +1771,9 @@ interface MyValue {
     double getValue();
 }
 
-MyValue = () -> 3.4;
+MyValue value = () -> 3.4;
 ```
-Burada önemli olan lambda ifadesinin ve abstract metodun ımzalarının tamamen birbirine uymasıdır. Aksi durumda compiler
+Burada önemli olan lambda ifadesinin ve abstract metodun imzalarının tamamen birbirine uymasıdır. Aksi durumda compiler
 hata verir.
 
 Fonksiyonel interfacelerin önemli özelliklerinden biri de içerdikleri abstract metodun kendisiyle uyumlu birden fazla 
@@ -1794,7 +1829,7 @@ public class Main {
 
             x = x < 0 ? -x : x;
 
-            for (int i = 2; i < x/2; i++) {
+            for (int i = 2; i <= x/2; i++) {
                 if (x % i == 0) {
                     result = i;
                 }
@@ -1810,7 +1845,7 @@ public class Main {
 ```
 Output :
 ```
-Biggest positive factor of 20 is 5
+Biggest positive factor of 20 is 10
 Biggest positive factor of 37 is 1
 ```
 
@@ -2061,7 +2096,7 @@ public class Main {
 func metodu throws IOException ifadesini bulundurmak zorunda.
 
 ### Metod referanslar
-Daha önceki bölümlerde fonksiyonale interfaceler tarafından bize sunulan abstract metodların anonim lambda ifadeleri
+Daha önceki bölümlerde fonksiyonel interfaceler tarafından bize sunulan abstract metodların anonim lambda ifadeleri
 tarafından nasıl implemente edildiğini gördük. Şimdi varolan metodlarımızı nasıl lambda ifadeleri ile ilişkilendirebileceğimizi
 göreceğiz. Burada önemli olan referans edeceğimiz metodun imzasının fonksiyonel interface tarafından sunulan abstract 
 metodun imzası ile eşleşiyor olması, aksi durumda compiler hatası oluşur.
@@ -2268,8 +2303,3 @@ Output:
 5 is even : false
 12 is even : true
 ```
-
-## Thread konusuna geri dönüş
-### ThreadLocal
-### Concurrency
-### ThreadPool and Executor Service
