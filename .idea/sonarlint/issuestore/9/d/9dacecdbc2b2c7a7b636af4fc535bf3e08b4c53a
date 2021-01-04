@@ -1,0 +1,11 @@
+
+P	java:S125	"<This block of commented-out lines of code should be removed.(ÍĞ’s
+N
+java:S1854"8Remove this useless assignment to local variable "func".(“ãˆ÷
+E
+java:S1611"/Remove the parentheses around the "a" parameter(“ãˆ÷
+?
+java:S1481")Remove this unused "func" local variable.(“ãˆ÷
+P	java:S125"<This block of commented-out lines of code should be removed.(ÍĞ’s
+i
+java:S1602"SRemove useless curly braces around statement and then remove useless return keyword(“ãˆ÷

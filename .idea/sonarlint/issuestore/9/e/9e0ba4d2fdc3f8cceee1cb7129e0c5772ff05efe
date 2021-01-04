@@ -1,0 +1,20 @@
+
+b
+java:S1192
+"GDefine a constant instead of duplicating this literal "ticked" 3 times.(è‹­éûÿÿÿÿ
+b
+java:S1192"GDefine a constant instead of duplicating this literal "tocked" 3 times.(œÅÎèøÿÿÿÿ
+K
+java:S2446"0"notify" may not wake up the appropriate thread.(óÄ£¶øÿÿÿÿ
+N	java:S106"9Replace this use of System.out or System.err by a logger.(„­€è
+K
+java:S2446"0"notify" may not wake up the appropriate thread.(óÄ£¶øÿÿÿÿ
+\
+java:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€
+K
+java:S2446!"0"notify" may not wake up the appropriate thread.(óÄ£¶øÿÿÿÿ
+N	java:S106%"9Replace this use of System.out or System.err by a logger.(¸°½Š
+K
+java:S2446("0"notify" may not wake up the appropriate thread.(óÄ£¶øÿÿÿÿ
+\
+java:S2142."FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€

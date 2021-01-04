@@ -34,6 +34,17 @@ public class MessageGenerator {
             return;
         }
 
+        if (state == null) {
+            notify();
+            try {
+                while (state == null) {
+                    wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         System.out.println("tock");
         state = "tocked";
 

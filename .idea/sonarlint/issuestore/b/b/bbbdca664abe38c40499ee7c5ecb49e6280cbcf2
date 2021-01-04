@@ -1,0 +1,19 @@
+
+D
+java:S1481"'Remove this unused "p3" local variable.(ôû‡À8Œ–¯ìë.
+R
+java:S1854"6Remove this useless assignment to local variable "p1".(ÜÕ¬{8§§®ìë.
+I
+java:S1481"'Remove this unused "p2" local variable.(àÙ”…ùÿÿÿÿ8Œ–¯ìë.
+U	java:S106"9Replace this use of System.out or System.err by a logger.(ÓãôÔ8İ€¼ìë.
+S
+java:S1854"6Remove this useless assignment to local variable "p3".(ôû‡À8êÎ®ìë.
+u
+java:S1192"XDefine a constant instead of duplicating this literal "Phaser completed phase " 3 times.(ÓãôÔ8÷›½ìë.
+U	java:S106"9Replace this use of System.out or System.err by a logger.(ÓãôÔ8÷›½ìë.
+X
+java:S1854"6Remove this useless assignment to local variable "p2".(àÙ”…ùÿÿÿÿ8êÎ®ìë.
+U	java:S106"9Replace this use of System.out or System.err by a logger.(ÓãôÔ8”ü¼ìë.
+U	java:S106""9Replace this use of System.out or System.err by a logger.(ß‹ùü8Àÿ¾ìë.
+C
+java:S1481"'Remove this unused "p1" local variable.(ÜÕ¬{8§§®ìë.

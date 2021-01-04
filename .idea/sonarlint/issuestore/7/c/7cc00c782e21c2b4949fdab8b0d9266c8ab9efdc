@@ -1,0 +1,23 @@
+
+O
+java:S1481"2Remove this unused "integerStream" local variable.(óÊ¨ê8Îˆ—ûë.
+Z
+java:S1128"8Remove this unused import 'java.net.URISyntaxException'.(Ä®íÿÿÿÿÿ8‚–‘ûë.
+b
+java:S1854"@Remove this useless assignment to local variable "valuesStream".(¾Ù·ıüÿÿÿÿ8…­“ûë.
+r
+java:S1854"URemove this useless assignment to local variable "integerStreamFromIndexZeroToThree".(ô¬¬À8Å¤›ûë.
+S
+java:S1481"1Remove this unused "valuesStream" local variable.(¾Ù·ıüÿÿÿÿ8î“ûë.
+M
+java:S1128"0Remove this unused import 'java.nio.file.Files'.(‚ƒü8‚–‘ûë.
+R
+java:S1128"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ8‚–‘ûë.
+M
+java:S1128"0Remove this unused import 'java.nio.file.Paths'.(áè°¯8‚–‘ûë.
+c
+java:S1481"FRemove this unused "integerStreamFromIndexZeroToThree" local variable.(ô¬¬À8…ùœûë.
+L
+java:S1128"/Remove this unused import 'java.nio.file.Path'.(×²êÂ8‚–‘ûë.
+^
+java:S1854"ARemove this useless assignment to local variable "integerStream".(óÊ¨ê8Õí–ûë.

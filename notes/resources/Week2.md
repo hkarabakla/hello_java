@@ -1364,39 +1364,6 @@ için birbirini beklemektedir. İlk thread 'Tick' mesajını yazdırdıktan sonr
 O thread de aynı şekilde 'tock' mesajını yazdıktan sonra beklemeye geçer ve yeni den 'tick' mesajı yazılması için diğer 
 threadi uyarır.
 
-### Thread yaşam döngüsü
-Bir thread var olmaya başladığı andan itibaren bir durum(state) bilgisine sahip olur. Bu state bilgisi threadin o anki
-durumuna göre aşağıdaki değerleri alabilir.
-New, Runnable, Blocked, Waiting, Timed Waiting ve Terminated.
-![thread life cycle](images/threadLifeCycle.jpg)
-
-New : Bir thread ilk yaratıldığı anda bu state bilgisine sahip olur.
-Runnable : start() metodunu çağırdığımız anda threadin state bilgisi Runnable olarak atanır ve artık thread çalışmaya hazırdır.
-Fakata biz start() metodunu çağırdığımızda direk çalışmaya başlamaz sadece scheduler (planlayıcı) ın kendisi CPU zamanı
-vermesini bekler.
-Blocked : Bir thread bir input beklerken yada başka bir thread tarafından lock edilmiş bir obje üzerinde çalışmayı beklerken 
-Blocked durumuna geçer.
-Waiting : Bir thread başka bir threadin çalışıp işini bitirmesini bekliyorsa sahip olduğu durumdur.
-Timed Waiting : sleep() yada wait() metodlarının timeout bilgisi ile çağırılması sonucu threadin sahip olduğu durumdur.
-Terminated : Bir threadin başarıyla yada hata olarak son bulması durumunda sahip olduğu durumdur.
-
-### Alıştırma
-[örneğini](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain7.java) yaptığımız multithread array toplama 
-işlemini lambda ifadeler ile yeniden yazalım.
-
-### Thread pool ve ExecutorService (WIP)
-Bu kısma kadar thread yaratma işlemini manuel olarak kendimiz yaptık fakat Java bize asenkron task çalıştırma ve thread 
-yaratma ve yönetme görevini arka planda kendisi yöneten ExecutorService sınıfını da sunuyor. Bu işlemi yaparken taskları
-çalıştırmak için arka planda sürekli thread yaratmak yerine bir thread pool kullanıyor. 
-
-Çok fazla CPU kullanan tasklarımız olduğunu ve bu taskları çalıştırmak için sürekli thread yarattığımızı düşünelim.
-Bu durumda yarattığımız thread sayısı CPUda bulunan core sayısını geçtiği zaman bu durumda tüm CPU sadece bizim yarattığımız
-tasklar ile bloklanmış olacak ve performans sorunları ortaya çıkacak. İşte bu sorunu çözmek için sürekli thread yaratmak yerine
-bir thread pool kullanmak ve yaratacağımız taskları çalıştırılmak üzere bu thread poola vermek CPU kullanımı açısından çok
-daha verimli olacaktır. Şimdi bütün bu anlattıklarımı ExecutorService ile 
-[nasıl yapabildiğimize](../../examples/src/com/hkarabakla/multithread/MultiThreadDemoMain9.java) bir bakalım;
-
-
 ## Generics (Jenerikler)
 Java dilinde pek çok özellik çoğunlukla 1.0 versiyonunda eklenmiştir. Eklenen diğer tüm özellikler dilin kapsamını genişletmiştir 
 ki bunlardan biri olan Jenerikler dili en çok şekillendirenlerdendir.
