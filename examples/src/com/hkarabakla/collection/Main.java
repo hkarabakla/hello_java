@@ -1,9 +1,8 @@
 package com.hkarabakla.collection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.DoubleStream;
 
 public class Main {
 
@@ -18,12 +17,17 @@ public class Main {
 
         System.out.println(ar);
 
-        ar.sort();
+
         Comparator<Student> myComparator = (o1, o2) -> o2.rollno - o1.rollno;
 
         Collections.sort(ar, myComparator);
 
         System.out.println("Sorted by rollno");
         System.out.println(ar);
+
+        String[] values = {"1", "2", "3"};
+        Arrays.stream(values)
+                .map(val -> Integer.parseInt(val))
+                .forEach(a -> System.out.println(a));
     }
 }

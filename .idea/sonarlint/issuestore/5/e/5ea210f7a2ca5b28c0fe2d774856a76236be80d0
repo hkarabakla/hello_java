@@ -1,0 +1,5 @@
+
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(æ¨¤šøÿÿÿÿ8³Ü–¿í.
+g
+java:S2133
+"JRemove this object instantiation and use "MyAnnotatedClass.class" instead.(ˆ¤þŒ8³Ü–¿í.

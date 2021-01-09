@@ -1,0 +1,14 @@
+
+N
+java:S1612",Replace this lambda with a method reference.(ßš¨øøÿÿÿÿ8ô²½ıì.
+T	java:S106"9Replace this use of System.out or System.err by a logger.(šÆR8‡£à·ì.
+V
+java:S1128"4Remove this unused import 'java.util.regex.Pattern'.(Ã•…Äúÿÿÿÿ8Ä‘½ıì.
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(—Éâúÿÿÿÿ8É®Ô·ì.
+N
+java:S1612",Replace this lambda with a method reference.(ï¡ôµüÿÿÿÿ8ô²½ıì.
+U	java:S106"9Replace this use of System.out or System.err by a logger.(Úøİæ8É®Ô·ì.
+T	java:S106"9Replace this use of System.out or System.err by a logger.(šÆR8û¯á·ì.
+Z	java:S106"9Replace this use of System.out or System.err by a logger.(ßš¨øøÿÿÿÿ8Ä‘½ıì.
+W
+java:S1128":Remove this unused import 'java.util.stream.DoubleStream'.(óÖĞ©8Ä‘½ıì.

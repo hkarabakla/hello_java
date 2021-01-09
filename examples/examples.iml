@@ -8,5 +8,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="com.h2database:h2:1.4.200" level="project" />
+    <orderEntry type="library" name="javax.persistence:javax.persistence-api:2.2" level="project" />
+    <orderEntry type="library" name="org.eclipse.persistence:eclipselink:2.6.1" level="project" />
   </component>
 </module>

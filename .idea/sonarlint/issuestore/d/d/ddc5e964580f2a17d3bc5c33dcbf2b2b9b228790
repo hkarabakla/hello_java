@@ -1,0 +1,15 @@
+
+Y
+java:S1854"<Remove this useless assignment to local variable "collect1".(òİÑ8ÕïÅ¾ì.
+T
+java:S1128"2Remove this unused import 'java.util.Collections'.(¢³ïÓşÿÿÿÿ8ÒÁÃ¾ì.
+M
+java:S1128"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8ÒÁÃ¾ì.
+L
+java:S3631"/Use "Arrays.stream" instead of "Arrays.asList".(òİÑ8ÕïÅ¾ì.
+J
+java:S1481"-Remove this unused "collect1" local variable.(òİÑ8ÕïÅ¾ì.
+V
+java:S1854":Remove this useless assignment to local variable "values".(«É‘8Ù¯Æ¾ì.
+G
+java:S1481"+Remove this unused "values" local variable.(«É‘8Ù¯Æ¾ì.

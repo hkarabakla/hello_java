@@ -1,15 +1,2 @@
 
-]
-java:S1854
-"@Remove this useless assignment to local variable "stringStream".(Ö¦õƒ8ú‘µûë.
-N
-java:S1481
-"1Remove this unused "stringStream" local variable.(Ö¦õƒ8İ©µûë.
-O
-java:S1128"-Remove this unused import 'java.util.Arrays'.(î–˜Éüÿÿÿÿ8ü¹°ûë.
-T
-java:S3958"2Refactor the code so this stream pipeline is used.(Ò¿¦şÿÿÿÿ8ö·Ğûë.
-c
-java:S1854"ARemove this useless assignment to local variable "limitedStream".(Ò¿¦şÿÿÿÿ8ö·Ğûë.
-T
-java:S1481"2Remove this unused "limitedStream" local variable.(Ò¿¦şÿÿÿÿ8ŒñĞûë.
+U	java:S106"9Replace this use of System.out or System.err by a logger.(€¬ú¨8“èµ·ì.
