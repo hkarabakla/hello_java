@@ -131,8 +131,8 @@ Maven ile proje yaratmak için üç tane yöntemi kullanabiliriz;
 2. Maven tarafından bize sunulan archetype proje şablonları kullanılarak maven projesi yaratabiliriz. Örnek kullanım aşağıdaki gibi;
    ```shell
        mvn archetype:generate
-            -DgroupId=org.baeldung
-            -DartifactId=org.baeldung.java
+            -DgroupId=com.hkarabakla
+            -DartifactId=maven-example
             -DarchetypeArtifactId=maven-archetype-quickstart
             -DinteractiveMode=false
    ```
