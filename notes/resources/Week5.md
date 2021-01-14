@@ -40,10 +40,10 @@ bulundurur. Bu dosyanın genel yapısı aşağıdaki gibidir;
     
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.hkarabakla</groupId>
+    <groupId>com.hkarabakla</groupId>
     <artifactId>maven-example</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
