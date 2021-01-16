@@ -1,5 +1,5 @@
 
-Z	java:S106"9Replace this use of System.out or System.err by a logger.(æ¨¤šøÿÿÿÿ8³Ü–¿í.
-g
-java:S2133
-"JRemove this object instantiation and use "MyAnnotatedClass.class" instead.(ˆ¤şŒ8³Ü–¿í.
+e
+java:S2133"JRemove this object instantiation and use "MyAnnotatedClass.class" instead.(ˆ¤şŒ8³Ü–¿í.
+S	java:S106"9Replace this use of System.out or System.err by a logger.(šï–8»şï°î.
+X	java:S106"9Replace this use of System.out or System.err by a logger.(æ¨¤šøÿÿÿÿ8‰Îî°î.

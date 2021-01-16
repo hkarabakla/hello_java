@@ -90,6 +90,7 @@ ABC bizim için ana dependency, XYZ ve KLM ise transitive dependency oluyor ve M
 
 ### Maven repository mimarisi
 ![maven repo architecture](images/maven_repo_arch.png)
+
 Maven repositorysi projelerin ihtiyacı olan jar dosyalarını ve bu dosyalar ile ilgili meta verilerin saklandığı özel bir depolama
 alanı olarak düşünülebilir. Maven projelerin bağımlı oldukları kütüphaneleri bu depolama sistemi aracılığı ile yönetir.
 
@@ -140,4 +141,199 @@ Maven ile proje yaratmak için üç tane yöntemi kullanabiliriz;
 
 ![maven folder structure](images/maven_folder_structure.png)
 
+## Spring Data JPA ile veritabanı işlemleri
+Daha önce JPA standartlarını implemente eden Hibernate kütüphanesi ile nasıl veritabanı işlemleri yapıldığını görmüştük.
+O örnekte veritabanına erişmek için pek çok manuel konfigürasyon yapmıstık ve objeler yaratmıştık. Bunun yanında sorgularımızı
+çalıştırabilmek için sürekli bir session açmamız gerekmişti. Spring Data JPA işte bu tarz boilerplate kod dediğimiz aynı proje içinde yada
+projeden projeye sürekli tekrar eden ve temelde projeye business anlamında bir katkısı olmayan kod tekrarlarını ortadan 
+kaldırmak için ortaya çıkmıştır.
 
+Spring Data JPA bize sağladığı birtakım interfaceler sayesinde entitylerimizi işaretleyebilir ve bu interfaceleri extend ederek
+sorgu metodlarımızı yaratabiliriz. Spring Data JPAnın gücü bu interfacelerden gelir ve interface hiyerarşisinin en tepesinde
+Repository interface gelir. Repository<T, ID> interfacei entity sınıflarını ve bu sınıfların id alanlarının tipini parametre 
+olarak alan jenerik bir interfacedir. 
+
+Repository interfaceini extend eden CrudRepository<T, ID> entityler üzerinde CRUD (Create, Read, Update, Delete) işlemleri
+yapmaya yarayan jenerik abstract metodları bulundurur. Genel yapısı aşağıdaki gibidir;
+
+```java
+public interface CrudRepository<T, ID> extends Repository<T, ID> {
+    <S extends T> S save(S var1);
+
+    <S extends T> Iterable<S> saveAll(Iterable<S> var1);
+
+    Optional<T> findById(ID var1);
+
+    boolean existsById(ID var1);
+
+    Iterable<T> findAll();
+
+    Iterable<T> findAllById(Iterable<ID> var1);
+
+    long count();
+
+    void deleteById(ID var1);
+
+    void delete(T var1);
+
+    void deleteAll(Iterable<? extends T> var1);
+
+    void deleteAll();
+}
+```
+
+CrudRepository dışında bir de entityler üzerinde pagination ve sıralama için abstraction sunan PagingAndSortingRepository<T, ID>
+interface i vardır, onun da yapısı aşağıdaki gibidir;
+
+```java
+public interface PagingAndSortingRepository<T, ID> extends CrudRepository<T, ID> {
+    Iterable<T> findAll(Sort var1);
+
+    Page<T> findAll(Pageable var1);
+}
+```
+### Query metodlar
+Spring Data JPA bizlere sunduğu sorgu metodları sayesinde CRUD işlemleri için custom sorguları yaratmak çok kolay halee gelmiştir.
+Sorgu metodlarını oluşturabilmek ve kullanabilmek için aşağıdaki 4 adım takip edilebilir;
+
+1. Repository<T, ID> yada bu interfacein alt interfacelerini extend eden bir repository interfacei yaratılır.
+```java
+interface PersonRepository extends Repository<Person, Long> { … }
+```
+2. Sorgu metodu yukarda tanımlanan interface e eklenir;
+```java
+interface PersonRepository extends Repository<Person, Long> {
+  List<Person> findByLastname(String lastname);
+}
+```
+3. Yarattığımız repositoryleri spring contextine eklemek için @EnableJpaRepositories anotasyonu kullanılır;
+```java
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+@EnableJpaRepositories
+class Config { … }
+```
+4. Yarattığımız repository kullanmak istediğimiz sınıfa inject edilir;
+```java
+class SomeClient {
+
+  private final PersonRepository repository;
+
+  SomeClient(PersonRepository repository) {
+    this.repository = repository;
+  }
+
+  void doSomething() {
+    List<Person> persons = repository.findByLastname("Matthews");
+  }
+}
+```
+
+Örnek sorgu metodları;
+```java
+interface PersonRepository extends Repository<Person, Long> {
+
+  List<Person> findByEmailAddressAndLastname(EmailAddress emailAddress, String lastname);
+
+  // Enables the distinct flag for the query
+  List<Person> findDistinctPeopleByLastnameOrFirstname(String lastname, String firstname);
+  List<Person> findPeopleDistinctByLastnameOrFirstname(String lastname, String firstname);
+
+  // Enabling ignoring case for an individual property
+  List<Person> findByLastnameIgnoreCase(String lastname);
+  // Enabling ignoring case for all suitable properties
+  List<Person> findByLastnameAndFirstnameAllIgnoreCase(String lastname, String firstname);
+
+  // Enabling static ORDER BY for a query
+  List<Person> findByLastnameOrderByFirstnameAsc(String lastname);
+  List<Person> findByLastnameOrderByFirstnameDesc(String lastname);
+}
+```
+#### Propert expression
+```java
+List<Person> findByAddressZipCode(ZipCode zipCode);
+List<Person> findByAddress_ZipCode(ZipCode zipCode);
+```
+
+### Pagin ve siralama
+```java
+Page<User> findByLastname(String lastname, Pageable pageable);
+
+Slice<User> findByLastname(String lastname, Pageable pageable);
+
+List<User> findByLastname(String lastname, Sort sort);
+
+List<User> findByLastname(String lastname, Pageable pageable);
+```
+
+```java
+Sort sort = Sort.by("firstname").ascending()
+  .and(Sort.by("lastname").descending());
+
+TypedSort<Person> person = Sort.sort(Person.class);
+
+Sort sort = person.by(Person::getFirstname).ascending()
+.and(person.by(Person::getLastname).descending());
+```
+
+### Sorgu limitleme
+```java
+User findFirstByOrderByLastnameAsc();
+
+User findTopByOrderByAgeDesc();
+
+Page<User> queryFirst10ByLastname(String lastname, Pageable pageable);
+
+Slice<User> findTop3ByLastname(String lastname, Pageable pageable);
+
+List<User> findFirst10ByLastname(String lastname, Sort sort);
+
+List<User> findTop10ByLastname(String lastname, Pageable pageable);
+```
+
+### Named query kullanimi
+```java
+@Entity
+@NamedQuery(name = "User.findByEmailAddress",
+  query = "select u from User u where u.emailAddress = ?1")
+public class User {
+
+}
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+   List<User> findByLastname(String lastname);
+
+   User findByEmailAddress(String emailAddress);
+}
+```
+
+### @Query kullanimi
+```java
+public interface UserRepository extends JpaRepository<User, Long> {
+
+  @Query("select u from User u where u.emailAddress = ?1")
+  User findByEmailAddress(String emailAddress);
+}
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+   @Query(value = "SELECT * FROM USERS WHERE EMAIL_ADDRESS = ?1", nativeQuery = true)
+   User findByEmailAddress(String emailAddress);
+}
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+   @Query(value = "SELECT * FROM USERS WHERE LASTNAME = ?1",
+           countQuery = "SELECT count(*) FROM USERS WHERE LASTNAME = ?1",
+           nativeQuery = true)
+   Page<User> findByLastname(String lastname, Pageable pageable);
+}
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+   @Query("select u from User u where u.firstname = :firstname or u.lastname = :lastname")
+   User findByLastnameOrFirstname(@Param("lastname") String lastname,
+                                  @Param("firstname") String firstname);
+}
+```
