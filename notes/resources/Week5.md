@@ -255,7 +255,7 @@ List<Person> findByAddressZipCode(ZipCode zipCode);
 List<Person> findByAddress_ZipCode(ZipCode zipCode);
 ```
 
-### Pagin ve siralama
+### Paging ve siralama
 ```java
 Page<User> findByLastname(String lastname, Pageable pageable);
 
@@ -274,6 +274,19 @@ TypedSort<Person> person = Sort.sort(Person.class);
 
 Sort sort = person.by(Person::getFirstname).ascending()
 .and(person.by(Person::getLastname).descending());
+
+Pageable firstPageWithTwoElements = PageRequest.of(0, 2);
+
+Pageable secondPageWithFiveElements = PageRequest.of(1, 5);
+
+Pageable sortedByName =
+PageRequest.of(0, 3, Sort.by("name"));
+
+Pageable sortedByPriceDesc =
+PageRequest.of(0, 3, Sort.by("price").descending());
+
+Pageable sortedByPriceDescNameAsc =
+PageRequest.of(0, 5, Sort.by("price").descending().and(Sort.by("name")));
 ```
 
 ### Sorgu limitleme
@@ -337,3 +350,95 @@ public interface UserRepository extends JpaRepository<User, Long> {
                                   @Param("firstname") String firstname);
 }
 ```
+
+## REST API 
+
+### Rest API nedir ?
+REST API modern yazılım dünyasında uygulamaların birbiri ile iletişim kurmak için kullandıkları dildir. 
+Daha teknik bir tanım yapmak gerekir ise, REST mimarisini kullanarak uygulamalar arası veri transferini mümkün kılan 
+webservice lere REST API denir.
+
+Bir API ın REST API olabilmesi için ihtiyacı olan 3 şey vardır.
+
+![client server](images/client-server-architecture.png)
+
+1. Server : Söz konusu API'ı servis eden yazılım.
+2. Resource : Server tarafından API aracılığıyla servis edilen veri, bu text formatında bir kullanıcı bilgisi, bir dosya, 
+   bir fotoğraf yada bunlar gibi heerhangi bir veri olabilir. Burada önemli olan her resourceun unique bir idsi olması gerekir.    
+3. Client : Server tarafından servis edilen API'ı kullanan yazılım.
+
+Fakat bunlar tek başına bir API'ı Restful yapmaya yetmez, uyması gereken bazı kurallar ve kısıtlar vardır. Bu kurallar API'ın
+kolay kullanılabilmesini mümkün kılar. REST ifadesi **RE**presentational **S**tate **T**ransfer kavramının kısaltmasıdır ve 
+client tarafından talep edilen resource'un o anki durumunun server'dan clienta transfer edilmesi olarak Türkçe'ye çevrilebilir.
+Bu transfer işlemi JSON formatında olabileceği gibi XML yada binary formatında da olabilir. Peki bu kurallar ve kısıtlar nelerdir;
+
+* Uniform interface : Tek tip bir API olmalıdır ve tüm clientlardan servera gelen istekleer hep aynı şekilde olmalıdır
+* Client — server separation : Client ve server tamamen birbirinden bağımsız olarak hareket edebilmelidir
+* Stateless : Seerver tarafında clientla ilgili herhangi bir state tutulmamalıdır, servera gelen requestler kendi başına 
+  çalışabilecek her bilgiyi içermelidir.
+* Layered system : Client herzaman doğrudan servera bağlı olmayabilir, arada load balancer yada proxy gibi ara servisler olabilir. 
+  Bu servisler sistemin scalable olmasını ve performansını artırırken client ve server arasındaki iletişimi etkilememeli. 
+* Cacheable : Server tarafından üreetilen responselar keşlenebilir olup olmadıklarını belirtmeli.
+* Code-on-demand(optional) : Server geçici olarak clientın çalışmasını genişletebilir, bunu clienta çalıştırılmak üzere 
+javascript gönderebilir
+
+Peki bir client bir resourcea ihtiyaç duyarsa bunu isteği servera nasıl iletir ? Bu drurumda servera ilgilendiği kaynağın 
+unique idsini iletmesi gerekir, bu id Rest API için o resourceun URLidir. URL ifadesi Uniform Resource Locator kavramının 
+kısaltmasıdır. Bir de servera resource üstünde gerçekleştirmek istediği operasyonu iletmelidir, bu işlemi HTTP metodlarını
+kullanarak gerçekleştirir. Veritabanı uygulamalarında CRUD diye isimlendirdiğimiz Create, Read, Update ve Delete işlemlerine,
+API düzeyinde karşılık gelen başlıca HTTP metodları resource üzerinde işlem yapmak için kullanılır. Bu metodlar aşağıda gösterildiği
+gibidir;
+
+| Veritabanı işlemleri  | HTTP Metodları  | HTTP Metod amacı  |
+| --------------------- |-----------------| ------------------|
+| Create                | POST            | Yeni bir resource u serverda oluşturmak |
+| Read                  | GET             | Clientın ihtiyacı olan resourceu serverdan almak |
+| Update                | PUT             | Güncellenen resourceu serverda güncellemek |
+| Delete                | DELETE          | Serverda bulunan resourceu silmek |
+
+Daha önce de söylediğimiz gibi REST bir mimaridir, HTTP ise bir web protokolü. Zaman zaman insanlar REST ve HTTP kafa karışıklığı 
+yaşamakta ve bu iki kavramı kıyaslamaya çalışmaktadır. Fakat yukarıda da belirttiğimiz gibi ikisi de kıyaslanamayacak kadar
+farklı kavramlardır ve birbirine alternatif değillerdir.  
+
+### HTTP bileşenleri
+
+#### HTTP Request
+Reequest bir client server uygulamasında clieent tarafından üretilen ve servera gönderilen, resopurcelar üzerinde işlem yapmaya 
+yarayan kaynaklara denir. Bir HTTP request aşağıdaki temel bileşeenlerden oluşur;
+
+* Method (Operation) : Resource üzerinde yapmak istediğimiz işlem
+* Header : İşlemin gerçekleşmesi için gerekli olan meta veriler
+* Endpoint : Resourcea erişmek için geerekli olan unique id (URL)
+* Param/Body : Üzerinde işlem yapılacak resourceun kendisi yada onunla ilgili veriler
+
+#### HTTP Response
+Serveera gelen http requeste karşılık seerver tarafından üretileen cevaptır. Bir http reponse aşağıdaki bileşenlerden oluşur;
+
+* Status code : İşlemin sonucunu belirtmeye yarayan 100-599 arasında değişen sayısal değerdir.
+* Body : İşlem sonucunda oluşan resource
+* Header : Resource la ilgili meta veriler
+
+#### https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+
+## Spring MVC ile Rest API
+
+### Spring MVC nedir ?
+Spring MVC, Spring frameworkun bir parçası olan DispatcherServlet etrafında MVC patternini uygulayan modüldür.
+DispatcherServlet uygulamaya gelen tüm requestleeri yakalar ve geerekli çözümlemeyi yaptıktan sonra requesti uygun handlera
+iletir. Request handler @Controller ve @RequestMapping anotasyonlarını kullanarak gelen requestlerden kendisine uygun olanı 
+işleyen sınıf ve metodlardan oluşan yapıdır.
+
+![mvc](images/mvc.png)
+
+### Spring MVC anotasyonları
+
+* @Controller
+* @RestController
+* @RequestMapping
+* @RequestBody
+* @PathVariable
+* @RequestParam
+* @RequestHeader
+* @ResponseBody
+* @ResponseStatus
