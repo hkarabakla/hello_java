@@ -539,8 +539,7 @@ public class Student {
 
   @Column(nullable = false, length = 100, unique = false)
   private String name;
-
-  @Temporal(TemporalType.DATE)
+  
   private LocalDate birthDate;
 
   @Transient
@@ -558,7 +557,6 @@ public class Student {
 * @Id : Tablodaki unique identifier(ayırt edici) kolonunu sınıftaki ilgili değişken ile eşleştirmek için kullanılır
 * @GeneratedValue : @Id annotasyonu ile işaretlenen değişkenin değerinin nasıl üretileceğini belirtir
 * @Column : İlgili değişkenin karşılığı olan ttablodaki kolonla ilgili bilgileri sağlar
-* @Temporal : Tarih tipindeki değişkenleri tabloda karşılayan kolonun ttipini belirtmek için kullanılır
 * @Transient : Veritabanına kaydetmek istenilmeyen değişkenleri işaretlemek için kullanılır 
 * @Enumerated : Enum tipinde tanımlanan değişkenlerin veritabanına nasıl kaydedileceğini belirler
 
@@ -591,8 +589,7 @@ public class Student {
 
     @Column(nullable = false, length = 100, unique = false)
     private String name;
-
-    @Temporal(TemporalType.DATE)
+    
     private LocalDate birthDate;
 
     @Transient
@@ -653,8 +650,7 @@ public class Student {
 
     @Column(nullable = false, length = 100, unique = false)
     private String name;
-
-    @Temporal(TemporalType.DATE)
+    
     private LocalDate birthDate;
 
     @Transient
@@ -712,8 +708,7 @@ public class Student {
 
   @Column(nullable = false, length = 100, unique = false)
   private String name;
-
-  @Temporal(TemporalType.DATE)
+  
   private LocalDate birthDate;
 
   @Transient
@@ -736,8 +731,7 @@ public class Grades {
   private int id;
 
   private String lessonName;
-
-  @Temporal(TemporalType.DATE)
+  
   private LocalDate creationDate;
 
   @ManyToOne
@@ -763,8 +757,7 @@ public class Student {
 
     @Column(nullable = false, length = 100, unique = false)
     private String name;
-
-    @Temporal(TemporalType.DATE)
+    
     private LocalDate birthDate;
 
     @Transient
@@ -792,8 +785,7 @@ public class Lesson {
   private int id;
 
   private String name;
-
-  @Temporal(TemporalType.DATE)
+  
   private LocalDate registrationDate;
 
   @ManyToMany(mappedBy = "registeredLessons")
