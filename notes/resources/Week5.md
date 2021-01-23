@@ -442,3 +442,99 @@ işleyen sınıf ve metodlardan oluşan yapıdır.
 * @RequestHeader
 * @ResponseBody
 * @ResponseStatus
+
+### Exception yakalama
+Hata yakalama her uygulamada olduğu gibi Rest API yazarken de uygulanması gereken bir pratiktir. Spring MVC farklı seviyelerde 
+hata yakalamayı mümkün kılan birkaç farklı seçenek sunar. O nedenle bir Spring MVC uygulamasında hata yakalama işlemi yapmadan
+önce bu hatayı hangi seviyede yakalamak istediğimize karar vermeliyiz.
+
+#### Uygulama seviyesinde global exception handling
+Tüm uygulama genelinde servera gelen herbir request için oluşan hataları tek bir noktada yakalamak ve yönetmek istiyorsak
+@RestControllerAdvice anotasyonu yardımı ile global exception handler metodları ekleyebiliriz. Genel yapısı aşağıdaki gibidir;
+
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class })
+    protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, new CustomError("error message", HttpStatus.CONFLICT.value()), new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+}
+```
+Bu metod tercih edildiği zaman döndüğümüz hata responsu için custom bir hata sınıfı yaratmalıyız, yukarda kullanımı 
+görüldüğü gibi handler metodu CustomError tipinde ResponseEntity objesi dönmektedir. Bu yöntemin avantajı olarak tüm hata durumlarını 
+uygulama genelinde tek bir yerde yönetme ve dönecek olan reponse üzerindeki hata mesajının kontrolü tamamen bizde olması diyebiliriz.
+
+#### Controller seviyesinde exception handling
+Bir Controller yazarken sadece o kontrollerdaki endpointlerden fırlatılacak hataları yakalamak için controller seviyesinde 
+exception handling tercih edilebilir. Controller seviyesinde exception handling yapılabilmesi için o controller içerisine 
+aşağıda gösterildiği gibi bir exception handler metodu eklenebilir;
+
+```java
+@Controller
+public class SimpleController {
+    
+    // ...
+ 
+    @ExceptionHandler({FileSystemException.class, RemoteException.class})
+    public ResponseEntity<CustomError> handle(Exception ex) {
+        // ...
+    }
+
+    @ExceptionHandler({BusinessDataException.class})
+    public ResponseEntity<CustomError> handleNotFound(Exception ex) {
+        // ...
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<CustomError> handleTheRest(Exception ex) {
+        // ...
+    }
+}
+```
+Bu örnekte farklı exception türleri için iki tane ve bir tane de genel exception handler ekledik. Bu metod tercih edildiği
+zaman döndüğümüz hata responsu için custom bir hata sınıfı yaratmalıyız, yukarda kullanımı görüldüğü gibi handler metodları
+CustomError tipinde ResponseEntity objesi dönmektedir. ResponseEntity yaratmak ve http status kod atamak için aşağıdaki
+yöntem kullanılabilir;
+
+```java
+@ExceptionHandler
+public ResponseEntity<String> handle(Exception ex) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ex.getLocalizedMessage());
+}
+```
+
+#### Endpoint seviyesinde exception handling
+Spring 5 ile birlikte genel exception sınıfı ResponseStatusException, endpoint seviyesinde yakaladığımız hataları status code
+ile birlikte fırlatmak için kullanılabilir. Bu durumda try-catch blokları ile birlikte yakaladığımız hataları istediğimiz http
+status code ile birlikte fırlatabiliriz.
+
+```java
+@GetMapping(value = "/{id}")
+public User get(@PathVariable UUID id) {
+
+    try {
+        return userService.getById(id);
+    } catch (Exception e) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id : " + id);
+    }
+}
+```
+Response :
+```json5
+{
+    "timestamp": "2021-01-20T20:54:20.444+00:00",
+    "status": 404,
+    "error": "Not Found",
+    "message": "",
+    "path": "/api/user/3b243db5-162e-40d3-be33-fac52ded3b99"
+}
+```
+Bu örnekte gördüğümüz gibi endpoint metodu içerisinde yakaladığımız exception için bir ResponseStatusException fırlattık.
+Response alanında default olarak message alanı boş geldi, bu alanı ResponseStatusException içerisinde versiğimiz mesaj ile
+doldurmak istiyorsak `server.error.include-message=always` ifadesini application.properties dosyasına eklemeliyiz.
+
+Bu yöntemin artısı ResponseStatusException exception sınıfının farklı http status kodlarıyla birlikte kullanılabilmesi ve
+uygun status code dönmek için yeni exception sınıfları yaratmaya gerek olmaması.

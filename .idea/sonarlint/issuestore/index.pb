@@ -124,3 +124,5 @@ h
 0examples/src/com/hkarabakla/jpa/mtm/Student.java,1/d/1d2cdc9f1ce522718732263ae0cee6ed921e8fef
 H
 notes/resources/Week5.md,0/7/077062f9ee27e2c6fac769cc6c8fbf2a10aac0b7
+H
+notes/resources/Week6.md,d/d/dde77f2093881080528211db7d5e907c588f2b45
