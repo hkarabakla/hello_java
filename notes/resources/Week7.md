@@ -1,5 +1,7 @@
 # Fibabanka Java Bootcamp - 7. Hafta
 
+![code quality](images/Code-Cartoon.jpg)
+
 ## SOLID Prensipler
 SOLID prensipler yazılım kodlarını daha okunabilir, anlaşılabilir, esnek ve kolay bakım yapılabilir hale getirmek için 
 ortaya çıkmış yazılım geliştirme yaklaşımlarıdır. _SOLID_ ifadesindeki her bir harf ayrı bir prensibe karşılık gelmektedir.
